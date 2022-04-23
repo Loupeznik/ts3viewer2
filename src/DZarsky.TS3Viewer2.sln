@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dzarsky.TS3Viewer2.Api", "Dzarsky.TS3Viewer2.Api\Dzarsky.TS3Viewer2.Api.csproj", "{6362796A-833D-4040-87EF-66C4A9968648}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DZarsky.TS3Viewer2.Core", "DZarsky.TS3Viewer2.Core\DZarsky.TS3Viewer2.Core.csproj", "{60546916-40C7-411A-BDC0-84D53A45C868}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DZarsky.TS3Viewer2.Domain", "DZarsky.TS3Viewer2.Domain\DZarsky.TS3Viewer2.Domain.csproj", "{34789E87-3FA4-4443-9351-80EA43054577}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6362796A-833D-4040-87EF-66C4A9968648}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6362796A-833D-4040-87EF-66C4A9968648}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6362796A-833D-4040-87EF-66C4A9968648}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6362796A-833D-4040-87EF-66C4A9968648}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60546916-40C7-411A-BDC0-84D53A45C868}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60546916-40C7-411A-BDC0-84D53A45C868}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60546916-40C7-411A-BDC0-84D53A45C868}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60546916-40C7-411A-BDC0-84D53A45C868}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34789E87-3FA4-4443-9351-80EA43054577}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34789E87-3FA4-4443-9351-80EA43054577}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34789E87-3FA4-4443-9351-80EA43054577}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34789E87-3FA4-4443-9351-80EA43054577}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
