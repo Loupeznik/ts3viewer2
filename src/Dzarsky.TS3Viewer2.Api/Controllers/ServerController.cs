@@ -1,8 +1,6 @@
-﻿using System.Text.Json;
-using DZarsky.TS3Viewer2.Domain.Server.Dto;
+﻿using DZarsky.TS3Viewer2.Domain.Server.Dto;
 using DZarsky.TS3Viewer2.Domain.Server.Services;
 using Microsoft.AspNetCore.Mvc;
-using TeamSpeak3QueryApi.Net.Specialized.Responses;
 
 namespace DZarsky.TS3Viewer2.Api.Controllers;
 
@@ -29,7 +27,7 @@ public class ServerController : ApiControllerBase
     }
     
     /// <summary>
-    /// Gets clients
+    /// Kicks client by current ID
     /// </summary>
     /// <returns></returns>
     [ProducesResponseType(typeof(object), StatusCodes.Status403Forbidden)]
@@ -38,8 +36,13 @@ public class ServerController : ApiControllerBase
     [HttpGet("clients/kick/{id:int}")]
     public async Task<ActionResult> KickClient(int id)
     {
-        await _teamspeakServerService.KickClient(id);
+        var kickResult = await _teamspeakServerService.KickClient(id);
+
+        if (kickResult)
+        {
+            return BadRequest();
+        }
         
-        return new OkResult();
+        return Ok();
     }
 }
