@@ -33,7 +33,7 @@ public static class TeamSpeakApiConfigExtensions
 
     private static async Task<TeamSpeakClient> ConfigureClient(ServerInstance serverConfig)
     {
-        var client = new TeamSpeakClient(serverConfig.Host, serverConfig.Port);
+        var client = new TeamSpeakClient(serverConfig.Host, serverConfig.Port, TimeSpan.Zero);
         
         await client.Connect();
         await client.Login(serverConfig.Login, serverConfig.Token);

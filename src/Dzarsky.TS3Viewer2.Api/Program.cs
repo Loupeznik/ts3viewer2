@@ -1,7 +1,6 @@
 using DZarsky.TS3Viewer2.Core.Infrastructure.Extensions;
 using DZarsky.TS3Viewer2.Domain.Server.Mappings;
 using Serilog;
-using ILogger = Serilog.ILogger;
 
 var builder = WebApplication.CreateBuilder(args);
 

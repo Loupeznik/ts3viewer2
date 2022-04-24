@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
@@ -6,7 +6,8 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <AssemblyName>DZarsky.TS3Viewer2.Api</AssemblyName>
         <RootNamespace>DZarsky.TS3Viewer2.Api</RootNamespace>
-    </PropertyGroup>
+      <UserSecretsId>414ccc36-c286-452a-9cdf-6ee1f7544064</UserSecretsId>
+  </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="AutoMapper" Version="11.0.1" />

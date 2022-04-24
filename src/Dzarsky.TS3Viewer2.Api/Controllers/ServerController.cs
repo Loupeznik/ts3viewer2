@@ -40,9 +40,9 @@ public class ServerController : ApiControllerBase
 
         if (kickResult)
         {
-            return BadRequest();
+            return Ok();
         }
         
-        return Ok();
+        return BadRequest();
     }
 }
