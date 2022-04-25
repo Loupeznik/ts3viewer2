@@ -24,7 +24,7 @@ public static class TeamSpeakApiConfigExtensions
 
         var teamspeakClient = ConfigureClient(serverConfig).Result;
         
-        services.AddScoped<ITeamSpeakServerService, TeamSpeakServerService>();
+        services.AddScoped<ITeamSpeakClientService, TeamSpeakClientService>();
         services.AddScoped<IAudioBotService, AudioBotService>();
         services.AddSingleton(teamspeakClient);
         
