@@ -9,4 +9,6 @@ public interface ITeamSpeakClientService
     public Task<bool> KickClient(int id);
 
     public Task<bool> BanClient(int id, BanClientDto banInfo);
+    
+    public Task<bool> PokeClient(int id, PokeClientDto pokeInfo);
 }

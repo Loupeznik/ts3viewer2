@@ -55,4 +55,19 @@ public class TeamSpeakClientService : ITeamSpeakClientService
             return false;
         }
     }
+
+    public async Task<bool> PokeClient(int id, PokeClientDto pokeInfo)
+    {
+        try
+        {
+            await _client.PokeClient(id, pokeInfo.Message);
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            _logger.Error($"Could not poke user {id}", ex);
+            return false;
+        }
+    }
 }

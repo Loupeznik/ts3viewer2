@@ -4,8 +4,6 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Warning()
     .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day)
@@ -24,14 +22,16 @@ builder.Services.AddTeamSpeakApi(builder.Configuration);
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseAuthorization();
 

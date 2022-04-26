@@ -18,7 +18,7 @@ public class ClientController : ApiControllerBase
     [ProducesResponseType(typeof(object), StatusCodes.Status403Forbidden)]
     [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [HttpGet()]
+    [HttpGet]
     public async Task<ActionResult<IList<ClientDto>>> GetClients()
     {
         var clients = await _teamspeakClientService.GetClients();
@@ -33,19 +33,10 @@ public class ClientController : ApiControllerBase
     [ProducesResponseType(typeof(object), StatusCodes.Status403Forbidden)]
     [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [HttpGet("kick/{id:int}")]
-    public async Task<ActionResult> KickClient(int id)
-    {
-        var kickResult = await _teamspeakClientService.KickClient(id);
+    [HttpGet("{id:int}/kick")]
+    public async Task<ActionResult> KickClient(int id) =>
+        BoolToActionResult(await _teamspeakClientService.KickClient(id));
 
-        if (kickResult)
-        {
-            return Ok();
-        }
-        
-        return BadRequest();
-    }
-    
     /// <summary>
     /// Bans client by current ID
     /// </summary>
@@ -54,16 +45,19 @@ public class ClientController : ApiControllerBase
     [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
-    [HttpPost("ban/{id:int}")]
-    public async Task<ActionResult> BanClient(int id, [FromBody] BanClientDto banInfo)
-    {
-        var banResult = await _teamspeakClientService.BanClient(id, banInfo);
+    [HttpPost("{id:int}/ban")]
+    public async Task<ActionResult> BanClient(int id, [FromBody] BanClientDto banInfo) =>
+        BoolToActionResult(await _teamspeakClientService.BanClient(id, banInfo));
 
-        if (banResult)
-        {
-            return Ok();
-        }
-        
-        return BadRequest();
-    }
+    /// <summary>
+    /// Pokes client by current ID
+    /// </summary>
+    /// <returns></returns>
+    [ProducesResponseType(typeof(object), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
+    [HttpPost("{id:int}/poke")]
+    public async Task<ActionResult> PokeClient(int id, [FromBody] PokeClientDto pokeInfo) =>
+        BoolToActionResult(await _teamspeakClientService.PokeClient(id, pokeInfo));
 }
