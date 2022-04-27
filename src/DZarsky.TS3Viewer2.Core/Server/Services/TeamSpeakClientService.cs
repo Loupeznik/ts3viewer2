@@ -56,7 +56,7 @@ public class TeamSpeakClientService : ITeamSpeakClientService
         }
     }
 
-    public async Task<bool> PokeClient(int id, PokeClientDto pokeInfo)
+    public async Task<bool> PokeClient(int id, MessageDto pokeInfo)
     {
         try
         {

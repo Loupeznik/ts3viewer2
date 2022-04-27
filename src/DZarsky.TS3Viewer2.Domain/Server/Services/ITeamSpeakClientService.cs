@@ -10,5 +10,5 @@ public interface ITeamSpeakClientService
 
     public Task<bool> BanClient(int id, BanClientDto banInfo);
     
-    public Task<bool> PokeClient(int id, PokeClientDto pokeInfo);
+    public Task<bool> PokeClient(int id, MessageDto pokeInfo);
 }

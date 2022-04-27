@@ -23,8 +23,9 @@ public static class TeamSpeakApiConfigExtensions
         services.AddSingleton(serverConfig);
 
         var teamspeakClient = ConfigureClient(serverConfig).Result;
+
+        services.AddTeamSpeakServices();
         
-        services.AddScoped<ITeamSpeakClientService, TeamSpeakClientService>();
         services.AddScoped<IAudioBotService, AudioBotService>();
         services.AddSingleton(teamspeakClient);
         
@@ -40,5 +41,13 @@ public static class TeamSpeakApiConfigExtensions
         await client.UseServer(serverConfig.ServerID);
 
         return client;
+    }
+
+    private static IServiceCollection AddTeamSpeakServices(this IServiceCollection services)
+    {
+        services.AddScoped<ITeamSpeakClientService, TeamSpeakClientService>();
+        services.AddScoped<ITeamSpeakServerService, TeamSpeakServerService>();
+        
+        return services;
     }
 }

@@ -58,6 +58,6 @@ public class ClientController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
     [HttpPost("{id:int}/poke")]
-    public async Task<ActionResult> PokeClient(int id, [FromBody] PokeClientDto pokeInfo) =>
+    public async Task<ActionResult> PokeClient(int id, [FromBody] MessageDto pokeInfo) =>
         BoolToActionResult(await _teamspeakClientService.PokeClient(id, pokeInfo));
 }
