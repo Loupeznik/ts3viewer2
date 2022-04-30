@@ -47,6 +47,7 @@ public static class TeamSpeakApiConfigExtensions
     {
         services.AddScoped<ITeamSpeakClientService, TeamSpeakClientService>();
         services.AddScoped<ITeamSpeakServerService, TeamSpeakServerService>();
+        services.AddScoped<ITeamSpeakChannelService, TeamSpeakChannelService>();
         
         return services;
     }
