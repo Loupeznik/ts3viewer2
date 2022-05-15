@@ -38,7 +38,7 @@ public static class TeamSpeakApiConfigExtensions
         
         await client.Connect();
         await client.Login(serverConfig.Login, serverConfig.Token);
-        await client.UseServer(serverConfig.ServerID);
+        await client.UseServer(serverConfig.ServerId);
 
         return client;
     }

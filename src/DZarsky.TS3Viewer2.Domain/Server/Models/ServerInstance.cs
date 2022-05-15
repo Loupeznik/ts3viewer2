@@ -10,5 +10,5 @@ public class ServerInstance
     
     public string? Token { get; set; }
     
-    public int ServerID { get; set; }
+    public int ServerId { get; set; }
 }

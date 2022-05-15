@@ -19,12 +19,7 @@ public class ClientController : ApiControllerBase
     [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [HttpGet]
-    public async Task<ActionResult<IList<ClientDto>>> GetClients()
-    {
-        var clients = await _clientService.GetClients();
-
-        return new JsonResult(clients);
-    }
+    public async Task<ActionResult<IList<ClientDto>>> GetClients() => Ok(await _clientService.GetClients());
 
     /// <summary>
     /// Kicks client by current ID
