@@ -3,6 +3,7 @@ using DZarsky.TS3Viewer2.Domain.Server.Mappings;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+var allowedOriginsPolicy = "_allowedOriginsPolicy";
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Warning()
@@ -20,6 +21,14 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTeamSpeakApi(builder.Configuration);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(allowedOriginsPolicy, policy =>
+    {
+        policy.WithOrigins("http://localhost:3000");
+    });
+});
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -31,6 +40,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseCors(allowedOriginsPolicy);
 
 app.MapControllers();
 
