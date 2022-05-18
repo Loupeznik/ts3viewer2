@@ -4,7 +4,6 @@ using DZarsky.TS3Viewer2.Domain.Server.Models;
 using DZarsky.TS3Viewer2.Domain.Server.Services;
 using Serilog;
 using TeamSpeak3QueryApi.Net.Specialized;
-using TeamSpeak3QueryApi.Net.Specialized.Responses;
 
 namespace DZarsky.TS3Viewer2.Core.Server.Services;
 

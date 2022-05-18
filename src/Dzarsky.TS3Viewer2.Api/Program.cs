@@ -3,7 +3,7 @@ using DZarsky.TS3Viewer2.Domain.Server.Mappings;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
-var allowedOriginsPolicy = "_allowedOriginsPolicy";
+const string allowedOriginsPolicy = "_allowedOriginsPolicy";
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Warning()
