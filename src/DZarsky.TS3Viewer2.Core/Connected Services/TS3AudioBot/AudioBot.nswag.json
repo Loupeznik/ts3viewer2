@@ -1,0 +1,4441 @@
+﻿{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Ts3AudioBot API",
+    "description": "The Ts3AudioBot api interface.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "/api",
+      "description": "Your Ts3AudioBot server."
+    },
+    {
+      "url": "/api/bot/use/0/(/",
+      "description": "Bot splamy"
+    }
+  ],
+  "paths": {
+    "/unsubscribe/channel/{channels}...": {
+      "get": {
+        "tags": [
+          "unsubscribe"
+        ],
+        "description": "Removes your current channel from the music playback.",
+        "operationId": "channel",
+        "parameters": [
+          {
+            "name": "channels",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "array",
+              "items": {}
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/unsubscribe/temporary": {
+      "get": {
+        "tags": [
+          "unsubscribe"
+        ],
+        "description": "Clears all temporary targets.",
+        "operationId": "temporary",
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/unsubscribe/client/{client}": {
+      "get": {
+        "tags": [
+          "unsubscribe"
+        ],
+        "description": "Unsubscribes the specified client to listen from anywhere.",
+        "operationId": "client",
+        "parameters": [
+          {
+            "name": "client",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/version": {
+      "get": {
+        "description": "Gets the current build version.",
+        "operationId": "version",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/volume": {
+      "get": {
+        "description": "Sets the volume level of the music.",
+        "operationId": "volume",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "number",
+                  "format": "float"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/volume/{volume}": {
+      "get": {
+        "description": "Sets the volume level of the music.",
+        "operationId": "volume2",
+        "parameters": [
+          {
+            "name": "volume",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/whisper/all": {
+      "get": {
+        "tags": [
+          "whisper"
+        ],
+        "description": "Set how to send music.",
+        "operationId": "all",
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/whisper/group/{type}/{target}/{targetId}": {
+      "get": {
+        "tags": [
+          "whisper"
+        ],
+        "description": "Set a specific teamspeak whisper group.",
+        "operationId": "group",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {}
+          },
+          {
+            "name": "target",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {}
+          },
+          {
+            "name": "targetId",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "integer",
+              "format": "uint64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/whisper/list": {
+      "get": {
+        "tags": [
+          "whisper"
+        ],
+        "description": "Set how to send music.",
+        "operationId": "list",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/whisper/off": {
+      "get": {
+        "tags": [
+          "whisper"
+        ],
+        "description": "Enables normal voice mode.",
+        "operationId": "off",
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/whisper/subscription": {
+      "get": {
+        "tags": [
+          "whisper"
+        ],
+        "description": "Enables default whisper subscription mode.",
+        "operationId": "subscription",
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/xecute": {
+      "get": {
+        "description": "Evaluates all parameter.",
+        "operationId": "xecute",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/list/create/{listId}/{title}": {
+      "get": {
+        "tags": [
+          "list"
+        ],
+        "description": "This feature is not documented.",
+        "operationId": "create",
+        "parameters": [
+          {
+            "name": "listId",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "title",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/list/delete/{listId}": {
+      "get": {
+        "tags": [
+          "list"
+        ],
+        "description": "<name> Deletes the playlist with the name <name>. You can only delete playlists which you also have created. Admins can delete every playlist.",
+        "operationId": "delete",
+        "parameters": [
+          {
+            "name": "listId",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/list/from/{resolverName}/{listId}/{url}": {
+      "get": {
+        "tags": [
+          "list"
+        ],
+        "description": "This feature is not documented.",
+        "operationId": "from",
+        "parameters": [
+          {
+            "name": "resolverName",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "listId",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "url",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/list/import/{listId}/{link}": {
+      "get": {
+        "tags": [
+          "list"
+        ],
+        "description": "<link> Imports a playlist form an other platform like youtube etc.",
+        "operationId": "import",
+        "parameters": [
+          {
+            "name": "listId",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "link",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/list/insert/{listId}/{index}/{link}": {
+      "get": {
+        "tags": [
+          "list"
+        ],
+        "description": "This feature is not documented.",
+        "operationId": "insert",
+        "parameters": [
+          {
+            "name": "listId",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "index",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "link",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/list/item/get/{name}/{index}": {
+      "get": {
+        "tags": [
+          "list"
+        ],
+        "description": "This feature is not documented.",
+        "operationId": "get",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "index",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/list/item/move/{listId}/{from}/{to}": {
+      "get": {
+        "tags": [
+          "list"
+        ],
+        "description": "<from> <to> Moves a item in a playlist <from> <to> position.",
+        "operationId": "move",
+        "parameters": [
+          {
+            "name": "listId",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "from",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "to",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/list/item/delete/{listId}/{index}": {
+      "get": {
+        "tags": [
+          "list"
+        ],
+        "description": "<index> Removes the item at <index>.",
+        "operationId": "delete2",
+        "parameters": [
+          {
+            "name": "listId",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "index",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/list/item/name/{listId}/{index}/{title}": {
+      "get": {
+        "tags": [
+          "list"
+        ],
+        "description": "Renames an item.",
+        "operationId": "name",
+        "parameters": [
+          {
+            "name": "listId",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "index",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "title",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/list/list/{pattern}": {
+      "get": {
+        "tags": [
+          "list"
+        ],
+        "description": "Displays all available playlists from all users.",
+        "operationId": "listAll",
+        "parameters": [
+          {
+            "name": "pattern",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/list/merge/{baseListId}/{mergeListId}": {
+      "get": {
+        "tags": [
+          "list"
+        ],
+        "description": "Appends another playlist to yours.",
+        "operationId": "merge",
+        "parameters": [
+          {
+            "name": "baseListId",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "mergeListId",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/list/name/{listId}/{title}": {
+      "get": {
+        "tags": [
+          "list"
+        ],
+        "description": "Displays the name of the playlist you are currently working on.",
+        "operationId": "name2",
+        "parameters": [
+          {
+            "name": "listId",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "title",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/list/play/{listId}/{index}": {
+      "get": {
+        "tags": [
+          "list"
+        ],
+        "description": "Replaces the current freelist with your workinglist and plays from the beginning.",
+        "operationId": "play",
+        "parameters": [
+          {
+            "name": "listId",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "index",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/list/queue/{listId}": {
+      "get": {
+        "tags": [
+          "list"
+        ],
+        "description": "Appends your playlist to the freelist.",
+        "operationId": "queue",
+        "parameters": [
+          {
+            "name": "listId",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/list/show/{listId}/{offset}/{count}": {
+      "get": {
+        "tags": [
+          "list"
+        ],
+        "description": "<name> Displays all songs currently in the playlists with the name <name>",
+        "operationId": "show",
+        "parameters": [
+          {
+            "name": "listId",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "count",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/next": {
+      "get": {
+        "description": "Plays the next song in the playlist.",
+        "operationId": "next",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/param/{index}": {
+      "get": {
+        "description": "This feature is not documented.",
+        "operationId": "param",
+        "parameters": [
+          {
+            "name": "index",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pm": {
+      "get": {
+        "tags": [
+          "pm"
+        ],
+        "description": "Requests a private session with the ServerBot so you can be intimate.",
+        "operationId": "pm",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pm/channel/{message}": {
+      "get": {
+        "tags": [
+          "pm"
+        ],
+        "description": "This feature is not documented.",
+        "operationId": "channel2",
+        "parameters": [
+          {
+            "name": "message",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pm/server/{message}": {
+      "get": {
+        "tags": [
+          "pm"
+        ],
+        "description": "This feature is not documented.",
+        "operationId": "server",
+        "parameters": [
+          {
+            "name": "message",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pm/user/{clientId}/{message}": {
+      "get": {
+        "tags": [
+          "pm"
+        ],
+        "description": "Writes a message to a particular user.",
+        "operationId": "user",
+        "parameters": [
+          {
+            "name": "clientId",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "integer",
+              "format": "uint16"
+            }
+          },
+          {
+            "name": "message",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pause": {
+      "get": {
+        "description": "Well, pauses the song. Undo with !play.",
+        "operationId": "pause",
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/play": {
+      "get": {
+        "description": "Automatically tries to decide whether the link is a special resource (like youtube) or a direct resource (like ./hello.mp3) and starts it.",
+        "operationId": "play2",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/play/{url}/{attributes}...": {
+      "get": {
+        "description": "Automatically tries to decide whether the link is a special resource (like youtube) or a direct resource (like ./hello.mp3) and starts it.",
+        "operationId": "play3",
+        "parameters": [
+          {
+            "name": "url",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "attributes",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/play/{rsc}/{attributes}...": {
+      "get": {
+        "description": "Automatically tries to decide whether the link is a special resource (like youtube) or a direct resource (like ./hello.mp3) and starts it.",
+        "operationId": "play4",
+        "parameters": [
+          {
+            "name": "rsc",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {}
+          },
+          {
+            "name": "attributes",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/plugin/list": {
+      "get": {
+        "tags": [
+          "plugin"
+        ],
+        "description": "Lists all found plugins.",
+        "operationId": "listAll2",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/plugin/unload/{identifier}": {
+      "get": {
+        "tags": [
+          "plugin"
+        ],
+        "description": "Unloads a plugin.",
+        "operationId": "unload",
+        "parameters": [
+          {
+            "name": "identifier",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/plugin/load/{identifier}": {
+      "get": {
+        "tags": [
+          "plugin"
+        ],
+        "description": "Unloads a plugin.",
+        "operationId": "load",
+        "parameters": [
+          {
+            "name": "identifier",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/previous": {
+      "get": {
+        "description": "Plays the previous song in the playlist.",
+        "operationId": "previous",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/print/{parameter}...": {
+      "get": {
+        "description": "Lets you format multiple parameter to one.",
+        "operationId": "print",
+        "parameters": [
+          {
+            "name": "parameter",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/quiz": {
+      "get": {
+        "tags": [
+          "quiz"
+        ],
+        "description": "Shows the quizmode status.",
+        "operationId": "quiz",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/quiz/on": {
+      "get": {
+        "tags": [
+          "quiz"
+        ],
+        "description": "Enable to hide the songnames and let your friends guess the title.",
+        "operationId": "on",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/quiz/off": {
+      "get": {
+        "tags": [
+          "quiz"
+        ],
+        "description": "Disable to show the songnames again.",
+        "operationId": "off2",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/random": {
+      "get": {
+        "tags": [
+          "random"
+        ],
+        "description": "Gets whether or not to play playlists in random order.",
+        "operationId": "random",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/random/on": {
+      "get": {
+        "tags": [
+          "random"
+        ],
+        "description": "Enables random playlist playback",
+        "operationId": "on2",
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/random/off": {
+      "get": {
+        "tags": [
+          "random"
+        ],
+        "description": "Disables random playlist playback",
+        "operationId": "off3",
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/random/seed": {
+      "get": {
+        "tags": [
+          "random"
+        ],
+        "description": "Gets the unique seed for a certain playback order",
+        "operationId": "seed",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/random/seed/{newSeed}": {
+      "get": {
+        "tags": [
+          "random"
+        ],
+        "description": "Sets the unique seed for a certain playback order",
+        "operationId": "seed2",
+        "parameters": [
+          {
+            "name": "newSeed",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/repeat": {
+      "get": {
+        "tags": [
+          "repeat"
+        ],
+        "description": "Gets the current repeat mode.",
+        "operationId": "repeat",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/repeat/off": {
+      "get": {
+        "tags": [
+          "repeat"
+        ],
+        "description": "Disables repeating.",
+        "operationId": "off4",
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/repeat/one": {
+      "get": {
+        "tags": [
+          "repeat"
+        ],
+        "description": "Repeats a single song.",
+        "operationId": "one",
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/repeat/all": {
+      "get": {
+        "tags": [
+          "repeat"
+        ],
+        "description": "Repeats the entire playlist.",
+        "operationId": "all2",
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/rights/can/{rights}...": {
+      "get": {
+        "tags": [
+          "rights"
+        ],
+        "description": "Returns the subset of allowed commands the caller (you) can execute.",
+        "operationId": "can",
+        "parameters": [
+          {
+            "name": "rights",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rights/reload": {
+      "get": {
+        "tags": [
+          "rights"
+        ],
+        "description": "Reloads the rights configuration from file.",
+        "operationId": "reload",
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/rng/{first}/{second}": {
+      "get": {
+        "description": "Gets a random number.",
+        "operationId": "rng",
+        "parameters": [
+          {
+            "name": "first",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "second",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/seek/{position}": {
+      "get": {
+        "description": "Jumps to a timemark within the current song.",
+        "operationId": "seek",
+        "parameters": [
+          {
+            "name": "position",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string",
+              "format": "duration"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/search/add/{index}": {
+      "get": {
+        "tags": [
+          "search"
+        ],
+        "description": "This feature is not documented.",
+        "operationId": "add",
+        "parameters": [
+          {
+            "name": "index",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/search/from/{resolverName}/{query}": {
+      "get": {
+        "tags": [
+          "search"
+        ],
+        "description": "This feature is not documented.",
+        "operationId": "from2",
+        "parameters": [
+          {
+            "name": "resolverName",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "query",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/search/get/{index}": {
+      "get": {
+        "tags": [
+          "search"
+        ],
+        "description": "This feature is not documented.",
+        "operationId": "get2",
+        "parameters": [
+          {
+            "name": "index",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/search/play/{index}": {
+      "get": {
+        "tags": [
+          "search"
+        ],
+        "description": "This feature is not documented.",
+        "operationId": "play5",
+        "parameters": [
+          {
+            "name": "index",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/search/show": {
+      "get": {
+        "tags": [
+          "search"
+        ],
+        "description": "This feature is not documented.",
+        "operationId": "showAll",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/server/tree": {
+      "get": {
+        "tags": [
+          "server"
+        ],
+        "description": "This feature is not documented.",
+        "operationId": "tree",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/settings": {
+      "get": {
+        "tags": [
+          "settings"
+        ],
+        "description": "Provides get/set methods to change the settings.",
+        "operationId": "settings",
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/settings/copy/{from}/{to}": {
+      "get": {
+        "tags": [
+          "settings"
+        ],
+        "description": "Duplicates a bot template with a new name.",
+        "operationId": "copy",
+        "parameters": [
+          {
+            "name": "from",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/settings/create/{name}": {
+      "get": {
+        "tags": [
+          "settings"
+        ],
+        "description": "Creates a new bot template.",
+        "operationId": "create2",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/settings/delete/{name}": {
+      "get": {
+        "tags": [
+          "settings"
+        ],
+        "description": "Deletes a bot template.",
+        "operationId": "delete3",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/settings/get/{path}": {
+      "get": {
+        "tags": [
+          "settings"
+        ],
+        "description": "Gets a value from the bot settings.",
+        "operationId": "get3",
+        "parameters": [
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/settings/set/{path}/{value}": {
+      "get": {
+        "tags": [
+          "settings"
+        ],
+        "description": "Sets a value from the bot settings.",
+        "operationId": "set",
+        "parameters": [
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "value",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/settings/bot/get/{botName}/{path}": {
+      "get": {
+        "tags": [
+          "settings"
+        ],
+        "description": "Gets a value from the bot settings.",
+        "operationId": "get4",
+        "parameters": [
+          {
+            "name": "botName",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/settings/bot/set/{botName}/{path}/{value}": {
+      "get": {
+        "tags": [
+          "settings"
+        ],
+        "description": "Sets a value from the bot settings.",
+        "operationId": "set2",
+        "parameters": [
+          {
+            "name": "botName",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "value",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/settings/bot/reload/{name}": {
+      "get": {
+        "tags": [
+          "settings"
+        ],
+        "description": "Reloads the bot template configuration from the file.",
+        "operationId": "reload2",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/settings/global/get/{path}": {
+      "get": {
+        "tags": [
+          "settings"
+        ],
+        "description": "Gets a value from the core settings.",
+        "operationId": "get5",
+        "parameters": [
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/settings/global/set/{path}/{value}": {
+      "get": {
+        "tags": [
+          "settings"
+        ],
+        "description": "Set a value from the core settings.",
+        "operationId": "set3",
+        "parameters": [
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "value",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/settings/help/{path}": {
+      "get": {
+        "tags": [
+          "settings"
+        ],
+        "description": "Get the description for a setting.",
+        "operationId": "help",
+        "parameters": [
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/song": {
+      "get": {
+        "description": "Tells you the name of the current song.",
+        "operationId": "song",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stop": {
+      "get": {
+        "description": "Stops the current song.",
+        "operationId": "stop",
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/subscribe": {
+      "get": {
+        "tags": [
+          "subscribe"
+        ],
+        "description": "Lets you hear the music independent from the channel you are in.",
+        "operationId": "subscribe",
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/subscribe/tempchannel/{channel}": {
+      "get": {
+        "tags": [
+          "subscribe"
+        ],
+        "description": "Adds your current channel to the music playback.",
+        "operationId": "tempchannel",
+        "parameters": [
+          {
+            "name": "channel",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/subscribe/channel/{channels}...": {
+      "get": {
+        "tags": [
+          "subscribe"
+        ],
+        "description": "Adds your current channel to the music playback.",
+        "operationId": "channel3",
+        "parameters": [
+          {
+            "name": "channels",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "array",
+              "items": {}
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/subscribe/client/{client}": {
+      "get": {
+        "tags": [
+          "subscribe"
+        ],
+        "description": "Subscribes the specified client to listen from anywhere",
+        "operationId": "client2",
+        "parameters": [
+          {
+            "name": "client",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/system/info": {
+      "get": {
+        "tags": [
+          "system"
+        ],
+        "description": "This feature is not documented.",
+        "operationId": "info",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/system/quit/{param}": {
+      "get": {
+        "tags": [
+          "system"
+        ],
+        "description": "Closes the TS3AudioBot application.",
+        "operationId": "quit",
+        "parameters": [
+          {
+            "name": "param",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/take": {
+      "get": {
+        "description": "Take a substring from a string.",
+        "operationId": "take",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/unsubscribe": {
+      "get": {
+        "tags": [
+          "unsubscribe"
+        ],
+        "description": "Only lets you hear the music in active channels again.",
+        "operationId": "unsubscribe",
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/add/{url}/{attributes}...": {
+      "get": {
+        "description": "Adds a new song to the queue.",
+        "operationId": "add2",
+        "parameters": [
+          {
+            "name": "url",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "attributes",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/add/{rsc}/{attributes}...": {
+      "get": {
+        "description": "Adds a new song to the queue.",
+        "operationId": "add3",
+        "parameters": [
+          {
+            "name": "rsc",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {}
+          },
+          {
+            "name": "attributes",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/alias/add/{commandName}/{command}": {
+      "get": {
+        "tags": [
+          "alias"
+        ],
+        "description": "Creates a new command alias.",
+        "operationId": "add4",
+        "parameters": [
+          {
+            "name": "commandName",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "command",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/alias/remove/{commandName}": {
+      "get": {
+        "tags": [
+          "alias"
+        ],
+        "description": "Removes an existing alias.",
+        "operationId": "remove",
+        "parameters": [
+          {
+            "name": "commandName",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/alias/list": {
+      "get": {
+        "tags": [
+          "alias"
+        ],
+        "description": "Lists all currently registered alias.",
+        "operationId": "listAll3",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/alias/show/{commandName}": {
+      "get": {
+        "tags": [
+          "alias"
+        ],
+        "description": "Shows the implementation of the alias.",
+        "operationId": "show2",
+        "parameters": [
+          {
+            "name": "commandName",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/token/{validTime}": {
+      "get": {
+        "tags": [
+          "api"
+        ],
+        "description": "Generates an api token.",
+        "operationId": "token",
+        "parameters": [
+          {
+            "name": "validTime",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string",
+              "format": "duration"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bot/avatar/set/{url}": {
+      "get": {
+        "tags": [
+          "bot"
+        ],
+        "description": "Sets an avatar for the bot",
+        "operationId": "set4",
+        "parameters": [
+          {
+            "name": "url",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bot/avatar/clear": {
+      "get": {
+        "tags": [
+          "bot"
+        ],
+        "description": "Clears the avatar of the bot.",
+        "operationId": "clear",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bot/badges/{badges}": {
+      "get": {
+        "tags": [
+          "bot"
+        ],
+        "description": "Set your bot a badge. The badges string starts with 'overwolf=0:badges='",
+        "operationId": "badges",
+        "parameters": [
+          {
+            "name": "badges",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bot/description/set/{description}": {
+      "get": {
+        "tags": [
+          "bot"
+        ],
+        "description": "Sets the description of the bot.",
+        "operationId": "set5",
+        "parameters": [
+          {
+            "name": "description",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bot/diagnose": {
+      "get": {
+        "tags": [
+          "bot"
+        ],
+        "description": "This feature is not documented.",
+        "operationId": "diagnose",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bot/disconnect": {
+      "get": {
+        "tags": [
+          "bot"
+        ],
+        "description": "Stop this bot instance.",
+        "operationId": "disconnect",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bot/commander": {
+      "get": {
+        "tags": [
+          "bot"
+        ],
+        "description": "Gets the status of the channel commander mode.",
+        "operationId": "commander",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bot/commander/on": {
+      "get": {
+        "tags": [
+          "bot"
+        ],
+        "description": "Enables channel commander.",
+        "operationId": "on3",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bot/commander/off": {
+      "get": {
+        "tags": [
+          "bot"
+        ],
+        "description": "Disables channel commander.",
+        "operationId": "off5",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bot/come/{password}": {
+      "get": {
+        "tags": [
+          "bot"
+        ],
+        "description": "Moves the bot to your channel.",
+        "operationId": "come",
+        "parameters": [
+          {
+            "name": "password",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bot/connect/template/{name}": {
+      "get": {
+        "tags": [
+          "bot"
+        ],
+        "description": "Connects a new bot with the settings from the template name.",
+        "operationId": "template",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bot/connect/to/{address}/{password}": {
+      "get": {
+        "tags": [
+          "bot"
+        ],
+        "description": "Connects a new bot to the given address.",
+        "operationId": "to",
+        "parameters": [
+          {
+            "name": "address",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "password",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bot/info": {
+      "get": {
+        "tags": [
+          "bot"
+        ],
+        "description": "Gets various information about the bot.",
+        "operationId": "info2",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bot/info/client": {
+      "get": {
+        "tags": [
+          "bot"
+        ],
+        "description": "This feature is not documented.",
+        "operationId": "client3",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bot/info/template/{name}": {
+      "get": {
+        "tags": [
+          "bot"
+        ],
+        "description": "Gets various information about the bot.",
+        "operationId": "template2",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bot/list": {
+      "get": {
+        "tags": [
+          "bot"
+        ],
+        "description": "Gets a list of all active bots.",
+        "operationId": "listAll4",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bot/move/{channel}/{password}": {
+      "get": {
+        "tags": [
+          "bot"
+        ],
+        "description": "Moves the bot to you or a specified channel.",
+        "operationId": "move2",
+        "parameters": [
+          {
+            "name": "channel",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "integer",
+              "format": "uint64"
+            }
+          },
+          {
+            "name": "password",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bot/name/{name}": {
+      "get": {
+        "tags": [
+          "bot"
+        ],
+        "description": "Gives the bot a new name.",
+        "operationId": "name3",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bot/save/{name}": {
+      "get": {
+        "tags": [
+          "bot"
+        ],
+        "description": "Saves the configuration for the newly connected bot.",
+        "operationId": "save",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/bot/setup/{adminToken}": {
+      "get": {
+        "tags": [
+          "bot"
+        ],
+        "description": "Sets all teamspeak rights for the bot to be fully functional.",
+        "operationId": "setup",
+        "parameters": [
+          {
+            "name": "adminToken",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bot/template/{botName}/{cmd}": {
+      "get": {
+        "tags": [
+          "bot"
+        ],
+        "description": "Switches the context to the requested bot.",
+        "operationId": "template3",
+        "parameters": [
+          {
+            "name": "botName",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cmd",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bot/use/{botId}/{cmd}": {
+      "get": {
+        "tags": [
+          "bot"
+        ],
+        "description": "Switches the context to the requested bot.",
+        "operationId": "use",
+        "parameters": [
+          {
+            "name": "botId",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "cmd",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/clear": {
+      "get": {
+        "description": "Removes all songs from the current playlist.",
+        "operationId": "clear2",
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/command/parse/{parameter}": {
+      "get": {
+        "tags": [
+          "command"
+        ],
+        "description": "Displays the AST of the requested command.",
+        "operationId": "parse",
+        "parameters": [
+          {
+            "name": "parameter",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/command/tree": {
+      "get": {
+        "tags": [
+          "command"
+        ],
+        "description": "This feature is not documented.",
+        "operationId": "tree2",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/data/song/cover/get": {
+      "get": {
+        "tags": [
+          "data"
+        ],
+        "description": "This feature is not documented.",
+        "operationId": "get6",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/eval": {
+      "get": {
+        "description": "Executes a given command or string",
+        "operationId": "eval",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/from/{factoryName}/{url}": {
+      "get": {
+        "description": "This feature is not documented.",
+        "operationId": "from3",
+        "parameters": [
+          {
+            "name": "factoryName",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "url",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/get/{index}/{list}": {
+      "get": {
+        "description": "This feature is not documented.",
+        "operationId": "get7",
+        "parameters": [
+          {
+            "name": "index",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "integer",
+              "format": "uint32"
+            }
+          },
+          {
+            "name": "list",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/getmy/id": {
+      "get": {
+        "tags": [
+          "getmy"
+        ],
+        "description": "Gets your id.",
+        "operationId": "id",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "uint16"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/getmy/uid": {
+      "get": {
+        "tags": [
+          "getmy"
+        ],
+        "description": "Gets your unique id.",
+        "operationId": "uid",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/getmy/name": {
+      "get": {
+        "tags": [
+          "getmy"
+        ],
+        "description": "Gets your nickname.",
+        "operationId": "name4",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/getmy/dbid": {
+      "get": {
+        "tags": [
+          "getmy"
+        ],
+        "description": "Gets your database id.",
+        "operationId": "dbid",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "uint64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/getmy/channel": {
+      "get": {
+        "tags": [
+          "getmy"
+        ],
+        "description": "Gets your channel id you are currently in.",
+        "operationId": "channel4",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "uint64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/getmy/all": {
+      "get": {
+        "tags": [
+          "getmy"
+        ],
+        "description": "Gets all information about you.",
+        "operationId": "all3",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/getuser/uid/byid/{id}": {
+      "get": {
+        "tags": [
+          "getuser"
+        ],
+        "description": "Gets the unique id of a user, searching with his id.",
+        "operationId": "byid",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "integer",
+              "format": "uint16"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/getuser/name/byid/{id}": {
+      "get": {
+        "tags": [
+          "getuser"
+        ],
+        "description": "Gets the nickname of a user, searching with his id.",
+        "operationId": "byid2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "integer",
+              "format": "uint16"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/getuser/dbid/byid/{id}": {
+      "get": {
+        "tags": [
+          "getuser"
+        ],
+        "description": "Gets the database id of a user, searching with his id.",
+        "operationId": "byid3",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "integer",
+              "format": "uint16"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/getuser/channel/byid/{id}": {
+      "get": {
+        "tags": [
+          "getuser"
+        ],
+        "description": "Gets the channel id a user is currently in, searching with his id.",
+        "operationId": "byid4",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "integer",
+              "format": "uint16"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/getuser/all/byid/{id}": {
+      "get": {
+        "tags": [
+          "getuser"
+        ],
+        "description": "Gets all information about a user, searching with his id.",
+        "operationId": "byid5",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "integer",
+              "format": "uint16"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/getuser/id/byname/{username}": {
+      "get": {
+        "tags": [
+          "getuser"
+        ],
+        "description": "Gets the id of a user, searching with his name.",
+        "operationId": "byname",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/getuser/all/byname/{username}": {
+      "get": {
+        "tags": [
+          "getuser"
+        ],
+        "description": "Gets all information of a user, searching with his name.",
+        "operationId": "byname2",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/getuser/name/bydbid/{dbId}": {
+      "get": {
+        "tags": [
+          "getuser"
+        ],
+        "description": "Gets the user name by dbid, searching with his database id.",
+        "operationId": "bydbid",
+        "parameters": [
+          {
+            "name": "dbId",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "integer",
+              "format": "uint64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/getuser/uid/bydbid/{dbId}": {
+      "get": {
+        "tags": [
+          "getuser"
+        ],
+        "description": "Gets the unique id of a user, searching with his database id.",
+        "operationId": "bydbid2",
+        "parameters": [
+          {
+            "name": "dbId",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "integer",
+              "format": "uint64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/help": {
+      "get": {
+        "tags": [
+          "help"
+        ],
+        "description": "Shows all commands or detailed help about a specific command.",
+        "operationId": "help2",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/help/all": {
+      "get": {
+        "tags": [
+          "help"
+        ],
+        "description": "This feature is not documented.",
+        "operationId": "allAll",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/help/command/{command}...": {
+      "get": {
+        "tags": [
+          "help"
+        ],
+        "description": "This feature is not documented.",
+        "operationId": "command",
+        "parameters": [
+          {
+            "name": "command",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/help/play": {
+      "get": {
+        "tags": [
+          "help"
+        ],
+        "description": "This feature is not documented.",
+        "operationId": "play6",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/history/add/{hid}": {
+      "get": {
+        "tags": [
+          "history"
+        ],
+        "description": "<id> Adds the song with <id> to the queue",
+        "operationId": "add5",
+        "parameters": [
+          {
+            "name": "hid",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "integer",
+              "format": "uint32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/history/clean": {
+      "get": {
+        "tags": [
+          "history"
+        ],
+        "description": "Cleans up the history file for better startup performance.",
+        "operationId": "clean",
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/history/clean/upgrade": {
+      "get": {
+        "tags": [
+          "history"
+        ],
+        "description": "This feature is not documented.",
+        "operationId": "upgrade",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/history/delete/{id}": {
+      "get": {
+        "tags": [
+          "history"
+        ],
+        "description": "<id> Removes the entry with <id> from the history",
+        "operationId": "delete4",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "integer",
+              "format": "uint32"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/history/from/{userUid}/{amount}": {
+      "get": {
+        "tags": [
+          "history"
+        ],
+        "description": "Gets the last <count> songs from the user with the given <user-dbid>",
+        "operationId": "fromAll",
+        "parameters": [
+          {
+            "name": "userUid",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "amount",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/history/id/{id}": {
+      "get": {
+        "tags": [
+          "history"
+        ],
+        "description": "<id> Displays all saved information about the song with <id>",
+        "operationId": "id2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "integer",
+              "format": "uint32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/history/id/{special}": {
+      "get": {
+        "tags": [
+          "history"
+        ],
+        "description": "(last|next) Gets the highest|next song id",
+        "operationId": "id3",
+        "parameters": [
+          {
+            "name": "special",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "uint32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/history/last/{amount}": {
+      "get": {
+        "tags": [
+          "history"
+        ],
+        "description": "<count> Gets the last <count> played songs.",
+        "operationId": "lastAll",
+        "parameters": [
+          {
+            "name": "amount",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/history/last": {
+      "get": {
+        "tags": [
+          "history"
+        ],
+        "description": "Plays the last song again",
+        "operationId": "last",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/history/play/{hid}": {
+      "get": {
+        "tags": [
+          "history"
+        ],
+        "description": "<id> Playes the song with <id>",
+        "operationId": "play7",
+        "parameters": [
+          {
+            "name": "hid",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "integer",
+              "format": "uint32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/history/rename/{id}/{newName}": {
+      "get": {
+        "tags": [
+          "history"
+        ],
+        "description": "<id> <name> Sets the name of the song with <id> to <name>",
+        "operationId": "rename",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "integer",
+              "format": "uint32"
+            }
+          },
+          {
+            "name": "newName",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/history/till/{time}": {
+      "get": {
+        "tags": [
+          "history"
+        ],
+        "description": "<date> Gets all songs played until <date>.",
+        "operationId": "till",
+        "parameters": [
+          {
+            "name": "time",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/history/title/{part}": {
+      "get": {
+        "tags": [
+          "history"
+        ],
+        "description": "Gets all songs which title contains <string>",
+        "operationId": "title",
+        "parameters": [
+          {
+            "name": "part",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/if/{arg0}/{cmp}/{arg1}/{then}/{other}": {
+      "get": {
+        "description": "Conditionally executes subcommands.",
+        "operationId": "if",
+        "parameters": [
+          {
+            "name": "arg0",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cmp",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "arg1",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "then",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {}
+          },
+          {
+            "name": "other",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/info/{offset}/{count}": {
+      "get": {
+        "description": "Show's a small summary of the current playlist and queue status.",
+        "operationId": "info3",
+        "parameters": [
+          {
+            "name": "offset",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "count",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/json/merge": {
+      "get": {
+        "tags": [
+          "json"
+        ],
+        "description": "Allows you to combine multiple JsonResults into one",
+        "operationId": "merge2",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/json/api": {
+      "get": {
+        "tags": [
+          "json"
+        ],
+        "description": "This feature is not documented.",
+        "operationId": "api",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/jump/{offset}": {
+      "get": {
+        "description": "Jumps to the requested index in the current queue and starts playing.",
+        "operationId": "jump",
+        "parameters": [
+          {
+            "name": "offset",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/kickme": {
+      "get": {
+        "tags": [
+          "kickme"
+        ],
+        "description": "Guess what?",
+        "operationId": "kickme",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/kickme/far": {
+      "get": {
+        "tags": [
+          "kickme"
+        ],
+        "description": "Guess what?",
+        "operationId": "far",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/list/add/{listId}/{link}": {
+      "get": {
+        "tags": [
+          "list"
+        ],
+        "description": "<id> Adds a link to your private playlist from the history by <id>.",
+        "operationId": "add6",
+        "parameters": [
+          {
+            "name": "listId",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "link",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/list/clear/{listId}": {
+      "get": {
+        "tags": [
+          "list"
+        ],
+        "description": "Clears a playlist.",
+        "operationId": "clear3",
+        "parameters": [
+          {
+            "name": "listId",
+            "in": "path",
+            "required": true,
+            "description": "useful help",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "default_basic": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    }
+  },
+  "security": [
+    {
+      "default_basic": []
+    }
+  ]
+}
