@@ -47,12 +47,13 @@ public class FileController : ApiControllerBase
     }
 
     /// <summary>
-    /// Delete files
+    /// Delete file by filename
     /// </summary>
+    /// <param name="fullFileName">The full file name</param>
     /// <returns></returns>
     [ProducesResponseType(typeof(object), StatusCodes.Status403Forbidden)]
     [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [HttpDelete("{fullFileName}")]
-    public ActionResult<bool> DeleteFiles(string? fullFileName) => _fileService.DeleteFile(fullFileName) ? Ok() : BadRequest();
+    public ActionResult<bool> DeleteFiles(string? fullFileName) => BoolToActionResult(_fileService.DeleteFile(fullFileName));
 }
