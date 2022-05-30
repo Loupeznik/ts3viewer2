@@ -1,6 +1,4 @@
-﻿using DZarsky.TS3Viewer2.Core.AudioBot.Services;
-using DZarsky.TS3Viewer2.Core.Server.Services;
-using DZarsky.TS3Viewer2.Domain.AudioBot.Services;
+﻿using DZarsky.TS3Viewer2.Core.Server.Services;
 using DZarsky.TS3Viewer2.Domain.Server.Models;
 using DZarsky.TS3Viewer2.Domain.Server.Services;
 using Microsoft.Extensions.Configuration;
@@ -25,8 +23,6 @@ public static class TeamSpeakApiConfigExtensions
         var teamspeakClient = ConfigureClient(serverConfig).Result;
 
         services.AddTeamSpeakServices();
-        
-        services.AddScoped<IAudioBotService, AudioBotService>();
         services.AddSingleton(teamspeakClient);
         
         return services;

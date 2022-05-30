@@ -21,6 +21,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTeamSpeakApi(builder.Configuration);
 builder.Services.AddFiles(builder.Configuration);
+builder.Services.AddAudioBot(builder.Configuration);
 
 builder.Services.AddCors(options =>
 {
