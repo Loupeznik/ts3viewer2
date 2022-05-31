@@ -16,7 +16,10 @@ namespace DZarsky.TS3Viewer2.Core.Infrastructure.Net
 
             _httpClient.BaseAddress = new Uri(baseUrl);
 
-            return new Client(_httpClient);
+            return new Client(_httpClient)
+            {
+                BaseUrl = baseUrl
+            };
         }
     }
 }
