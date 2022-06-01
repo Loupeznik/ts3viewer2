@@ -1,4 +1,5 @@
 ﻿using DZarsky.TS3Viewer2.Core.Infrastructure.Net;
+using DZarsky.TS3Viewer2.Core.TS3AudioBot;
 using DZarsky.TS3Viewer2.Domain.AudioBot.Dto;
 using DZarsky.TS3Viewer2.Domain.AudioBot.Services;
 using Newtonsoft.Json;
@@ -19,56 +20,127 @@ public class AudioBotService : IAudioBotService
 
     public async Task<SongDto> GetCurrentSong()
     {
-        var song = new SongDto();
-
         try
         {
-            var client = _clientFactory.GetApiClient();
-            var result = await client.SongAsync();
-            var stringResult = Convert.ToString(result);
-
-            if (result == null || string.IsNullOrWhiteSpace(stringResult))
-            {
-                return song;
-            }
-
-            song = JsonConvert.DeserializeObject<SongDto>(stringResult);
+            var result = await GetSong(_clientFactory.GetApiClient());
+            return MapSongToDto(result);
         }
         catch (Exception ex)
         {
-            _logger.Error("Could not get current song", ex);
+            ConstructAndLogErrorMessage(nameof(GetCurrentSong), ex);
         }
 
-        return song!;
+        return new SongDto();
     }
 
-    public Task<VolumeDto> GetCurrentVolume()
+    public async Task<VolumeDto> GetCurrentVolume()
     {
-        throw new NotImplementedException();
+        var volume = new VolumeDto();
+
+        try
+        {
+            volume.Volume = await _clientFactory.GetApiClient().VolumeGetAsync();
+        }
+        catch (Exception ex)
+        {
+            ConstructAndLogErrorMessage(nameof(GetCurrentVolume), ex);
+        }
+
+        return volume;
     }
 
-    public Task<bool> MoveBotToChannel(MoveBotDto channel)
+    public async Task<bool> MoveBotToChannel(MoveBotDto channel)
     {
-        throw new NotImplementedException();
+        try
+        {
+            _ = await _clientFactory.GetApiClient().BotMoveAsync(channel.ChannelId, channel.Password);
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            ConstructAndLogErrorMessage(nameof(MoveBotToChannel), ex);
+            return false;
+        }
     }
 
-    public Task<SongDto> PausePlayback()
+    public async Task<SongDto> PausePlayback()
     {
-        throw new NotImplementedException();
+        var client = _clientFactory.GetApiClient();
+
+        try
+        {
+            await client.PauseAsync();
+        }
+        catch (Exception ex)
+        {
+            ConstructAndLogErrorMessage(nameof(PausePlayback), ex);
+        }
+
+        return MapSongToDto(await GetSong(client));
     }
 
-    public Task<SongDto> PlaySong(SongDto song)
+    public async Task<SongDto> PlaySong(SongDto song)
     {
-        throw new NotImplementedException();
+        var client = _clientFactory.GetApiClient();
+
+        try
+        {
+            _ = await client.Play___GetAsync(song.Link, new List<string>());
+        }
+        catch (Exception ex)
+        {
+            ConstructAndLogErrorMessage(nameof(PlaySong), ex);
+        }
+
+        return MapSongToDto(await GetSong(client));
     }
 
-    public Task<VolumeDto> SetVolume(VolumeDto volume)
+    public async Task<VolumeDto> SetVolume(VolumeDto volume)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _clientFactory.GetApiClient().VolumeGetAsync(volume.Volume.ToString());
+        }
+        catch (Exception ex)
+        {
+            ConstructAndLogErrorMessage(nameof(SetVolume), ex);
+            volume.Volume = 0;
+        }
+
+        return volume;
     }
 
-    public Task<SongDto> StopPlayback()
+    public async Task<SongDto> StopPlayback()
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _clientFactory.GetApiClient().StopAsync();
+        }
+        catch (Exception ex)
+        {
+            ConstructAndLogErrorMessage(nameof(StopPlayback), ex);
+        }
+
+        return new SongDto();
+    }
+
+    private void ConstructAndLogErrorMessage(string action, Exception ex)
+    {
+        _logger.Error($"Could not invoke {action}", ex);
+    }
+
+    private static async Task<object> GetSong(Client client) => await client.SongAsync();
+
+    private static SongDto MapSongToDto(object song)
+    {
+        var stringResult = Convert.ToString(song);
+
+        if (string.IsNullOrWhiteSpace(stringResult))
+        {
+            return new SongDto();
+        }
+
+        return JsonConvert.DeserializeObject<SongDto>(stringResult)!;
     }
 }
