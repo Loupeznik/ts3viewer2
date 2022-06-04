@@ -7,14 +7,13 @@ import {MainPage} from "./pages/Main"
 
 function App() {
   return (
-      <div className="dark">
+      <div className="dark h-screen bg-gray-800">
         <Navbar />
           <Routes>
               <Route path="/" element={<MainPage />} />
               <Route path="/status" element={<StatusPage />} />
           </Routes>
       </div>
-
   );
 }
 
