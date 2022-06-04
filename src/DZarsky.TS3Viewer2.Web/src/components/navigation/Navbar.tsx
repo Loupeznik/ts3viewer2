@@ -33,6 +33,7 @@ export const Navbar = () => {
                             <Link url="/status" name="Server status"/>
                             <Link url="/bot" name="Audiobot"/>
                             <Link url="/connect" name="Connect"/>
+                            <Link url="/upload" name="Song upload"/>
                             <Link url="/admin" name="Server administration"/>
                         </ul>
                     </div>
