@@ -4,6 +4,7 @@ import { Routes, Route } from "react-router-dom";
 import { StatusPage } from "./pages/Status";
 import { MainPage } from "./pages/Main"
 import { ConnectPage } from './pages/Connect';
+import { UploadPage } from './pages/Upload';
 
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
               <Route path="/" element={<MainPage />} />
               <Route path="/status" element={<StatusPage />} />
               <Route path="/connect" element={<ConnectPage />} />
+              <Route path="/upload" element={<UploadPage />} />
           </Routes>
       </div>
   );
