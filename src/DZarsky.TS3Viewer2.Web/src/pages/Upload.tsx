@@ -54,9 +54,9 @@ export const UploadPage = () => {
         if (failedUploads && failedUploads?.length > 0) {
             return (
                 <ul>
-                    {failedUploads?.map((filename) =>
-                        (<li>{filename}</li>)
-                    ) ?? (<li>-</li>)}
+                    {failedUploads?.map((filename, index) =>
+                        (<li key="index">{filename}</li>)
+                    )}
                 </ul>
             )
         }
@@ -70,8 +70,8 @@ export const UploadPage = () => {
         if (successfulUploads && successfulUploads?.length > 0) {
             return (
                 <ul>
-                    {successfulUploads?.map((filename) =>
-                        (<li>{filename}</li>)
+                    {successfulUploads?.map((filename, index) =>
+                        (<li key={index}>{filename}</li>)
                     )}
                 </ul>
             )
