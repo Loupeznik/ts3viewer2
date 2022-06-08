@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FileService } from "../api";
+import { AddFilesResultDto, ApiError, FileService } from "../api";
 import { Input } from '../components/forms/Input';
 import { SubmitButton } from '../components/forms/SubmitButton';
 
@@ -23,20 +23,82 @@ export const UploadPage = () => {
             }
         }
 
-        const result = await FileService.postApiV1Files({ files: filesToUpload })
+        await FileService.postApiV1Files({ files: filesToUpload }).catch(err => {
+            if (err instanceof ApiError) {
+                const res = err.body as AddFilesResultDto
 
-        if (result.successful && result.successful?.length > 0) {
-            setSuccessfulUploads(result.successful)
-        }
+                if (res.failed && res.failed?.length > 0) {
+                    setFailedUploads(res.failed)
+                }
+            }
+        }).then((res) => {
+            if (res) {
+                if (res.successful && res.successful?.length > 0) {
+                    setSuccessfulUploads(res.successful)
+                }
 
-        if (result.failed && result.failed?.length > 0) {
-            setFailedUploads(result.failed)
-        }
+                if (res.failed && res.failed?.length > 0) {
+                    setFailedUploads(res.failed)
+                }
+            }
+
+        })
+
     }
 
     useEffect(() => {
 
     }, [successfulUploads, failedUploads]);
+
+    function renderFailedUploads() {
+        if (failedUploads && failedUploads?.length > 0) {
+            return (
+                <ul>
+                    {failedUploads?.map((filename) =>
+                        (<li>{filename}</li>)
+                    ) ?? (<li>-</li>)}
+                </ul>
+            )
+        }
+
+        return (
+            <p>-</p>
+        )
+    }
+
+    function renderSuccessfulUploads() {
+        if (successfulUploads && successfulUploads?.length > 0) {
+            return (
+                <ul>
+                    {successfulUploads?.map((filename) =>
+                        (<li>{filename}</li>)
+                    )}
+                </ul>
+            )
+        }
+        
+        return (
+            <p>-</p>
+        )
+    }
+
+    function renderUploadResult() {
+        if (successfulUploads || failedUploads)
+        {
+            return (
+                <div>
+                    <div className="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800" role="alert">
+                        <span className="font-bold text-lg">Successful</span>
+                        {renderSuccessfulUploads()}
+                    </div>
+                    <div className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert">
+                        <span className="font-bold text-lg">Failed</span>
+                        {renderFailedUploads()}
+                    </div>
+                </div>
+            )
+        }
+    }
 
     return (
         <div>
@@ -50,6 +112,7 @@ export const UploadPage = () => {
                             <Input type="file" id="files" onChange={changeHandler} />
 
                             <SubmitButton value="Upload" onClick={handleSubmission} />
+                            {renderUploadResult()}
                         </div>
                     </div>
                 </div>
