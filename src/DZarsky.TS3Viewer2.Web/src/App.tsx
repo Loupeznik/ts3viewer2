@@ -5,6 +5,7 @@ import { StatusPage } from "./pages/Status";
 import { MainPage } from "./pages/Main"
 import { ConnectPage } from './pages/Connect';
 import { UploadPage } from './pages/Upload';
+import { AudioBotPage } from './pages/AudioBot';
 
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
               <Route path="/status" element={<StatusPage />} />
               <Route path="/connect" element={<ConnectPage />} />
               <Route path="/upload" element={<UploadPage />} />
+              <Route path="/bot" element={<AudioBotPage />} />
           </Routes>
       </div>
   );
