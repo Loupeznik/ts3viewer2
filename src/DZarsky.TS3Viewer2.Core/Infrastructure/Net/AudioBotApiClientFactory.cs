@@ -12,7 +12,7 @@ namespace DZarsky.TS3Viewer2.Core.Infrastructure.Net
 
         public Client GetApiClient()
         {
-            var baseUrl = $"{_config.BaseUrl}/bot/use/{_config.BotID}/(/";
+            var baseUrl = ConstructBaseUrl();
 
             _httpClient.BaseAddress = new Uri(baseUrl);
 
@@ -21,5 +21,14 @@ namespace DZarsky.TS3Viewer2.Core.Infrastructure.Net
                 BaseUrl = baseUrl
             };
         }
+
+        public HttpClient GetHttpClient()
+        {
+            _httpClient.BaseAddress = new Uri(ConstructBaseUrl());
+
+            return _httpClient;
+        }
+
+        private string ConstructBaseUrl() => $"{_config.BaseUrl}/bot/use/{_config.BotID}/(/";
     }
 }

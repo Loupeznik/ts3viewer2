@@ -1,4 +1,5 @@
-﻿using DZarsky.TS3Viewer2.Core.Infrastructure.Net;
+﻿using DZarsky.TS3Viewer2.Core.AudioBot.Models;
+using DZarsky.TS3Viewer2.Core.Infrastructure.Net;
 using DZarsky.TS3Viewer2.Core.TS3AudioBot;
 using DZarsky.TS3Viewer2.Domain.AudioBot.Dto;
 using DZarsky.TS3Viewer2.Domain.AudioBot.Services;
@@ -37,13 +38,12 @@ public class AudioBotService : IAudioBotService
     {
         var volume = new VolumeDto();
 
-        try
+        var client = _clientFactory.GetHttpClient();
+        var response = await client.GetAsync(string.Concat(client.BaseAddress, "volume"));
+
+        if (response.IsSuccessStatusCode)
         {
-            volume.Volume = await _clientFactory.GetApiClient().VolumeGetAsync();
-        }
-        catch (Exception ex)
-        {
-            ConstructAndLogErrorMessage(nameof(GetCurrentVolume), ex);
+            volume.Volume = JsonConvert.DeserializeObject<BaseValueResponse<float>>(await response.Content.ReadAsStringAsync())?.Value ?? 0;
         }
 
         return volume;
