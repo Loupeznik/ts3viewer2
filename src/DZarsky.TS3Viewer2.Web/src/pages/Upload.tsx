@@ -53,7 +53,7 @@ export const UploadPage = () => {
             return (
                 <ul>
                     {failedUploads?.map((filename, index) =>
-                        (<li key="index">{filename}</li>)
+                        (<li key={index}>{filename}</li>)
                     )}
                 </ul>
             )

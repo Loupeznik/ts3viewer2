@@ -1,4 +1,5 @@
 import React from 'react';
+import { FiUser } from 'react-icons/fi';
 import { ClientDto, ClientType } from '../api';
 
 type ClientListProps = {
@@ -11,14 +12,12 @@ export const ClientList = ({clients}: ClientListProps) => {
             return null
         }
 
-        return <li>{client.nickName}</li>
+        return <li className="ml-4"><FiUser className="mr-1" />{client.nickName}</li>
     });
 
     return (
-        <div>
             <ul>
                 { formattedList }
             </ul>
-        </div>
     )
 }
