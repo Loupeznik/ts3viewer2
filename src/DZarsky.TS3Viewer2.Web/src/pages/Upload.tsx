@@ -41,9 +41,7 @@ export const UploadPage = () => {
                     setFailedUploads(res.failed)
                 }
             }
-
         })
-
     }
 
     useEffect(() => {
