@@ -23,6 +23,7 @@ builder.Services.AddTeamSpeakApi(builder.Configuration);
 builder.Services.AddFiles(builder.Configuration);
 builder.Services.AddAudioBot(builder.Configuration);
 
+/*
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(allowedOriginsPolicy, policy =>
@@ -30,8 +31,15 @@ builder.Services.AddCors(options =>
         policy.WithOrigins("http://localhost:3000");
     });
 });
+*/
+
+builder.Services.AddCors();
 
 var app = builder.Build();
+
+app.UseCors(x => x.AllowAnyHeader()
+    .AllowAnyOrigin()
+    .AllowAnyMethod());
 
 if (app.Environment.IsDevelopment())
 {
@@ -43,7 +51,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
-app.UseCors(allowedOriginsPolicy);
+//app.UseCors(allowedOriginsPolicy);
 
 app.MapControllers();
 
