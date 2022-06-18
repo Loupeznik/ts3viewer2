@@ -58,7 +58,6 @@ steps:
   inputs:
     secureFile: '.env.test'
     retryCount: '10'
-    socketTimeout: '100'
 
 - task: PowerShell@2
   inputs:
@@ -82,7 +81,6 @@ steps:
   inputs:
     secureFile: '.env.production'
     retryCount: '10'
-    socketTimeout: '100'
 
 - task: PowerShell@2
   inputs:
