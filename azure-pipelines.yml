@@ -53,6 +53,13 @@ steps:
     command: 'install'
     workingDir: '$(webSourcesDirectory)'
 
+- task: EnvTransform@0
+  inputs:
+    inputType: 'inline'
+    content: |
+      API_BASE_URL=$(api-baseurl-test)
+    outputFile: '.env.test'
+
 - task: Npm@1
   inputs:
     command: 'custom'
@@ -64,6 +71,13 @@ steps:
     SourceFolder: '$(webSourcesDirectory)\build'
     Contents: '**'
     TargetFolder: '$(Build.ArtifactStagingDirectory)\DZarsky.TS3Viewer2.Web\test'
+
+- task: EnvTransform@0
+  inputs:
+    inputType: 'inline'
+    content: |
+      API_BASE_URL=$(api-baseurl-prod)
+    outputFile: '.env.production'
 
 - task: Npm@1
   inputs:
