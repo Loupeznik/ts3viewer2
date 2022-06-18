@@ -13,6 +13,7 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  webSourcesDirectory: '$(Build.SourcesDirectory)\src\DZarsky.TS3Viewer2.Web'
 
 steps:
 - task: UseDotNet@2
@@ -21,6 +22,10 @@ steps:
     version: '6.x'
 
 - task: NuGetToolInstaller@1
+
+- task: NodeTool@0
+  inputs:
+    versionSpec: '18.x'
 
 - task: NuGetCommand@2
   inputs:
@@ -42,6 +47,35 @@ steps:
     command: 'publish'
     publishWebProjects: true
     arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+
+- task: Npm@1
+  inputs:
+    command: 'install'
+    workingDir: '$(webSourcesDirectory)'
+
+- task: Npm@1
+  inputs:
+    command: 'custom'
+    workingDir: '$(webSourcesDirectory)'
+    customCommand: 'npm run build:test'
+
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(webSourcesDirectory)\build'
+    Contents: '**'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)\DZarsky.TS3Viewer2.Web\test'
+
+- task: Npm@1
+  inputs:
+    command: 'custom'
+    workingDir: '$(webSourcesDirectory)'
+    customCommand: 'npm run build:prod'
+
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(webSourcesDirectory)\build'
+    Contents: '**'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)\DZarsky.TS3Viewer2.Web\prod'
 
 - task: PublishBuildArtifacts@1
   inputs:
