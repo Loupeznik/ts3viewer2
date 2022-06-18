@@ -26,7 +26,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "build:prod": "env-cmd -f .env.production npm run build",
-    "build:test": "env-cmd F .env.test npm run build",
+    "build:test": "env-cmd -f .env.test npm run build",
     "types:openapi": "openapi -i http://localhost:5274/swagger/v1/swagger.json -o src/api"
   },
   "eslintConfig": {
