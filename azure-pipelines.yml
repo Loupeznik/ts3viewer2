@@ -56,9 +56,8 @@ steps:
 - task: EnvTransform@0
   inputs:
     inputType: 'inline'
-    inputFile: '$(webSourcesDirectory)\.env.test'
     content: |
-      API_BASE_URL=$(api-baseurl-test)
+      API_BASE_URL=https://api.ts3viewer-test.dzarsky.eu
     outputFile: '$(webSourcesDirectory)\.env.test'
 
 - task: Npm@1
@@ -76,7 +75,6 @@ steps:
 - task: EnvTransform@0
   inputs:
     inputType: 'inline'
-    inputFile: '$(webSourcesDirectory)\.env.production'
     content: |
       API_BASE_URL=$(api-baseurl-prod)
     outputFile: '$(webSourcesDirectory)\.env.production'
