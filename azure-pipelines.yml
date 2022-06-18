@@ -53,12 +53,17 @@ steps:
     command: 'install'
     workingDir: '$(webSourcesDirectory)'
 
-- task: EnvTransform@0
+- task: DownloadSecureFile@1
+  name: env_test
   inputs:
-    inputType: 'inline'
-    content: |
-      API_BASE_URL=https://api.ts3viewer-test.dzarsky.eu
-    outputFile: '$(webSourcesDirectory)\.env.test'
+    secureFile: '.env.test'
+    retryCount: '10'
+    socketTimeout: '100'
+
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: 'Copy-Item $(env_test.secureFilePath) $(webSourcesDirectory) -Force'
 
 - task: Npm@1
   inputs:
@@ -72,12 +77,17 @@ steps:
     Contents: '**'
     TargetFolder: '$(Build.ArtifactStagingDirectory)\DZarsky.TS3Viewer2.Web\test'
 
-- task: EnvTransform@0
+- task: DownloadSecureFile@1
+  name: env_prd
   inputs:
-    inputType: 'inline'
-    content: |
-      API_BASE_URL=$(api-baseurl-prod)
-    outputFile: '$(webSourcesDirectory)\.env.production'
+    secureFile: '.env.production'
+    retryCount: '10'
+    socketTimeout: '100'
+
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: 'Copy-Item $(env_prd.secureFilePath) $(webSourcesDirectory) -Force'
 
 - task: Npm@1
   inputs:
