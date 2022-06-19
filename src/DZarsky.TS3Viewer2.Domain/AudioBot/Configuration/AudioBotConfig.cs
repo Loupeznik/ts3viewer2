@@ -5,5 +5,7 @@
         public string? BaseUrl { get; set; }
 
         public int BotID { get; set; }
+
+        public string? Token { get; set; }
     }
 }
