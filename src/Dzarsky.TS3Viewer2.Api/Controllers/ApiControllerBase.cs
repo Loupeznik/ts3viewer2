@@ -12,9 +12,5 @@ public class ApiControllerBase : ControllerBase
 
     }
 
-    protected ActionResult BoolToActionResult(bool result)
-    {
-        return result ? Ok() : BadRequest();
-    }
-
+    protected ActionResult BoolToActionResult(bool result) => result ? Ok() : BadRequest();
 }

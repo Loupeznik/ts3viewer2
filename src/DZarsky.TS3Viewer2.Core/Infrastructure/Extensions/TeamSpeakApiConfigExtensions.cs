@@ -12,7 +12,7 @@ public static class TeamSpeakApiConfigExtensions
     public static IServiceCollection AddTeamSpeakApi(this IServiceCollection services, IConfiguration config)
     {
         var serverConfig = config.GetSection("TeamSpeakServer").Get<ServerInstance>();
-        
+
         if (serverConfig == null)
         {
             throw new SystemException("Cannot find TeamSpeakServer config.");
@@ -24,14 +24,14 @@ public static class TeamSpeakApiConfigExtensions
 
         services.AddTeamSpeakServices();
         services.AddSingleton(teamspeakClient);
-        
+
         return services;
     }
 
     private static async Task<TeamSpeakClient> ConfigureClient(ServerInstance serverConfig)
     {
         var client = new TeamSpeakClient(serverConfig.Host, serverConfig.Port, TimeSpan.Zero);
-        
+
         await client.Connect();
         await client.Login(serverConfig.Login, serverConfig.Token);
         await client.UseServer(serverConfig.ServerId);
@@ -44,7 +44,7 @@ public static class TeamSpeakApiConfigExtensions
         services.AddScoped<ITeamSpeakClientService, TeamSpeakClientService>();
         services.AddScoped<ITeamSpeakServerService, TeamSpeakServerService>();
         services.AddScoped<ITeamSpeakChannelService, TeamSpeakChannelService>();
-        
+
         return services;
     }
 }
