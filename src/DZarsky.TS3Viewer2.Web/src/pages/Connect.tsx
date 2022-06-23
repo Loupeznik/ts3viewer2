@@ -4,8 +4,6 @@ import { Label } from '../components/forms/Label';
 import { SubmitButton } from '../components/forms/SubmitButton';
 
 export const ConnectPage = () => {
-    const serverAddress = "127.0.0.1:9987"
-
     const [username, setUsername] = useState({})
 
     const onChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -15,7 +13,7 @@ export const ConnectPage = () => {
     const handleSubmit = (event: React.SyntheticEvent) => {
         event.preventDefault()
 
-        window.location.assign("ts3server://" + serverAddress + "?nickname=" + username)
+        window.location.assign("ts3server://" + process.env.REACT_APP_TS3_HOST + "?nickname=" + username)
     }
 
     return (
@@ -30,7 +28,7 @@ export const ConnectPage = () => {
                             <form onSubmit={handleSubmit}>
                                 <div className="mb-4">
                                     <Label forElement="server" value="Server" />
-                                    <Input type="text" id="server" value={serverAddress} isDisabled={true} />
+                                    <Input type="text" id="server" value={process.env.REACT_APP_TS3_HOST} isDisabled={true} />
                                     <Label forElement="name" value="Username" />
                                     <Input type="text" id="name" onChange={onChangeInput} />
                                 </div>
