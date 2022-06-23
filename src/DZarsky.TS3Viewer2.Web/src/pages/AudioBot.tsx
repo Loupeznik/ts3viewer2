@@ -71,7 +71,7 @@ export const AudioBotPage = () => {
     }
 
     function renderPlaybackControls() {
-        if (currentSong) {
+        if (currentSong && !currentSong.paused) {
             return (
                 <FiPauseCircle onClick={pausePlayback} className="cursor-pointer hover:text-yellow-400" />
             )
@@ -151,7 +151,7 @@ export const AudioBotPage = () => {
                                 <FiStopCircle onClick={stopPlayback} className="cursor-pointer hover:text-red-400" />
                             </div>
                             <div className="bg-gray-800 rounded-lg text-xl font-bold p-2">
-                                <p title="Current volume">{currentVolume}</p>
+                                <p title="Current volume">{currentVolume?.toFixed(0)}</p>
                             </div>
                             <div className="flex flex-row gap-4 justify-center">
                                 <FiPlusCircle onClick={increaseVolume} className="cursor-pointer hover:text-green-400" title="Increase volume by 10%" />
