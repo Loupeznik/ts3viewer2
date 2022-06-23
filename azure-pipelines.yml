@@ -17,17 +17,21 @@ variables:
 
 steps:
 - task: UseDotNet@2
+  displayName: 'Use .NET6'
   inputs:
     packageType: 'sdk'
     version: '6.x'
 
 - task: NuGetToolInstaller@1
+  displayName: 'Install NuGet tool'
 
 - task: NodeTool@0
+  displayName: 'Install NodeJS'
   inputs:
     versionSpec: '18.x'
 
 - task: NuGetCommand@2
+  displayName: 'Restore packages'
   inputs:
     command: 'restore'
     restoreSolution: '$(solution)'
@@ -35,6 +39,7 @@ steps:
     vstsFeed: 'fec35eb5-47a4-4789-9fd4-a3bcd21af267/a213a184-fce7-4021-9560-8d466b7c6eba'
 
 - task: MSBuild@1
+  displayName: 'Build API'
   inputs:
     solution: '$(solution)'
     msbuildArchitecture: 'x64'
@@ -43,63 +48,74 @@ steps:
     msbuildArguments: '/p:DeployOnBuild=True'
 
 - task: DotNetCoreCLI@2
+  displayName: 'Publish API'
   inputs:
     command: 'publish'
     publishWebProjects: true
     arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
 
 - task: Npm@1
+  displayName: 'Install NPM packages'
   inputs:
     command: 'install'
     workingDir: '$(webSourcesDirectory)'
 
 - task: DownloadSecureFile@1
+  displayName: 'Download .env file - Test'
   name: env_test
   inputs:
     secureFile: '.env.test'
     retryCount: '10'
 
 - task: PowerShell@2
+  displayName: 'Copy .env file - Test'
   inputs:
     targetType: 'inline'
     script: 'Copy-Item $(env_test.secureFilePath) $(webSourcesDirectory) -Force'
 
 - task: Npm@1
+  displayName: 'Build web - Test'
   inputs:
     command: 'custom'
     workingDir: '$(webSourcesDirectory)'
     customCommand: 'run build:test'
 
 - task: CopyFiles@2
+  displayName: 'Copy web artifact - Test'
   inputs:
     SourceFolder: '$(webSourcesDirectory)\build'
     Contents: '**'
     TargetFolder: '$(Build.ArtifactStagingDirectory)\DZarsky.TS3Viewer2.Web\test'
 
 - task: DownloadSecureFile@1
+  displayName: 'Download .env file - Prod'
   name: env_prd
   inputs:
     secureFile: '.env.production'
     retryCount: '10'
 
 - task: PowerShell@2
+  displayName: 'Copy .env file - Prod'
   inputs:
     targetType: 'inline'
     script: 'Copy-Item $(env_prd.secureFilePath) $(webSourcesDirectory) -Force'
 
 - task: Npm@1
+  displayName: 'Build web - Prod'
   inputs:
     command: 'custom'
     workingDir: '$(webSourcesDirectory)'
     customCommand: 'run build:prod'
 
 - task: CopyFiles@2
+  displayName: 'Copy web artifact - Prod'
   inputs:
     SourceFolder: '$(webSourcesDirectory)\build'
     Contents: '**'
     TargetFolder: '$(Build.ArtifactStagingDirectory)\DZarsky.TS3Viewer2.Web\prod'
 
 - task: PublishBuildArtifacts@1
+  displayName: 'Publish artifacts'
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'drop'
