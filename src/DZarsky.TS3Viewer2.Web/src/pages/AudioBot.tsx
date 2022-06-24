@@ -128,7 +128,7 @@ export const AudioBotPage = () => {
         if (errorMessage) {
             return (
                 <div>
-                    <div className="p-4 w-1/2 mx-auto text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800 mt-4" role="alert">
+                    <div className="p-4 w-full md:w-1/2 mx-auto text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800 mt-4" role="alert">
                         <span className="font-bold">{errorMessage}</span>
                     </div>
                 </div>
@@ -145,7 +145,7 @@ export const AudioBotPage = () => {
                     <div
                         className="w-full mt-3 md:w-1/2 bg-gray-800 text-white rounded-lg items-center justify-center px-4 py-2.5 dark:bg-gray-700">
                         <p className="text-xl font-semibold">{currentSong?.title ? "Currently playing " + currentSong.title : "Currently not playing any song"}</p>
-                        <div className="bg-gray-600 p-4 mt-8 w-1/2 mx-auto grid grid-flow-col rounded-lg text-3xl items-center">
+                        <div className="bg-gray-600 p-4 mt-8 w-full md:w-1/2 mx-auto grid grid-flow-col rounded-lg text-3xl items-center">
                             <div className="flex flex-row gap-4 justify-center">
                                 {renderPlaybackControls()}
                                 <FiStopCircle onClick={stopPlayback} className="cursor-pointer hover:text-red-400" />
@@ -161,7 +161,7 @@ export const AudioBotPage = () => {
                         <div>
                             {renderErrorMessage()}
                         </div>
-                        <div className="bg-gray-600 p-4 mt-12 w-1/2 mx-auto rounded-lg text-left">
+                        <div className="bg-gray-600 p-4 mt-12 w-full md:w-1/2 mx-auto rounded-lg text-left">
                             <label htmlFor="play" className="mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Play music from YouTube</label>
                             <div className="relative">
                                 <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
@@ -178,7 +178,7 @@ export const AudioBotPage = () => {
                                 </button>
                             </div>
                         </div>
-                        <div className="bg-gray-600 p-4 my-4 w-1/2 mx-auto gap-4 justify-center rounded-lg">
+                        <div className="bg-gray-600 p-4 my-4 w-full md:w-1/2 mx-auto gap-4 justify-center rounded-lg">
                             <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                                 <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400 text-center">
                                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
