@@ -20,8 +20,8 @@ public class ServerController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
     [HttpPost("messages/global")]
-    public async Task<ActionResult> SendGlobalMessage(MessageDto message) =>
-        BoolToActionResult((await _serverService.SendGlobalMessage(message)).Result);
+    public async Task<ActionResult<bool>> SendGlobalMessage(MessageDto message) =>
+        ApiResultToActionResult(await _serverService.SendGlobalMessage(message));
 
     /// <summary>
     /// Sends global message
@@ -32,15 +32,6 @@ public class ServerController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
     [HttpGet("info")]
-    public async Task<ActionResult<ServerInfoDto>> GetServerInfo()
-    {
-        var result = await _serverService.GetServerInfo();
-
-        if (!result.IsSuccess)
-        {
-            return BadRequest();
-        }
-
-        return Ok(result);
-    }
+    public async Task<ActionResult<ServerInfoDto>> GetServerInfo() =>
+        ApiResultToActionResult(await _serverService.GetServerInfo());
 }
