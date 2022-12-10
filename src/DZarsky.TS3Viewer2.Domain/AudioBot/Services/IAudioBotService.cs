@@ -1,20 +1,21 @@
 ﻿using DZarsky.TS3Viewer2.Domain.AudioBot.Dto;
+using DZarsky.TS3Viewer2.Domain.Infrastructure.General;
 
 namespace DZarsky.TS3Viewer2.Domain.AudioBot.Services;
 
 public interface IAudioBotService
 {
-    public Task<VolumeDto> GetCurrentVolume();
+    public Task<ApiResult<VolumeDto>> GetCurrentVolume();
 
-    public Task<VolumeDto> SetVolume(VolumeDto volume);
+    public Task<ApiResult<VolumeDto>> SetVolume(VolumeDto volume);
 
-    public Task<SongDto> GetCurrentSong();
+    public Task<ApiResult<SongDto>> GetCurrentSong();
 
-    public Task<SongDto> PlaySong(SongDto song);
+    public Task<ApiResult<SongDto>> PlaySong(SongDto song);
 
-    public Task<SongDto> StopPlayback();
+    public Task<ApiResult<SongDto>> StopPlayback();
 
-    public Task<SongDto> PausePlayback();
+    public Task<ApiResult<SongDto>> PausePlayback();
 
-    public Task<bool> MoveBotToChannel(MoveBotDto channel);
+    public Task<ApiResult<bool>> MoveBotToChannel(MoveBotDto channel);
 }

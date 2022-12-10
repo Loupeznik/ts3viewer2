@@ -19,7 +19,7 @@ public class FileController : ApiControllerBase
     [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [HttpGet]
-    public ActionResult<IList<FileDto>> GetFiles() => Ok(_fileService.GetFiles());
+    public ActionResult<List<FileDto>> GetFiles() => ApiResultToActionResult(_fileService.GetFiles());
 
     /// <summary>
     /// Upload files
@@ -43,7 +43,7 @@ public class FileController : ApiControllerBase
 
         var result = await _fileService.AddFiles(validFiles);
 
-        return result.Successful.Count > 0 ? Ok(result) : BadRequest(result);
+        return ApiResultToActionResult(result);
     }
 
     /// <summary>
@@ -55,5 +55,5 @@ public class FileController : ApiControllerBase
     [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [HttpDelete("{fullFileName}")]
-    public ActionResult<bool> DeleteFiles(string? fullFileName) => BoolToActionResult(_fileService.DeleteFile(fullFileName));
+    public ActionResult<bool> DeleteFiles(string? fullFileName) => ApiResultToActionResult(_fileService.DeleteFile(fullFileName));
 }

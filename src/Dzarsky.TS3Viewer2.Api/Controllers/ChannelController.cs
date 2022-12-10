@@ -19,9 +19,9 @@ public class ChannelController : ApiControllerBase
     [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [HttpGet]
-    public async Task<ActionResult<IList<ChannelDto>>> GetChannels() 
-        => new JsonResult(await _channelService.GetChannels());
-    
+    public async Task<ActionResult<List<ChannelDto>>> GetChannels()
+        => ApiResultToActionResult(await _channelService.GetChannels());
+
     /// <summary>
     /// Sends message to channel by current ID
     /// </summary>
@@ -31,6 +31,6 @@ public class ChannelController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
     [HttpPost("{id:int}/message")]
-    public async Task<ActionResult> SendMessage(int id, [FromBody] MessageDto message) =>
-        BoolToActionResult(await _channelService.SendMessage(id, message));
+    public async Task<ActionResult<bool>> SendMessage(int id, [FromBody] MessageDto message) =>
+        ApiResultToActionResult((await _channelService.SendMessage(id, message)));
 }

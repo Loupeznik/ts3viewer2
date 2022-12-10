@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DZarsky.TS3Viewer2.Domain.Infrastructure.General;
 using DZarsky.TS3Viewer2.Domain.Server.Dto;
 using DZarsky.TS3Viewer2.Domain.Server.Services;
 using Serilog;
@@ -19,30 +20,30 @@ public class TeamSpeakChannelService : ITeamSpeakChannelService
         _mapper = mapper;
     }
 
-    public async Task<bool> SendMessage(int id, MessageDto message)
+    public async Task<ApiResult<bool>> SendMessage(int id, MessageDto message)
     {
         if (string.IsNullOrWhiteSpace(message.Message))
         {
-            return false;
+            return ApiResult.Build(false, false, ReasonCodes.NullArgumentException, nameof(message.Message));
         }
 
         try
         {
             await _client.SendMessage(message.Message, MessageTarget.Channel, id);
-            
-            return true;
+
+            return ApiResult.Build(true);
         }
         catch (Exception ex)
         {
             _logger.Error($"Could not send message to channel {id}", ex);
-            return false;
+            return ApiResult.Build(false, false);
         }
     }
 
-    public async Task<IList<ChannelDto>> GetChannels()
+    public async Task<ApiResult<List<ChannelDto>>> GetChannels()
     {
         var channels = _mapper.Map(await _client.GetChannels(), new List<ChannelDto>());
 
-        return channels;
+        return ApiResult.Build(channels);
     }
 }

@@ -2,6 +2,7 @@
 using DZarsky.TS3Viewer2.Domain.Files.Constants;
 using DZarsky.TS3Viewer2.Domain.Files.Dto;
 using DZarsky.TS3Viewer2.Domain.Files.Services;
+using DZarsky.TS3Viewer2.Domain.Infrastructure.General;
 using HeyRed.Mime;
 using Serilog;
 
@@ -18,15 +19,15 @@ namespace DZarsky.TS3Viewer2.Core.Files.Services
             _logger = logger;
         }
 
-        public async Task<AddFilesResultDto> AddFiles(IDictionary<string, Stream> files)
+        public async Task<ApiResult<AddFilesResultDto>> AddFiles(IDictionary<string, Stream> files)
         {
             var result = new AddFilesResultDto();
 
             if (files.Count == 0)
             {
-                return result;
+                return ApiResult.Build(result, false, ReasonCodes.NullArgumentException, nameof(files));
             }
-            
+
             CreateFilesDirectoryIfNotExists();
 
             foreach (var file in files)
@@ -47,21 +48,26 @@ namespace DZarsky.TS3Viewer2.Core.Files.Services
                 result.Successful.Add(file.Key);
             }
 
-            return result;
+            return ApiResult.Build(result);
         }
 
-        public bool DeleteFile(string? fullFileName)
+        public ApiResult<bool> DeleteFile(string? fullFileName)
         {
             if (string.IsNullOrWhiteSpace(fullFileName) || !FilesDirectoryExists())
             {
-                return false;
+                return ApiResult.Build(false, false, ReasonCodes.InvalidArgument, nameof(fullFileName));
+            }
+
+            if (!FilesDirectoryExists())
+            {
+                return ApiResult.Build(false, false, ReasonCodes.NotFound);
             }
 
             var filePath = Path.Combine(_fileConfig.BasePath!, fullFileName);
 
             if (!File.Exists(filePath))
             {
-                return false;
+                return ApiResult.Build(false, false, ReasonCodes.NotFound);
             }
 
             try
@@ -71,20 +77,19 @@ namespace DZarsky.TS3Viewer2.Core.Files.Services
             catch (Exception ex)
             {
                 _logger.Error($"Could not delete file {filePath}", ex);
-                return false;
+                return ApiResult.Build(false, false);
             }
-            
 
-            return true;
+            return ApiResult.Build(true);
         }
 
-        public IList<FileDto> GetFiles()
+        public ApiResult<List<FileDto>> GetFiles()
         {
             var files = new List<FileDto>();
 
             if (!FilesDirectoryExists())
             {
-                return files;
+                return ApiResult.Build(files, false, ReasonCodes.NotFound);
             }
 
             var directoryFiles = Directory.GetFiles(_fileConfig.BasePath!);
@@ -99,7 +104,7 @@ namespace DZarsky.TS3Viewer2.Core.Files.Services
                 });
             }
 
-            return files;
+            return ApiResult.Build(files);
         }
 
         private bool FilesDirectoryExists() => Directory.Exists(_fileConfig.BasePath);
