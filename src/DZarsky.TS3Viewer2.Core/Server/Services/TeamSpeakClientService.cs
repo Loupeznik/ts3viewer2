@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DZarsky.TS3Viewer2.Domain.Infrastructure.General;
 using DZarsky.TS3Viewer2.Domain.Server.Dto;
 using DZarsky.TS3Viewer2.Domain.Server.Services;
 using Serilog;
@@ -18,56 +19,56 @@ public class TeamSpeakClientService : ITeamSpeakClientService
         _logger = logger;
         _mapper = mapper;
     }
-    
-    public async Task<IList<ClientDto>> GetClients()
+
+    public async Task<ApiResult<List<ClientDto>>> GetClients()
     {
         var clients = _mapper.Map(await _client.GetClients(), new List<ClientDto>());
-        
-        return clients;
+
+        return ApiResult.Build(clients);
     }
 
-    public async Task<bool> KickClient(int id)
+    public async Task<ApiResult<bool>> KickClient(int id)
     {
         try
         {
             await _client.KickClient(id, KickOrigin.Server);
 
-            return true;
+            return ApiResult.Build(true);
         }
         catch (Exception ex)
         {
             _logger.Error($"Could not kick user {id}", ex);
-            return false;
+            return ApiResult.Build(false, false, ReasonCodes.InvalidArgument, nameof(id));
         }
     }
-    
-    public async Task<bool> BanClient(int id, BanClientDto banInfo)
+
+    public async Task<ApiResult<bool>> BanClient(int id, BanClientDto banInfo)
     {
         try
         {
             await _client.BanClient(id, TimeSpan.FromSeconds(banInfo.Duration), banInfo.Reason);
 
-            return true;
+            return ApiResult.Build(true);
         }
         catch (Exception ex)
         {
             _logger.Error($"Could not ban user {id}", ex);
-            return false;
+            return ApiResult.Build(false, false, ReasonCodes.InvalidArgument, nameof(id));
         }
     }
 
-    public async Task<bool> PokeClient(int id, MessageDto pokeInfo)
+    public async Task<ApiResult<bool>> PokeClient(int id, MessageDto pokeInfo)
     {
         try
         {
             await _client.PokeClient(id, pokeInfo.Message);
 
-            return true;
+            return ApiResult.Build(true);
         }
         catch (Exception ex)
         {
             _logger.Error($"Could not poke user {id}", ex);
-            return false;
+            return ApiResult.Build(false, false, ReasonCodes.InvalidArgument, nameof(id));
         }
     }
 }

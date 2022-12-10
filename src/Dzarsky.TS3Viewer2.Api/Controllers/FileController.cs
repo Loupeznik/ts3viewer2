@@ -43,7 +43,7 @@ public class FileController : ApiControllerBase
 
         var result = await _fileService.AddFiles(validFiles);
 
-        return result.Successful.Count > 0 ? Ok(result) : BadRequest(result);
+        return result.Result?.Successful.Count > 0 ? Ok(result) : BadRequest(result);
     }
 
     /// <summary>
@@ -55,5 +55,5 @@ public class FileController : ApiControllerBase
     [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [HttpDelete("{fullFileName}")]
-    public ActionResult<bool> DeleteFiles(string? fullFileName) => BoolToActionResult(_fileService.DeleteFile(fullFileName));
+    public ActionResult<bool> DeleteFiles(string? fullFileName) => BoolToActionResult(_fileService.DeleteFile(fullFileName).Result);
 }

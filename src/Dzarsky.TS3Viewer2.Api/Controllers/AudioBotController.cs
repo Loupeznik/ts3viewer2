@@ -79,6 +79,6 @@ namespace DZarsky.TS3Viewer2.Api.Controllers
         [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpPost("move")]
-        public async Task<ActionResult> MoveBot(MoveBotDto channel) => BoolToActionResult(await _audioBotService.MoveBotToChannel(channel));
+        public async Task<ActionResult> MoveBot(MoveBotDto channel) => BoolToActionResult((await _audioBotService.MoveBotToChannel(channel)).Result);
     }
 }

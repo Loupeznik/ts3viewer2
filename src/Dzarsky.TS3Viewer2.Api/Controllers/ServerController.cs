@@ -21,7 +21,7 @@ public class ServerController : ApiControllerBase
     [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
     [HttpPost("messages/global")]
     public async Task<ActionResult> SendGlobalMessage(MessageDto message) =>
-        BoolToActionResult(await _serverService.SendGlobalMessage(message));
+        BoolToActionResult((await _serverService.SendGlobalMessage(message)).Result);
 
     /// <summary>
     /// Sends global message
@@ -36,7 +36,7 @@ public class ServerController : ApiControllerBase
     {
         var result = await _serverService.GetServerInfo();
 
-        if (result == null)
+        if (!result.IsSuccess)
         {
             return BadRequest();
         }

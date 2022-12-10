@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DZarsky.TS3Viewer2.Domain.Infrastructure.General;
 using DZarsky.TS3Viewer2.Domain.Server.Dto;
 using DZarsky.TS3Viewer2.Domain.Server.Models;
 using DZarsky.TS3Viewer2.Domain.Server.Services;
@@ -21,36 +22,38 @@ public class TeamSpeakServerService : ITeamSpeakServerService
         _serverInstance = serverInstance;
         _mapper = mapper;
     }
-    
-    public async Task<bool> SendGlobalMessage(MessageDto message)
+
+    public async Task<ApiResult<bool>> SendGlobalMessage(MessageDto message)
     {
         try
         {
             await _client.SendGlobalMessage(message.Message);
 
-            return true;
+            return ApiResult.Build(true);
         }
         catch (Exception ex)
         {
             _logger.Error("Could not send global message", ex);
-            
-            return false;
+
+            return ApiResult.Build(false, false);
         }
     }
 
-    public async Task<ServerInfoDto?> GetServerInfo()
+    public async Task<ApiResult<ServerInfoDto>> GetServerInfo()
     {
         try
         {
             var server = (await _client.GetServers()).FirstOrDefault(x => x.Id == _serverInstance.ServerId);
 
-            return _mapper.Map(server, new ServerInfoDto());
+            return ApiResult.Build(_mapper.Map(server, new ServerInfoDto()));
         }
         catch (Exception ex)
         {
-            _logger.Error("Could not get server info", ex);
+            var message = "Could not get server info";
 
-            return null;
+            _logger.Error(message, ex);
+
+            return ApiResult.Build(new ServerInfoDto(), false, ReasonCodes.NoContent, message);
         }
     }
 }
