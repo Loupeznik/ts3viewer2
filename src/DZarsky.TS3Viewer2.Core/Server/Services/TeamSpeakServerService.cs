@@ -8,7 +8,7 @@ using TeamSpeak3QueryApi.Net.Specialized;
 
 namespace DZarsky.TS3Viewer2.Core.Server.Services;
 
-public class TeamSpeakServerService : ITeamSpeakServerService
+public sealed class TeamSpeakServerService : ITeamSpeakServerService
 {
     private readonly TeamSpeakClient _client;
     private readonly ILogger _logger;
@@ -33,7 +33,7 @@ public class TeamSpeakServerService : ITeamSpeakServerService
         }
         catch (Exception ex)
         {
-            _logger.Error("Could not send global message", ex);
+            _logger.Error($"Could not send global message: {ex}", ex);
 
             return ApiResult.Build(false, false);
         }
@@ -49,11 +49,11 @@ public class TeamSpeakServerService : ITeamSpeakServerService
         }
         catch (Exception ex)
         {
-            var message = "Could not get server info";
+            const string message = "Could not get server info";
 
-            _logger.Error(message, ex);
+            _logger.Error($"{message}: {ex}", ex);
 
-            return ApiResult.Build(new ServerInfoDto(), false, ReasonCodes.NoContent, message);
+            return ApiResult.Build(new ServerInfoDto(), false, ReasonCodes.ExternalServerError, message);
         }
     }
 }

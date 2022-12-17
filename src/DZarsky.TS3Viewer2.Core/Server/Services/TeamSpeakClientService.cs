@@ -7,7 +7,7 @@ using TeamSpeak3QueryApi.Net.Specialized;
 
 namespace DZarsky.TS3Viewer2.Core.Server.Services;
 
-public class TeamSpeakClientService : ITeamSpeakClientService
+public sealed class TeamSpeakClientService : ITeamSpeakClientService
 {
     private readonly TeamSpeakClient _client;
     private readonly ILogger _logger;
@@ -37,7 +37,7 @@ public class TeamSpeakClientService : ITeamSpeakClientService
         }
         catch (Exception ex)
         {
-            _logger.Error($"Could not kick user {id}", ex);
+            _logger.Error($"Could not kick user {id}: {ex}", ex);
             return ApiResult.Build(false, false, ReasonCodes.InvalidArgument, nameof(id));
         }
     }
@@ -52,7 +52,7 @@ public class TeamSpeakClientService : ITeamSpeakClientService
         }
         catch (Exception ex)
         {
-            _logger.Error($"Could not ban user {id}", ex);
+            _logger.Error($"Could not ban user {id}: {ex}", ex);
             return ApiResult.Build(false, false, ReasonCodes.InvalidArgument, nameof(id));
         }
     }
@@ -67,7 +67,7 @@ public class TeamSpeakClientService : ITeamSpeakClientService
         }
         catch (Exception ex)
         {
-            _logger.Error($"Could not poke user {id}", ex);
+            _logger.Error($"Could not poke user {id}: {ex}", ex);
             return ApiResult.Build(false, false, ReasonCodes.InvalidArgument, nameof(id));
         }
     }

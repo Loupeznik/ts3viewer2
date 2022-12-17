@@ -7,7 +7,7 @@ using TeamSpeak3QueryApi.Net.Specialized;
 
 namespace DZarsky.TS3Viewer2.Core.Server.Services;
 
-public class TeamSpeakChannelService : ITeamSpeakChannelService
+public sealed class TeamSpeakChannelService : ITeamSpeakChannelService
 {
     private readonly TeamSpeakClient _client;
     private readonly ILogger _logger;
@@ -35,7 +35,7 @@ public class TeamSpeakChannelService : ITeamSpeakChannelService
         }
         catch (Exception ex)
         {
-            _logger.Error($"Could not send message to channel {id}", ex);
+            _logger.Error($"Could not send message to channel {id}: {ex}", ex);
             return ApiResult.Build(false, false);
         }
     }

@@ -5,20 +5,24 @@ using DZarsky.TS3Viewer2.Domain.AudioBot.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DZarsky.TS3Viewer2.Core.Infrastructure.Extensions
+namespace DZarsky.TS3Viewer2.Core.Infrastructure.Extensions;
+
+public static class AudioBotConfigExtensions
 {
-    public static class AudioBotConfigExtensions
+    public static IServiceCollection AddAudioBot(this IServiceCollection services, IConfiguration config)
     {
-        public static IServiceCollection AddAudioBot(this IServiceCollection services, IConfiguration config)
+        var audioBotConfig = config.GetSection("AudioBot").Get<AudioBotConfig>();
+
+        if (audioBotConfig is null)
         {
-            var audioBotConfig = config.GetSection("AudioBot").Get<AudioBotConfig>();
-
-            services.AddSingleton(audioBotConfig);
-
-            services.AddScoped<AudioBotApiClientFactory>();
-            services.AddScoped<IAudioBotService, AudioBotService>();
-
-            return services;
+            throw new SystemException("Cannot find AudioBot config.");
         }
+
+        services.AddSingleton(audioBotConfig);
+
+        services.AddScoped<AudioBotApiClientFactory>();
+        services.AddScoped<IAudioBotService, AudioBotService>();
+
+        return services;
     }
 }

@@ -8,7 +8,7 @@ using Serilog;
 
 namespace DZarsky.TS3Viewer2.Core.Files.Services
 {
-    public class FileService : IFileService
+    public sealed class FileService : IFileService
     {
         private readonly FileConfig _fileConfig;
         private readonly ILogger _logger;
@@ -76,7 +76,7 @@ namespace DZarsky.TS3Viewer2.Core.Files.Services
             }
             catch (Exception ex)
             {
-                _logger.Error($"Could not delete file {filePath}", ex);
+                _logger.Error($"Could not delete file {filePath}: {ex}", ex);
                 return ApiResult.Build(false, false);
             }
 

@@ -3,46 +3,45 @@ using DZarsky.TS3Viewer2.Domain.AudioBot.Configuration;
 using System.Net.Http.Headers;
 using System.Text;
 
-namespace DZarsky.TS3Viewer2.Core.Infrastructure.Net
+namespace DZarsky.TS3Viewer2.Core.Infrastructure.Net;
+
+public sealed class AudioBotApiClientFactory
 {
-    public class AudioBotApiClientFactory
+    private readonly AudioBotConfig _config;
+    private readonly HttpClient _httpClient = new();
+
+    public AudioBotApiClientFactory(AudioBotConfig config) => _config = config;
+
+    public Client GetApiClient()
     {
-        private readonly AudioBotConfig _config;
-        private readonly HttpClient _httpClient = new();
+        var baseUrl = ConstructBaseUrl();
 
-        public AudioBotApiClientFactory(AudioBotConfig config) => _config = config;
+        _httpClient.BaseAddress = new Uri(baseUrl);
+        SetAuthorizationHeader();
 
-        public Client GetApiClient()
+        return new Client(_httpClient)
         {
-            var baseUrl = ConstructBaseUrl();
+            BaseUrl = baseUrl
+        };
+    }
 
-            _httpClient.BaseAddress = new Uri(baseUrl);
-            SetAuthorizationHeader();
+    public HttpClient GetHttpClient()
+    {
+        _httpClient.BaseAddress = new Uri(ConstructBaseUrl());
+        SetAuthorizationHeader();
 
-            return new Client(_httpClient)
-            {
-                BaseUrl = baseUrl
-            };
+        return _httpClient;
+    }
+
+    private string ConstructBaseUrl() => $"{_config.BaseUrl}/bot/use/{_config.BotID}/(/";
+
+    private void SetAuthorizationHeader()
+    {
+        if (string.IsNullOrWhiteSpace(_config.Token))
+        {
+            return;
         }
 
-        public HttpClient GetHttpClient()
-        {
-            _httpClient.BaseAddress = new Uri(ConstructBaseUrl());
-            SetAuthorizationHeader();
-
-            return _httpClient;
-        }
-
-        private string ConstructBaseUrl() => $"{_config.BaseUrl}/bot/use/{_config.BotID}/(/";
-
-        private void SetAuthorizationHeader()
-        {
-            if (string.IsNullOrWhiteSpace(_config.Token))
-            {
-                return;
-            }
-
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes(_config.Token)));
-        }
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes(_config.Token)));
     }
 }
