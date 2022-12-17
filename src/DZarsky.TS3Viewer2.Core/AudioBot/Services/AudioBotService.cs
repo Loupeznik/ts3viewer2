@@ -1,7 +1,10 @@
-﻿using DZarsky.TS3Viewer2.Core.AudioBot.Models;
+﻿using System.Globalization;
+using DZarsky.TS3Viewer2.Core.AudioBot.Models;
 using DZarsky.TS3Viewer2.Core.Infrastructure.Net;
 using DZarsky.TS3Viewer2.Core.TS3AudioBot;
+using DZarsky.TS3Viewer2.Domain.AudioBot.Constants;
 using DZarsky.TS3Viewer2.Domain.AudioBot.Dto;
+using DZarsky.TS3Viewer2.Domain.AudioBot.Models;
 using DZarsky.TS3Viewer2.Domain.AudioBot.Services;
 using DZarsky.TS3Viewer2.Domain.Infrastructure.General;
 using Newtonsoft.Json;
@@ -9,7 +12,7 @@ using Serilog;
 
 namespace DZarsky.TS3Viewer2.Core.AudioBot.Services;
 
-public class AudioBotService : IAudioBotService
+public sealed class AudioBotService : IAudioBotService
 {
     private readonly AudioBotApiClientFactory _clientFactory;
     private readonly ILogger _logger;
@@ -28,12 +31,16 @@ public class AudioBotService : IAudioBotService
 
             return ApiResult.Build(MapSongToDto(result));
         }
-        catch (Exception ex)
+        catch (ApiException ex)
         {
-            ConstructAndLogErrorMessage(nameof(GetCurrentSong), ex);
-        }
+            if (!IsGetSongSuccess(ex.StatusCode))
+            {
+                ConstructAndLogErrorMessage(nameof(GetCurrentSong), ex);
+                return ApiResult.Build(new SongDto(), false, ReasonCodes.ExternalServerError, ex.Message);
+            }
 
-        return ApiResult.Build(new SongDto(), false, ReasonCodes.NoContent);
+            return ApiResult.Build(new SongDto());
+        }
     }
 
     public async Task<ApiResult<VolumeDto>> GetCurrentVolume()
@@ -62,7 +69,7 @@ public class AudioBotService : IAudioBotService
         catch (Exception ex)
         {
             ConstructAndLogErrorMessage(nameof(MoveBotToChannel), ex);
-            return ApiResult.Build(false);
+            return ApiResult.Build(false, false, ReasonCodes.ExternalServerError, ex.Message);
         }
     }
 
@@ -73,13 +80,19 @@ public class AudioBotService : IAudioBotService
         try
         {
             await client.PauseAsync();
+
+            return ApiResult.Build(MapSongToDto(await GetSong(client)));
         }
-        catch (Exception ex)
+        catch (ApiException ex)
         {
-            ConstructAndLogErrorMessage(nameof(PausePlayback), ex);
+            if (!IsGetSongSuccess(ex.StatusCode))
+            {
+                ConstructAndLogErrorMessage(nameof(PausePlayback), ex);
+                return ApiResult.Build(new SongDto(), false, ReasonCodes.ExternalServerError, ex.Message);
+            }
         }
 
-        return ApiResult.Build(MapSongToDto(await GetSong(client)));
+        return ApiResult.Build(new SongDto());
     }
 
     public async Task<ApiResult<SongDto>> PlaySong(SongDto song)
@@ -88,21 +101,36 @@ public class AudioBotService : IAudioBotService
 
         try
         {
-            _ = await client.Play___GetAsync(song.Link, new List<string>());
+            var result = await client.Play___GetAsync(song.Link, new List<string>());
+
+            var resultObject = result != null
+                ? JsonConvert.DeserializeObject<AudioBotCommandResult>(Convert.ToString(result)!)
+                : null;
+
+            if (resultObject?.ErrorCode == 10)
+            {
+                return ApiResult.Build(new SongDto(), false, ReasonCodes.NotFound);
+            }
         }
-        catch (Exception ex)
+        catch (ApiException ex)
         {
-            ConstructAndLogErrorMessage(nameof(PlaySong), ex);
+            if (!IsGetSongSuccess(ex.StatusCode))
+            {
+                ConstructAndLogErrorMessage(nameof(PlaySong), ex);
+                return ApiResult.Build(new SongDto(), false, ReasonCodes.ExternalServerError, ex.Message);
+            }
+
+            return ApiResult.Build(MapSongToDto(await GetSong(client)));
         }
 
-        return ApiResult.Build(MapSongToDto(await GetSong(client)));
+        return ApiResult.Build(new SongDto());
     }
 
     public async Task<ApiResult<VolumeDto>> SetVolume(VolumeDto volume)
     {
         try
         {
-            await _clientFactory.GetApiClient().VolumeGetAsync(volume.Volume.ToString());
+            await _clientFactory.GetApiClient().VolumeGetAsync(volume.Volume.ToString(CultureInfo.InvariantCulture));
         }
         catch (Exception ex)
         {
@@ -119,9 +147,14 @@ public class AudioBotService : IAudioBotService
         {
             await _clientFactory.GetApiClient().StopAsync();
         }
-        catch (Exception ex)
+        catch (ApiException ex)
         {
-            ConstructAndLogErrorMessage(nameof(StopPlayback), ex);
+            if (IsGetSongSuccess(ex.StatusCode))
+            {
+                ConstructAndLogErrorMessage(nameof(StopPlayback), ex);
+                return ApiResult.Build(new SongDto(), false, ReasonCodes.ExternalServerError, ex.Message);
+
+            }
         }
 
         return ApiResult.Build(new SongDto());
@@ -129,7 +162,7 @@ public class AudioBotService : IAudioBotService
 
     private void ConstructAndLogErrorMessage(string action, Exception ex)
     {
-        _logger.Error($"Could not invoke {action}", ex);
+        _logger.Error($"Could not invoke {action}: {ex}", ex);
     }
 
     private static async Task<object> GetSong(Client client) => await client.SongAsync();
@@ -138,11 +171,9 @@ public class AudioBotService : IAudioBotService
     {
         var stringResult = Convert.ToString(song);
 
-        if (string.IsNullOrWhiteSpace(stringResult))
-        {
-            return new SongDto();
-        }
-
-        return JsonConvert.DeserializeObject<SongDto>(stringResult)!;
+        return string.IsNullOrWhiteSpace(stringResult) ? new SongDto() : JsonConvert.DeserializeObject<SongDto>(stringResult)!;
     }
+
+    private static bool IsGetSongSuccess(int statusCode) =>
+        AudioBotConstants.GetSongSuccessStatusCodes.Contains(statusCode);
 }

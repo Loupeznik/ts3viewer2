@@ -36,6 +36,12 @@ public class ApiControllerBase : ControllerBase
                     return NoContent();
                 case ReasonCodes.TooManyRequests:
                     return StatusCode(StatusCodes.Status429TooManyRequests);
+                case ReasonCodes.ExternalServerError:
+                    return StatusCode(502, new ProblemDetails
+                    {
+                        Title = "Bad Gateway",
+                        Detail = result.Message
+                    });
                 default:
                     return BadRequest(new ProblemDetails
                     {
