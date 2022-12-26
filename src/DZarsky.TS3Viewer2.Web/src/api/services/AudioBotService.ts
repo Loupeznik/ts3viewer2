@@ -113,12 +113,12 @@ requestBody?: SongDto,
 
     /**
      * @param requestBody 
-     * @returns any Success
+     * @returns boolean Success
      * @throws ApiError
      */
     public static postApiV1AudiobotMove(
 requestBody?: MoveBotDto,
-): CancelablePromise<any> {
+): CancelablePromise<boolean> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/v1/audiobot/move',

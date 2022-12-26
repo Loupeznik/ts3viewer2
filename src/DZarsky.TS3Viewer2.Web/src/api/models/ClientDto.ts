@@ -2,6 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import type { ClientDetailDto } from './ClientDetailDto';
 import type { ClientType } from './ClientType';
 
 export type ClientDto = {
@@ -10,4 +11,5 @@ export type ClientDto = {
     databaseId?: number;
     nickName?: string | null;
     type?: ClientType;
+    detail?: ClientDetailDto;
 };

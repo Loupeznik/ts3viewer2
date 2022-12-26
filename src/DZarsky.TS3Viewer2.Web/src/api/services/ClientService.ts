@@ -12,13 +12,19 @@ import { request as __request } from '../core/request';
 export class ClientService {
 
     /**
+     * @param getDetail 
      * @returns ClientDto Success
      * @throws ApiError
      */
-    public static getApiV1ServerClients(): CancelablePromise<Array<ClientDto>> {
+    public static getApiV1ServerClients(
+getDetail?: boolean,
+): CancelablePromise<Array<ClientDto>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/v1/server/clients',
+            query: {
+                'getDetail': getDetail,
+            },
             errors: {
                 401: `Unauthorized`,
                 403: `Forbidden`,
@@ -28,12 +34,12 @@ export class ClientService {
 
     /**
      * @param id 
-     * @returns any Success
+     * @returns boolean Success
      * @throws ApiError
      */
     public static getApiV1ServerClientsKick(
 id: number,
-): CancelablePromise<any> {
+): CancelablePromise<boolean> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/v1/server/clients/{id}/kick',
@@ -50,13 +56,13 @@ id: number,
     /**
      * @param id 
      * @param requestBody 
-     * @returns any Success
+     * @returns boolean Success
      * @throws ApiError
      */
     public static postApiV1ServerClientsBan(
 id: number,
 requestBody?: BanClientDto,
-): CancelablePromise<any> {
+): CancelablePromise<boolean> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/v1/server/clients/{id}/ban',
@@ -76,13 +82,13 @@ requestBody?: BanClientDto,
     /**
      * @param id 
      * @param requestBody 
-     * @returns any Success
+     * @returns boolean Success
      * @throws ApiError
      */
     public static postApiV1ServerClientsPoke(
 id: number,
 requestBody?: MessageDto,
-): CancelablePromise<any> {
+): CancelablePromise<boolean> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/v1/server/clients/{id}/poke',

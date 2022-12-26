@@ -20,9 +20,22 @@ public sealed class TeamSpeakClientService : ITeamSpeakClientService
         _mapper = mapper;
     }
 
-    public async Task<ApiResult<List<ClientDto>>> GetClients()
+    public async Task<ApiResult<List<ClientDto>>> GetClients(bool? getDetails = false)
     {
         var clients = _mapper.Map(await _client.GetClients(), new List<ClientDto>());
+
+        if (getDetails.GetValueOrDefault())
+        {
+            foreach (var client in clients)
+            {
+                var details = await _client.GetClientInfo(client.Id);
+
+                if (details != null)
+                {
+                    client.Detail = _mapper.Map(details, new ClientDetailDto());
+                }
+            }
+        }
 
         return ApiResult.Build(clients);
     }

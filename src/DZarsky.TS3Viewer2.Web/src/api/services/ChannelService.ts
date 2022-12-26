@@ -28,13 +28,13 @@ export class ChannelService {
     /**
      * @param id 
      * @param requestBody 
-     * @returns any Success
+     * @returns boolean Success
      * @throws ApiError
      */
     public static postApiV1ServerChannelsMessage(
 id: number,
 requestBody?: MessageDto,
-): CancelablePromise<any> {
+): CancelablePromise<boolean> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/v1/server/channels/{id}/message',

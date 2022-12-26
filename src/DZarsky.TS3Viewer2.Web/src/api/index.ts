@@ -9,6 +9,7 @@ export type { OpenAPIConfig } from './core/OpenAPI';
 export type { AddFilesResultDto } from './models/AddFilesResultDto';
 export type { BanClientDto } from './models/BanClientDto';
 export type { ChannelDto } from './models/ChannelDto';
+export type { ClientDetailDto } from './models/ClientDetailDto';
 export type { ClientDto } from './models/ClientDto';
 export { ClientType } from './models/ClientType';
 export { Codec } from './models/Codec';

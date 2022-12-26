@@ -2,15 +2,17 @@
 
 namespace DZarsky.TS3Viewer2.Domain.Server.Dto;
 
-public class ClientDto
+public sealed class ClientDto
 {
     public int Id { get; set; }
-    
+
     public int ChannelId { get; set; }
-    
+
     public int DatabaseId { get; set; }
-    
+
     public string? NickName { get; set; }
-    
+
     public ClientType Type { get; set; }
+
+    public ClientDetailDto? Detail { get; set; }
 }

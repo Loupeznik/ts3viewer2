@@ -10,7 +10,7 @@ export const StatusPage = () => {
     const [server, setServer] = useState<ServerInfoDto>()
 
     const getClientsList = async () => {
-        setClients(await ClientService.getApiV1ServerClients())
+        setClients(await ClientService.getApiV1ServerClients(true))
     }
 
     const getServerInfo = async () => {

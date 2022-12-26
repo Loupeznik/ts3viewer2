@@ -5,7 +5,7 @@ namespace DZarsky.TS3Viewer2.Domain.Server.Services;
 
 public interface ITeamSpeakClientService
 {
-    public Task<ApiResult<List<ClientDto>>> GetClients();
+    public Task<ApiResult<List<ClientDto>>> GetClients(bool? getDetails = false);
 
     public Task<ApiResult<bool>> KickClient(int id);
 
