@@ -1,14 +1,38 @@
 using DZarsky.TS3Viewer2.Core.Infrastructure.Extensions;
+using DZarsky.TS3Viewer2.Domain.Infrastructure.Configuration;
 using DZarsky.TS3Viewer2.Domain.Server.Mappings;
 using Serilog;
+using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 const string allowedOriginsPolicy = "_allowedOriginsPolicy";
 
-Log.Logger = new LoggerConfiguration()
-    .MinimumLevel.Warning()
-    .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day)
+var sentryConfig = builder.Configuration.GetSection("Sentry").Get<SentryConfig>();
+
+var logger = new LoggerConfiguration()
+        .MinimumLevel.Warning()
+        .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day);
+
+if (sentryConfig != null && sentryConfig.IsEnabled)
+{
+    Log.Logger = logger
+    .WriteTo.Sentry(options =>
+    {
+        options.Dsn = sentryConfig.Endpoint;
+        options.AttachStacktrace = true;
+        options.MinimumBreadcrumbLevel = LogEventLevel.Warning;
+        options.ServerName = Environment.MachineName;
+#if DEBUG
+        options.Debug = true;
+#endif
+    })
     .CreateLogger();
+}
+else
+{
+    Log.Logger = logger
+        .CreateLogger();
+}
 
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog();
