@@ -1,13 +1,25 @@
+using DZarsky.TS3Viewer2.Api.Infrastructure.Security;
+using DZarsky.TS3Viewer2.Api.Infrastructure.Security.Configuration;
 using DZarsky.TS3Viewer2.Core.Infrastructure.Extensions;
+using DZarsky.TS3Viewer2.Core.Users.Services;
 using DZarsky.TS3Viewer2.Domain.Infrastructure.Configuration;
 using DZarsky.TS3Viewer2.Domain.Server.Mappings;
+using DZarsky.TS3Viewer2.Domain.Users.Services;
+using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Serilog.Events;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-const string allowedOriginsPolicy = "_allowedOriginsPolicy";
+//const string allowedOriginsPolicy = "_allowedOriginsPolicy";
 
 var sentryConfig = builder.Configuration.GetSection("Sentry").Get<SentryConfig>();
+var jwtConfig = builder.Configuration.GetSection("Security").GetSection("Jwt").Get<JwtConfig>();
+
+if (jwtConfig == null || string.IsNullOrEmpty(jwtConfig.Issuer) || string.IsNullOrEmpty(jwtConfig.Key))
+{
+    throw new SystemException("Cannot find Security/JWT config");
+}
 
 var logger = new LoggerConfiguration()
         .MinimumLevel.Warning()
@@ -46,6 +58,26 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddTeamSpeakApi(builder.Configuration);
 builder.Services.AddFiles(builder.Configuration);
 builder.Services.AddAudioBot(builder.Configuration);
+
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddSingleton(jwtConfig);
+builder.Services.AddScoped<TokenProvider>();
+
+builder.Services
+    .AddAuthentication()
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = jwtConfig.Issuer,
+            ValidAudiences = jwtConfig.Audience,
+            IssuerSigningKey = new JsonWebKey(Encoding.ASCII.GetString(Convert.FromBase64String(jwtConfig.Key)))
+        };
+    });
 
 /*
 builder.Services.AddCors(options =>
