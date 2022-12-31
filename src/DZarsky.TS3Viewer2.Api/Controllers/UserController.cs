@@ -1,4 +1,6 @@
 ﻿using DZarsky.TS3Viewer2.Api.Infrastructure.Security;
+using DZarsky.TS3Viewer2.Domain.Infrastructure.General;
+using DZarsky.TS3Viewer2.Domain.Users.Dto;
 using DZarsky.TS3Viewer2.Domain.Users.Models;
 using DZarsky.TS3Viewer2.Domain.Users.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -25,27 +27,49 @@ namespace DZarsky.TS3Viewer2.Api.Controllers
         [ProducesResponseType(typeof(object), StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [HttpPost]
-        public async Task<ActionResult<bool>> AddUser([FromBody] User user) => ApiResultToActionResult(await _userService.AddUser(user));
+        public async Task<ActionResult> AddUser([FromBody] UserDto user)
+        {
+            var result = await _userService.AddUser(user);
+
+            if (result != Domain.Users.General.AddUserResult.Success)
+            {
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Failed to create user",
+                    Detail = result.ToString()
+                });
+            }
+
+            return Ok();
+        }
 
         /// <summary>
-        /// Gets a token
+        /// Generate a token
         /// </summary>
         /// <returns></returns>
         [ProducesResponseType(typeof(object), StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [HttpPost("auth/token")]
-        public async Task<ActionResult<object>> GetToken([FromBody] User user)
+        public async Task<ActionResult<TokenResult>> GetToken([FromBody] UserDto credentials)
         {
-            var token = _tokenProvider.GenerateToken();
+            var validationResult = await _userService.ValidateCredentials(credentials);
 
-            return new ActionResult<object>(new
+            if (validationResult.User == null || validationResult.Result != Domain.Users.General.ValidationResult.Success)
             {
-                token
-            });
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Login failed",
+                    Detail = validationResult.Result.ToString()
+                });
+            }
+
+            var token = _tokenProvider.GenerateToken(validationResult.User.Login!, validationResult.User.Type.ToString());
+
+            return Ok(new TokenResult(token));
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using DZarsky.TS3Viewer2.Api.Infrastructure.Security.Configuration;
-using DZarsky.TS3Viewer2.Domain.Infrastructure.General;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -16,13 +15,13 @@ public sealed class TokenProvider
         _config = config;
     }
 
-    public string GenerateToken() => new JwtSecurityTokenHandler()
+    public string GenerateToken(string userId, string role) => new JwtSecurityTokenHandler()
             .WriteToken(new JwtSecurityToken(_config.Issuer,
                 _config.Audience.FirstOrDefault(),
                 claims: new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, "test"),
-                    new Claim(ClaimTypes.Role, ApiRole.App)
+                    new Claim(ClaimTypes.NameIdentifier, userId),
+                    new Claim(ClaimTypes.Role, role)
                 },
                 expires: DateTime.Now.AddHours(12),
                 signingCredentials: new SigningCredentials(new JsonWebKey(Encoding.ASCII.GetString(Convert.FromBase64String(_config.Key!))), SecurityAlgorithms.RsaSha256)));

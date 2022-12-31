@@ -2,6 +2,7 @@ using DZarsky.TS3Viewer2.Api.Infrastructure.Security;
 using DZarsky.TS3Viewer2.Api.Infrastructure.Security.Configuration;
 using DZarsky.TS3Viewer2.Core.Infrastructure.Extensions;
 using DZarsky.TS3Viewer2.Core.Users.Services;
+using DZarsky.TS3Viewer2.Data.Infrastructure.Extensions;
 using DZarsky.TS3Viewer2.Domain.Infrastructure.Configuration;
 using DZarsky.TS3Viewer2.Domain.Server.Mappings;
 using DZarsky.TS3Viewer2.Domain.Users.Services;
@@ -62,6 +63,7 @@ builder.Services.AddAudioBot(builder.Configuration);
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddSingleton(jwtConfig);
 builder.Services.AddScoped<TokenProvider>();
+builder.Services.AddData(builder.Configuration);
 
 builder.Services
     .AddAuthentication()
