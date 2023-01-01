@@ -4,5 +4,6 @@ public enum AddUserResult
 {
     Success,
     UserExists,
-    NotServerAdmin
+    NotServerAdmin,
+    BadRequest
 }

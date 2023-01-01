@@ -56,4 +56,22 @@ public sealed class TeamSpeakServerService : ITeamSpeakServerService
             return ApiResult.Build(new ServerInfoDto(), false, ReasonCodes.ExternalServerError, message);
         }
     }
+
+    public async Task<ApiResult<List<ServerGroupDto>>> GetServerGroups()
+    {
+        try
+        {
+            var groups = await _client.GetServerGroups();
+
+            return ApiResult.Build(_mapper.Map<List<ServerGroupDto>>(groups));
+        }
+        catch (Exception ex)
+        {
+            const string message = "Could not get server groups";
+
+            _logger.Error($"{message}: {ex}", ex);
+
+            return ApiResult.Build(new List<ServerGroupDto>(), false, ReasonCodes.ExternalServerError, message);
+        }
+    }
 }

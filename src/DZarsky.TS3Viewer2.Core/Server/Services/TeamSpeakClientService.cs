@@ -12,6 +12,7 @@ public sealed class TeamSpeakClientService : ITeamSpeakClientService
     private readonly TeamSpeakClient _client;
     private readonly ILogger _logger;
     private readonly IMapper _mapper;
+    private const string _adminGroup = "Server Admin";
 
     public TeamSpeakClientService(TeamSpeakClient client, ILogger logger, IMapper mapper)
     {
@@ -82,6 +83,46 @@ public sealed class TeamSpeakClientService : ITeamSpeakClientService
         {
             _logger.Error($"Could not poke user {id}: {ex}", ex);
             return ApiResult.Build(false, false, ReasonCodes.InvalidArgument, nameof(id));
+        }
+    }
+
+    public async Task<bool> IsClientAdmin(int clientDatabaseId)
+    {
+        try
+        {
+            var groupId = (await _client.GetServerGroups())
+                .FirstOrDefault(x => x.Name == _adminGroup && x.ServerGroupType == ServerGroupType.NormalGroup)?.Id;
+
+            if (groupId == null)
+            {
+                _logger.Warning("Server group Server Admin not found");
+                return false;
+            }
+
+            var isUserInGroup = (await _client.GetServerGroupClientList(groupId.GetValueOrDefault()))
+                .Any(x => x.ClientDatabaseId == clientDatabaseId);
+
+            return isUserInGroup;
+        }
+        catch (Exception ex)
+        {
+            _logger.Error($"Could not determine whether user is admin: {ex}", ex);
+            return false;
+        }
+    }
+
+    public async Task<int> GetUserFromDatabase(string teamspeakId)
+    {
+        try
+        {
+            var id = (await _client.DatabaseIdFromClientUid(teamspeakId)).ClientDatabaseId;
+
+            return id;
+        }
+        catch (Exception ex)
+        {
+            _logger.Error($"Could not find user in the database: {ex}", ex);
+            return 0;
         }
     }
 }

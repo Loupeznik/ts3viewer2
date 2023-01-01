@@ -1,7 +1,6 @@
 ﻿using DZarsky.TS3Viewer2.Api.Infrastructure.Security;
 using DZarsky.TS3Viewer2.Domain.Infrastructure.General;
 using DZarsky.TS3Viewer2.Domain.Users.Dto;
-using DZarsky.TS3Viewer2.Domain.Users.Models;
 using DZarsky.TS3Viewer2.Domain.Users.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -29,6 +28,7 @@ namespace DZarsky.TS3Viewer2.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [HttpPost]
+        [Authorize(Policy = "App")]
         public async Task<ActionResult> AddUser([FromBody] UserDto user)
         {
             var result = await _userService.AddUser(user);

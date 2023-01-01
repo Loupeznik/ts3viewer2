@@ -8,4 +8,6 @@ public interface ITeamSpeakServerService
     public Task<ApiResult<bool>> SendGlobalMessage(MessageDto message);
 
     public Task<ApiResult<ServerInfoDto>> GetServerInfo();
+
+    public Task<ApiResult<List<ServerGroupDto>>> GetServerGroups();
 }

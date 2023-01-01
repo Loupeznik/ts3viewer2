@@ -5,10 +5,12 @@ using DZarsky.TS3Viewer2.Core.Users.Services;
 using DZarsky.TS3Viewer2.Data.Infrastructure.Extensions;
 using DZarsky.TS3Viewer2.Domain.Infrastructure.Configuration;
 using DZarsky.TS3Viewer2.Domain.Server.Mappings;
+using DZarsky.TS3Viewer2.Domain.Users.Models;
 using DZarsky.TS3Viewer2.Domain.Users.Services;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Serilog.Events;
+using System.Security.Claims;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -80,6 +82,12 @@ builder.Services
             IssuerSigningKey = new JsonWebKey(Encoding.ASCII.GetString(Convert.FromBase64String(jwtConfig.Key)))
         };
     });
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy(UserType.App.ToString(), policy => policy.RequireClaim(ClaimTypes.Role, UserType.App.ToString()));
+    options.AddPolicy(UserType.User.ToString(), policy => policy.RequireClaim(ClaimTypes.Role, UserType.User.ToString()));
+});
 
 /*
 builder.Services.AddCors(options =>
