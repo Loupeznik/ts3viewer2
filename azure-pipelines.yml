@@ -129,6 +129,7 @@ steps:
     action: 'create'
     target: '$(Build.SourceVersion)'
     tagSource: 'gitTag'
+    tagPattern: 'release-v*'
     assets: '$(Build.ArtifactStagingDirectory)/**/*.zip'
     isDraft: true
     changeLogCompareToRelease: 'lastFullRelease'
