@@ -1,10 +1,12 @@
 ﻿using DZarsky.TS3Viewer2.Domain.Server.Dto;
 using DZarsky.TS3Viewer2.Domain.Server.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DZarsky.TS3Viewer2.Api.Controllers;
 
 [Route($"{BaseUrl}/server/clients")]
+[Authorize(Policy = UserAuthorizationPolicy)]
 public class ClientController : ApiControllerBase
 {
     private readonly ITeamSpeakClientService _clientService;
@@ -19,6 +21,7 @@ public class ClientController : ApiControllerBase
     [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [HttpGet]
+    [Authorize(Policy = AppAuthorizationPolicy)]
     public async Task<ActionResult<List<ClientDto>>> GetClients([FromQuery] bool? getDetail) => ApiResultToActionResult(await _clientService.GetClients(getDetail));
 
     /// <summary>

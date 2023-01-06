@@ -1,10 +1,12 @@
 ﻿using DZarsky.TS3Viewer2.Domain.Files.Dto;
 using DZarsky.TS3Viewer2.Domain.Files.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DZarsky.TS3Viewer2.Api.Controllers;
 
 [Route($"{BaseUrl}/files")]
+[Authorize(Policy = AppAuthorizationPolicy)]
 public class FileController : ApiControllerBase
 {
     private readonly IFileService _fileService;
@@ -55,5 +57,6 @@ public class FileController : ApiControllerBase
     [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [HttpDelete("{fullFileName}")]
+    [Authorize(Policy = UserAuthorizationPolicy)]
     public ActionResult<bool> DeleteFiles(string? fullFileName) => ApiResultToActionResult(_fileService.DeleteFile(fullFileName));
 }

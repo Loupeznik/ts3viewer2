@@ -1,5 +1,6 @@
 ﻿using DZarsky.TS3Viewer2.Domain.Server.Dto;
 using DZarsky.TS3Viewer2.Domain.Server.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DZarsky.TS3Viewer2.Api.Controllers;
@@ -20,6 +21,7 @@ public class ServerController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
     [HttpPost("messages/global")]
+    [Authorize(Policy = UserAuthorizationPolicy)]
     public async Task<ActionResult<bool>> SendGlobalMessage(MessageDto message) =>
         ApiResultToActionResult(await _serverService.SendGlobalMessage(message));
 
@@ -32,6 +34,7 @@ public class ServerController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
     [HttpGet("info")]
+    [Authorize(Policy = AppAuthorizationPolicy)]
     public async Task<ActionResult<ServerInfoDto>> GetServerInfo() =>
         ApiResultToActionResult(await _serverService.GetServerInfo());
 }

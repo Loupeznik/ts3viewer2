@@ -1,10 +1,12 @@
 ﻿using DZarsky.TS3Viewer2.Domain.AudioBot.Dto;
 using DZarsky.TS3Viewer2.Domain.AudioBot.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DZarsky.TS3Viewer2.Api.Controllers
 {
     [Route($"{BaseUrl}/audiobot")]
+    [Authorize(Policy = AppAuthorizationPolicy)]
     public class AudioBotController : ApiControllerBase
     {
         private readonly IAudioBotService _audioBotService;
@@ -79,6 +81,7 @@ namespace DZarsky.TS3Viewer2.Api.Controllers
         [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpPost("move")]
+        [Authorize(Policy = UserAuthorizationPolicy)]
         public async Task<ActionResult<bool>> MoveBot(MoveBotDto channel) => ApiResultToActionResult((await _audioBotService.MoveBotToChannel(channel)));
     }
 }
