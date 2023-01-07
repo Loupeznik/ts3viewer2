@@ -61,7 +61,7 @@ steps:
     script: |
       dotnet tool install --global dotnet-ef
       
-      $appsettingsPath = $(Build.SourcesDirectory)\src\DZarsky.TS3Viewer2.Api\appsettings.json
+      $appsettingsPath = "$(Build.SourcesDirectory)\src\DZarsky.TS3Viewer2.Api\appsettings.json"
       $appsettings = Get-Content $appsettingsPath -raw | ConvertFrom-Json
       $appsettings.Security.Jwt.Issuer = "https://dev.azure.com/cclil"
       $appsettings.Security.Jwt.Key = "${env:TEST-JWK}"
