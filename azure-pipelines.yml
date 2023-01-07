@@ -14,6 +14,7 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   webSourcesDirectory: '$(Build.SourcesDirectory)\src\DZarsky.TS3Viewer2.Web'
+  jwtKey: '$(test-jwk)'
 
 steps:
 - task: UseDotNet@2
@@ -64,7 +65,7 @@ steps:
       $appsettingsPath = "$(Build.SourcesDirectory)\src\DZarsky.TS3Viewer2.Api\appsettings.json"
       $appsettings = Get-Content $appsettingsPath -raw | ConvertFrom-Json
       $appsettings.Security.Jwt.Issuer = "https://dev.azure.com/cclil"
-      $appsettings.Security.Jwt.Key = "${env:TEST-JWK}"
+      $appsettings.Security.Jwt.Key = "$(jwtKey)"
       $appsettings | ConvertTo-Json -Depth 4  | Set-Content $appsettingsPath
 
       mkdir $(Build.ArtifactStagingDirectory)\db
