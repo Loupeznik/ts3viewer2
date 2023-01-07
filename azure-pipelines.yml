@@ -14,7 +14,7 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   webSourcesDirectory: '$(Build.SourcesDirectory)\src\DZarsky.TS3Viewer2.Web'
-  jwtKey: '$(test-jwk)'
+  jwtKey: $(test-jwk)
 
 steps:
 - task: UseDotNet@2
