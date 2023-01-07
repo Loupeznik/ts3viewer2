@@ -61,8 +61,9 @@ steps:
     script: |
       dotnet tool install --global dotnet-ef
       
-      dotnet ef migrations bundle --startup-project $(Build.SourcesDirectory)\src\DZarsky.TS3Viewer2.Api\DZarsky.TS3Viewer2.Api.csproj --project $(Build.SourcesDirectory)\src\DZarsky.TS3Viewer2.Data\DZarsky.TS3Viewer2.Data.csproj --self-contained -r linux-x64 --force
-    workingDirectory: '$(Build.ArtifactStagingDirectory)\db'
+      mkdir $(Build.ArtifactStagingDirectory)\db
+      dotnet ef migrations bundle --startup-project $(Build.SourcesDirectory)\src\DZarsky.TS3Viewer2.Api\DZarsky.TS3Viewer2.Api.csproj --project $(Build.SourcesDirectory)\src\DZarsky.TS3Viewer2.Data\DZarsky.TS3Viewer2.Data.csproj --self-contained -r linux-x64 --output $(Build.ArtifactStagingDirectory)\db\efbundle --force
+    workingDirectory: '$(Build.ArtifactStagingDirectory)'
 
 - task: Npm@1
   displayName: 'Install NPM packages'
