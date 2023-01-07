@@ -15,6 +15,8 @@ variables:
   buildConfiguration: 'Release'
   webSourcesDirectory: '$(Build.SourcesDirectory)\src\DZarsky.TS3Viewer2.Web'
   jwtKey: $(test-jwk)
+  teamSpeak3Host: $(ts3host)
+  teamSpeak3Token: $(ts3token)
 
 steps:
 - task: UseDotNet@2
@@ -55,23 +57,26 @@ steps:
     publishWebProjects: true
     arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
 
-#- task: PowerShell@2
-#  displayName: 'Publish migrations'
-#  inputs:
-#    targetType: 'inline'
-#    script: |
-#      dotnet tool install --global dotnet-ef
-#      
-#      $appsettingsPath = "$(Build.SourcesDirectory)\src\DZarsky.TS3Viewer2.Api\appsettings.json"
-#      $appsettings = Get-Content $appsettingsPath -raw | ConvertFrom-Json
-#      $appsettings.Security.Jwt.Issuer = "https://dev.azure.com/cclil"
-#      $appsettings.Security.Jwt.Key = "$(jwtKey)"
-#      $appsettings | ConvertTo-Json -Depth 4  | Set-Content $appsettingsPath
-#
-#      mkdir $(Build.ArtifactStagingDirectory)\db
-#      dotnet ef migrations bundle --startup-project $(Build.SourcesDirectory)\src\DZarsky.TS3Viewer2.Api\DZarsky.TS3Viewer2.Api.csproj --project $(Build.SourcesDirectory)\src\DZarsky.TS3Viewer2.Data\DZarsky.TS3Viewer2.Data.csproj --self-contained -r linux-x64 --output $(Build.ArtifactStagingDirectory)\db\efbundle --force
-#    workingDirectory: '$(Build.ArtifactStagingDirectory)'
-#    errorActionPreference: continue
+- task: PowerShell@2
+  displayName: 'Publish migrations'
+  inputs:
+    targetType: 'inline'
+    script: |
+      dotnet tool install --global dotnet-ef
+      
+      $appsettingsPath = "$(Build.SourcesDirectory)\src\DZarsky.TS3Viewer2.Api\appsettings.json"
+      $appsettings = Get-Content $appsettingsPath -raw | ConvertFrom-Json
+      $appsettings.Security.Jwt.Issuer = "https://dev.azure.com/cclil"
+      $appsettings.Security.Jwt.Key = "$(jwtKey)"
+      $appsettings.TeamSpeakServer.Host = "$(teamSpeak3Host)"
+      $appsettings.TeamSpeakServer.Token = "$(teamSpeak3Token)"
+      $appsettings.TeamSpeakServer.Login = "serveradmin"
+      $appsettings | ConvertTo-Json -Depth 4  | Set-Content $appsettingsPath
+
+      mkdir $(Build.ArtifactStagingDirectory)\db
+      dotnet ef migrations bundle --startup-project $(Build.SourcesDirectory)\src\DZarsky.TS3Viewer2.Api\DZarsky.TS3Viewer2.Api.csproj --project $(Build.SourcesDirectory)\src\DZarsky.TS3Viewer2.Data\DZarsky.TS3Viewer2.Data.csproj --self-contained -r linux-x64 --output $(Build.ArtifactStagingDirectory)\db\efbundle --force
+    workingDirectory: '$(Build.ArtifactStagingDirectory)'
+    errorActionPreference: continue
 
 - task: Npm@1
   displayName: 'Install NPM packages'
