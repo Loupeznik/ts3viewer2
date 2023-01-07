@@ -15,7 +15,7 @@ public sealed class TokenProvider
         _config = config;
     }
 
-    public string GenerateToken(string userId, string role) => new JwtSecurityTokenHandler()
+    public (string, int) GenerateToken(string userId, string role) => (new JwtSecurityTokenHandler()
             .WriteToken(new JwtSecurityToken(_config.Issuer,
                 _config.Audience.FirstOrDefault(),
                 claims: new List<Claim>
@@ -23,6 +23,7 @@ public sealed class TokenProvider
                     new Claim(ClaimTypes.NameIdentifier, userId),
                     new Claim(ClaimTypes.Role, role)
                 },
-                expires: DateTime.Now.AddHours(12),
-                signingCredentials: new SigningCredentials(new JsonWebKey(Encoding.ASCII.GetString(Convert.FromBase64String(_config.Key!))), SecurityAlgorithms.RsaSha256)));
+                expires: DateTime.Now.AddHours(_config.Expiration),
+                signingCredentials: new SigningCredentials(new JsonWebKey(Encoding.ASCII.GetString(Convert.FromBase64String(_config.Key!))), SecurityAlgorithms.RsaSha256))),
+        _config.Expiration);
 }

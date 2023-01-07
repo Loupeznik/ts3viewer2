@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace DZarsky.TS3Viewer2.Api.Controllers;
 
 [Route($"{BaseUrl}/files")]
-[Authorize(Policy = AppAuthorizationPolicy)]
 public class FileController : ApiControllerBase
 {
     private readonly IFileService _fileService;
@@ -21,6 +20,7 @@ public class FileController : ApiControllerBase
     [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [HttpGet]
+    [Authorize(Policy = AppAuthorizationPolicy)]
     public ActionResult<List<FileDto>> GetFiles() => ApiResultToActionResult(_fileService.GetFiles());
 
     /// <summary>
@@ -31,6 +31,7 @@ public class FileController : ApiControllerBase
     [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [HttpPost]
+    [Authorize(Policy = AppAuthorizationPolicy)]
     public async Task<ActionResult<AddFilesResultDto>> AddFiles(IList<IFormFile> files)
     {
         var validFiles = new Dictionary<string, Stream>();

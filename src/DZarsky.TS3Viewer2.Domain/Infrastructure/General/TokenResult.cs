@@ -2,7 +2,19 @@
 
 public sealed class TokenResult
 {
+    /// <summary>
+    /// Gets or sets the JWT
+    /// </summary>
     public string Token { get; set; }
 
-    public TokenResult(string token) => Token = token;
+    /// <summary>
+    /// Gets or sets the token expiration time in hours
+    /// </summary>
+    public int ExpiresIn { get; set; }
+
+    public TokenResult(string token, int expiresIn)
+    {
+        Token = token;
+        ExpiresIn = expiresIn;
+    }
 }

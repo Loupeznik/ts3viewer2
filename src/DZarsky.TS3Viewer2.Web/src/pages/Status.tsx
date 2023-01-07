@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { FiCornerDownRight, FiServer } from 'react-icons/fi';
 import { ChannelDto, ChannelService, ClientDto, ClientService, ServerInfoDto, ServerService } from '../api';
 import { ClientList } from '../components/ClientList';
+import { getAppToken } from '../helpers/TokenProvider';
 
 export const StatusPage = () => {
+    getAppToken()
     const refreshInterval = 5000
     const [clients, setClients] = useState<ClientDto[]>([])
     const [channels, setChannels] = useState<ChannelDto[]>([])

@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { AddFilesResultDto, ApiError, FileService } from "../api";
 import { Input } from '../components/forms/Input';
 import { SubmitButton } from '../components/forms/SubmitButton';
+import { getAppToken } from '../helpers/TokenProvider';
 
 export const UploadPage = () => {
+    getAppToken()
     const [files, setFiles] = useState<FileList>()
     const [successfulUploads, setSuccessfulUploads] = useState<Array<string>>()
     const [failedUploads, setFailedUploads] = useState<Array<string>>()

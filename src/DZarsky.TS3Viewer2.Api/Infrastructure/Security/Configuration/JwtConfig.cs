@@ -7,4 +7,9 @@ public sealed class JwtConfig
     public IList<string> Audience { get; set; } = new List<string>();
 
     public string? Key { get; set; }
+
+    /// <summary>
+    /// Gets or sets the token expiration time in hours
+    /// </summary>
+    public int Expiration { get; set; }
 }

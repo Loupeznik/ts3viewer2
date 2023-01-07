@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace DZarsky.TS3Viewer2.Api.Controllers;
 
 [Route($"{BaseUrl}/server/clients")]
-[Authorize(Policy = UserAuthorizationPolicy)]
 public class ClientController : ApiControllerBase
 {
     private readonly ITeamSpeakClientService _clientService;
@@ -32,6 +31,7 @@ public class ClientController : ApiControllerBase
     [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [HttpGet("{id:int}/kick")]
+    [Authorize(Policy = UserAuthorizationPolicy)]
     public async Task<ActionResult<bool>> KickClient(int id) =>
         ApiResultToActionResult((await _clientService.KickClient(id)));
 
@@ -44,6 +44,7 @@ public class ClientController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
     [HttpPost("{id:int}/ban")]
+    [Authorize(Policy = UserAuthorizationPolicy)]
     public async Task<ActionResult<bool>> BanClient(int id, [FromBody] BanClientDto banInfo) =>
         ApiResultToActionResult((await _clientService.BanClient(id, banInfo)));
 
@@ -56,6 +57,7 @@ public class ClientController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
     [HttpPost("{id:int}/poke")]
+    [Authorize(Policy = UserAuthorizationPolicy)]
     public async Task<ActionResult<bool>> PokeClient(int id, [FromBody] MessageDto pokeInfo) =>
         ApiResultToActionResult((await _clientService.PokeClient(id, pokeInfo)));
 }

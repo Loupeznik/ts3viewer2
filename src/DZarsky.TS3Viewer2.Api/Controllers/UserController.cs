@@ -69,7 +69,7 @@ namespace DZarsky.TS3Viewer2.Api.Controllers
 
             var token = _tokenProvider.GenerateToken(validationResult.User.Login!, validationResult.User.Type.ToString());
 
-            return Ok(new TokenResult(token));
+            return Ok(new TokenResult(token.Item1, token.Item2));
         }
     }
 }
