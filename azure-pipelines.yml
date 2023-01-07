@@ -54,6 +54,16 @@ steps:
     publishWebProjects: true
     arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
 
+- task: PowerShell@2
+  displayName: 'Publish migrations'
+  inputs:
+    targetType: 'inline'
+    script: |
+      dotnet tool install --global dotnet-ef
+      
+      dotnet ef migrations bundle --startup-project $(Build.SourcesDirectory)\src\DZarsky.TS3Viewer2.Api\DZarsky.TS3Viewer2.Api.csproj --project $(Build.SourcesDirectory)\src\DZarsky.TS3Viewer2.Data\DZarsky.TS3Viewer2.Data.csproj --self-contained -r linux-x64 --force
+    workingDirectory: '$(Build.ArtifactStagingDirectory)\db'
+
 - task: Npm@1
   displayName: 'Install NPM packages'
   inputs:
