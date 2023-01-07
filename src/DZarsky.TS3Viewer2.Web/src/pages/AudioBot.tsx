@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { AudioBotService, FileDto, FileService, SongDto, VolumeDto } from '../api';
 import { FiPlayCircle, FiPauseCircle, FiStopCircle, FiMinusCircle, FiPlusCircle, FiYoutube } from "react-icons/fi";
 import validator from 'validator';
+import { getAppToken } from '../helpers/TokenProvider';
 
 export const AudioBotPage = () => {
+    getAppToken()
     const refreshInterval = 10000
     const [currentSong, setCurrentSong] = useState<SongDto>()
     const [availableSongs, setAvailableSongs] = useState<FileDto[]>()

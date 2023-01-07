@@ -12,4 +12,18 @@ public interface ITeamSpeakClientService
     public Task<ApiResult<bool>> BanClient(int id, BanClientDto banInfo);
 
     public Task<ApiResult<bool>> PokeClient(int id, MessageDto pokeInfo);
+
+    /// <summary>
+    /// Checks if the client is in the Server Admin group
+    /// </summary>
+    /// <param name="clientDatabaseId">The TeamSpeak server database ID</param>
+    /// <returns></returns>
+    public Task<bool> IsClientAdmin(int clientDatabaseId);
+
+    /// <summary>
+    /// Gets Database UserID from the TeamSpeak server database by unique ClientID
+    /// </summary>
+    /// <param name="teamspeakId">The unique TeamSpeak client ID</param>
+    /// <returns>The TeamSpeak server database ID</returns>
+    public Task<int> GetUserFromDatabase(string teamspeakId);
 }

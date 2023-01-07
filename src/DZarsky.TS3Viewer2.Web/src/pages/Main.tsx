@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { ServerInfoDto, ServerService } from "../api";
+import { getAppToken } from '../helpers/TokenProvider';
 
 export const MainPage = () => {
+    getAppToken()
     const [server, setServer] = useState({})
 
     const getServerInfo = async () => {

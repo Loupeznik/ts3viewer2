@@ -1,5 +1,6 @@
 ﻿using DZarsky.TS3Viewer2.Domain.AudioBot.Dto;
 using DZarsky.TS3Viewer2.Domain.AudioBot.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DZarsky.TS3Viewer2.Api.Controllers
@@ -19,6 +20,7 @@ namespace DZarsky.TS3Viewer2.Api.Controllers
         [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet("volume")]
+        [Authorize(Policy = AppAuthorizationPolicy)]
         public async Task<ActionResult<VolumeDto>> GetVolume() => ApiResultToActionResult(await _audioBotService.GetCurrentVolume());
 
         /// <summary>
@@ -29,6 +31,7 @@ namespace DZarsky.TS3Viewer2.Api.Controllers
         [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpPut("volume")]
+        [Authorize(Policy = AppAuthorizationPolicy)]
         public async Task<ActionResult<VolumeDto>> SetVolume(VolumeDto volume) => ApiResultToActionResult(await _audioBotService.SetVolume(volume));
 
         /// <summary>
@@ -39,6 +42,7 @@ namespace DZarsky.TS3Viewer2.Api.Controllers
         [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet("song")]
+        [Authorize(Policy = AppAuthorizationPolicy)]
         public async Task<ActionResult<SongDto>> GetSong() => ApiResultToActionResult(await _audioBotService.GetCurrentSong());
 
         /// <summary>
@@ -49,6 +53,7 @@ namespace DZarsky.TS3Viewer2.Api.Controllers
         [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpPost("song/play")]
+        [Authorize(Policy = AppAuthorizationPolicy)]
         public async Task<ActionResult<SongDto>> PlaySong(SongDto song) => ApiResultToActionResult(await _audioBotService.PlaySong(song));
 
         /// <summary>
@@ -59,6 +64,7 @@ namespace DZarsky.TS3Viewer2.Api.Controllers
         [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpPut("song/stop")]
+        [Authorize(Policy = AppAuthorizationPolicy)]
         public async Task<ActionResult<SongDto>> StopSong() => ApiResultToActionResult(await _audioBotService.StopPlayback());
 
         /// <summary>
@@ -69,6 +75,7 @@ namespace DZarsky.TS3Viewer2.Api.Controllers
         [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpPut("song/pause")]
+        [Authorize(Policy = AppAuthorizationPolicy)]
         public async Task<ActionResult<SongDto>> PauseSong() => ApiResultToActionResult(await _audioBotService.PausePlayback());
 
         /// <summary>
@@ -79,6 +86,7 @@ namespace DZarsky.TS3Viewer2.Api.Controllers
         [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpPost("move")]
+        [Authorize(Policy = UserAuthorizationPolicy)]
         public async Task<ActionResult<bool>> MoveBot(MoveBotDto channel) => ApiResultToActionResult((await _audioBotService.MoveBotToChannel(channel)));
     }
 }

@@ -7,6 +7,8 @@ namespace DZarsky.TS3Viewer2.Api.Controllers;
 public class ApiControllerBase : ControllerBase
 {
     protected const string BaseUrl = "api/v1";
+    protected const string AppAuthorizationPolicy = "App";
+    protected const string UserAuthorizationPolicy = "User";
 
     protected ApiControllerBase()
     {

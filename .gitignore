@@ -6,3 +6,5 @@ riderModule.iml
 logs
 .idea
 .vs
+
+*.db*
