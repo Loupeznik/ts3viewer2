@@ -85,7 +85,7 @@ builder.Services
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy(UserType.App.ToString(), policy => policy.RequireClaim(ClaimTypes.Role, UserType.App.ToString()));
+    options.AddPolicy(UserType.App.ToString(), policy => policy.RequireClaim(ClaimTypes.Role, UserType.App.ToString(), UserType.User.ToString()));
     options.AddPolicy(UserType.User.ToString(), policy => policy.RequireClaim(ClaimTypes.Role, UserType.User.ToString()));
 });
 
