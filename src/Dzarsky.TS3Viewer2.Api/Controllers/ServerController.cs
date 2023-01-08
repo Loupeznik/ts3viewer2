@@ -34,7 +34,6 @@ public class ServerController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
     [HttpGet("info")]
-    [Authorize(Policy = AppAuthorizationPolicy)]
     public async Task<ActionResult<ServerInfoDto>> GetServerInfo() =>
         ApiResultToActionResult(await _serverService.GetServerInfo());
 }
