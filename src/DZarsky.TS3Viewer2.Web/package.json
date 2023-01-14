@@ -9,7 +9,7 @@
     "@types/jest": "^27.5.2",
     "@types/node": "^16.18.10",
     "@types/react": "^18.0.26",
-    "@types/react-dom": "^18.0.9",
+    "@types/react-dom": "^18.0.10",
     "axios": "^0.27.2",
     "env-cmd": "^10.1.0",
     "react": "^18.2.0",
