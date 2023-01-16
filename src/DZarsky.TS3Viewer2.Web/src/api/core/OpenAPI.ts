@@ -19,7 +19,7 @@ export type OpenAPIConfig = {
 };
 
 export const OpenAPI: OpenAPIConfig = {
-    BASE: process.env.REACT_APP_API_BASE_URL as string,
+    BASE: import.meta.env.VITE_API_BASE_URL as string,
     VERSION: '1.0',
     WITH_CREDENTIALS: false,
     CREDENTIALS: 'include',

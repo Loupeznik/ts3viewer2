@@ -1,6 +1,6 @@
 {
   "name": "ts3viewer2-web",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.4",
@@ -16,16 +16,14 @@
     "react-dom": "^18.2.0",
     "react-icons": "^4.7.1",
     "react-router-dom": "^6.5.0",
-    "react-scripts": "5.0.1",
     "typescript": "^4.9.4",
     "validator": "^13.7.0",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "start": "vite",
+    "build": "tsc && vite build",
+    "test": "vite preview",
     "build:prod": "env-cmd -f .env.production npm run build",
     "build:test": "env-cmd -f .env.test npm run build",
     "types:openapi": "openapi -i http://localhost:5274/swagger/v1/swagger.json -o src/api"
@@ -50,11 +48,15 @@
   },
   "devDependencies": {
     "@types/validator": "^13.7.3",
+    "@vitejs/plugin-react": "^3.0.1",
     "autoprefixer": "^10.4.7",
     "flowbite": "^1.4.5",
     "openapi-typescript": "^5.3.0",
     "openapi-typescript-codegen": "^0.22.0",
     "postcss": "^8.4.13",
-    "tailwindcss": "^3.0.24"
+    "tailwindcss": "^3.0.24",
+    "vite": "^4.0.4",
+    "vite-plugin-svgr": "^2.4.0",
+    "vite-tsconfig-paths": "^4.0.3"
   }
 }

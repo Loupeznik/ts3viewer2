@@ -13,7 +13,7 @@ export const ConnectPage = () => {
     const handleSubmit = (event: React.SyntheticEvent) => {
         event.preventDefault()
 
-        window.location.assign("ts3server://" + process.env.REACT_APP_TS3_HOST + "?nickname=" + username)
+        window.location.assign("ts3server://" + import.meta.env.VITE_TS3_HOST + "?nickname=" + username)
     }
 
     return (
@@ -28,7 +28,7 @@ export const ConnectPage = () => {
                             <form onSubmit={handleSubmit}>
                                 <div className="mb-4">
                                     <Label forElement="server" value="Server" />
-                                    <Input type="text" id="server" value={process.env.REACT_APP_TS3_HOST} isDisabled={true} />
+                                    <Input type="text" id="server" value={import.meta.env.VITE_TS3_HOST} isDisabled={true} />
                                     <Label forElement="name" value="Username" />
                                     <Input type="text" id="name" onChange={onChangeInput} />
                                 </div>

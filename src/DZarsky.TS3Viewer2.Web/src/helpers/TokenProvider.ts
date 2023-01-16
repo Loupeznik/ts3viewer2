@@ -13,8 +13,8 @@ export const getAppToken = async () => {
     if (localToken === null || isLocalTokenExpired)
     {
         const credentials : UserDto = {
-            login: process.env.REACT_APP_APP_LOGIN as string,
-            secret: process.env.REACT_APP_APP_SECRET as string
+            login: import.meta.env.VITE_APP_LOGIN as string,
+            secret: import.meta.env.VITE_APP_SECRET as string
         }
 
         const tokenResult = await UserService.postApiV1UsersAuthToken(credentials)
