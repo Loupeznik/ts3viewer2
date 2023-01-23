@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dzarsky.TS3Viewer2.Api", "Dzarsky.TS3Viewer2.Api\Dzarsky.TS3Viewer2.Api.csproj", "{6362796A-833D-4040-87EF-66C4A9968648}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DZarsky.TS3Viewer2.Api", "DZarsky.TS3Viewer2.Api\DZarsky.TS3Viewer2.Api.csproj", "{6362796A-833D-4040-87EF-66C4A9968648}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DZarsky.TS3Viewer2.Core", "DZarsky.TS3Viewer2.Core\DZarsky.TS3Viewer2.Core.csproj", "{60546916-40C7-411A-BDC0-84D53A45C868}"
 EndProject

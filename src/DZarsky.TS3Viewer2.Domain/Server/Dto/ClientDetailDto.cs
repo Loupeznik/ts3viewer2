@@ -20,9 +20,11 @@ public sealed class ClientDetailDto
 
     public IReadOnlyList<int>? ChannelGroupsIds { get; set; }
 
-    public int TotalConnectionCount;
+    public int TotalConnectionCount { get; set; }
 
-    public bool Away;
+    public bool Away { get; set; }
 
-    public string? AwayMessage;
+    public bool IsClientTalking { get; set; }
+
+    public string? AwayMessage { get; set; }
 }
