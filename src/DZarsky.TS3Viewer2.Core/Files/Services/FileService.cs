@@ -104,7 +104,7 @@ public sealed class FileService : IFileService
             Path = file,
             FullName = Path.GetFileName(file),
             Name = Path.GetFileNameWithoutExtension(file)
-        }));
+        }).OrderBy(x => x.FullName));
 
         return ApiResult.Build(files);
     }
