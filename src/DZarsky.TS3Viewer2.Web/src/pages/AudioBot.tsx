@@ -9,9 +9,11 @@ export const AudioBotPage = () => {
     const refreshInterval = 10000
     const [currentSong, setCurrentSong] = useState<SongDto>()
     const [availableSongs, setAvailableSongs] = useState<FileDto[]>()
+    const [filteredSongs, setFilteredSongs] = useState<FileDto[]>()
     const [currentVolume, setCurrentVolume] = useState<number>()
     const [ytbSong, setYtbSong] = useState<SongDto>()
     const [errorMessage, setErrorMessage] = useState<string>()
+    const [filter, setFilter] = useState<string>()
 
     useEffect(() => {
         const getCurrentSong = async () => {
@@ -40,6 +42,17 @@ export const AudioBotPage = () => {
         return () => clearInterval(interval);
     }, [currentSong, currentVolume])
 
+    useEffect(() => {
+        setFilteredSongs(availableSongs?.filter(function (song) {
+            if (filter) {
+                return song.name?.toLowerCase().includes(filter.toLowerCase())
+            }
+            else {
+                return song
+            }
+        }))
+    }, [filter])
+
     async function startPlayback(song: SongDto) {
         setCurrentSong(await AudioBotService.postApiV1AudiobotSongPlay(song))
     }
@@ -53,7 +66,13 @@ export const AudioBotPage = () => {
     }
 
     async function getSongList() {
-        setAvailableSongs(await FileService.getApiV1Files())
+        const songs = await FileService.getApiV1Files()
+
+        setAvailableSongs(songs)
+
+        if (!filteredSongs) {
+            setFilteredSongs(songs)
+        }
     }
 
     async function increaseVolume() {
@@ -85,7 +104,7 @@ export const AudioBotPage = () => {
         }
     }
 
-    const renderSongs = availableSongs?.map(function (file, index) {
+    const renderSongs = filteredSongs?.map(function (file, index) {
         let song: SongDto = {
             link: file.fullName
         }
@@ -124,6 +143,10 @@ export const AudioBotPage = () => {
                 setErrorMessage(ytbSong.link as string + " is not a valid URL")
             }
         }
+    }
+
+    const onChangeFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setFilter(event.target.value)
     }
 
     function renderErrorMessage() {
@@ -178,6 +201,14 @@ export const AudioBotPage = () => {
                                     dark:hover:bg-blue-700 dark:focus:ring-blue-800" onClick={handleSubmit}>
                                     Play
                                 </button>
+                            </div>
+                        </div>
+                        <div className="bg-gray-600 p-4 mt-12 w-full md:w-1/2 mx-auto rounded-lg text-left">
+                            <label htmlFor="play" className="mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Filter songs</label>
+                            <div className="relative">
+                                <input type="text" id="play" className="block p-4 pl-10 w-full text-xs text-gray-900 bg-gray-50 rounded-lg border border-gray-300 
+                                    focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
+                                    dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required onChange={onChangeFilter} />
                             </div>
                         </div>
                         <div className="bg-gray-600 p-4 my-4 w-full md:w-1/2 mx-auto gap-4 justify-center rounded-lg">

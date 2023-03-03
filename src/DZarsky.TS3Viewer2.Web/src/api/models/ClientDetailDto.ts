@@ -12,4 +12,8 @@ export type ClientDetailDto = {
     isRecording?: boolean;
     serverGroupIds?: Array<number> | null;
     channelGroupsIds?: Array<number> | null;
+    totalConnectionCount?: number;
+    away?: boolean;
+    isClientTalking?: boolean;
+    awayMessage?: string | null;
 };
