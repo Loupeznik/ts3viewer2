@@ -90,18 +90,37 @@ server {
 }
 ```
 
-WEB
+WEB (includes PWA configuration)
 
 ```text
 # /etc/nginx/sites-available/ts3viewer2-web
 server {
+        include mime.types;
+
         root /opt/ts3viewer2/web;
-        index index.html index.htm index.nginx-debian.html;
+        index index.html index.htm;
 
         server_name web.ts3viewer.yourdomain.com;
 
+        types {
+                application/manifest+json  webmanifest;
+        }
+
         location / {
+                autoindex off;
+                expires off;
+                add_header Cache-Control "public, max-age=0, s-maxage=0, must-revalidate" always;
                 try_files $uri /index.html;
+        }
+
+        location ^~ /assets/ {
+                add_header Cache-Control "public, max-age=31536000, s-maxage=31536000, immutable";
+                try_files $uri =404;
+        }
+
+        location ^~ /workbox- {
+                add_header Cache-Control "public, max-age=31536000, s-maxage=31536000, immutable";
+                try_files $uri =404;
         }
 
         listen 80;
