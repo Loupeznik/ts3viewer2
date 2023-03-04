@@ -24,7 +24,7 @@ export const StatusPage = () => {
     }
 
     const getAll = () => {
-        getServerInfo().then(async ()=> {
+        getServerInfo().then(async () => {
             await getChannelList().then(() => {
                 getClientsList()
             })
@@ -43,23 +43,19 @@ export const StatusPage = () => {
         return () => clearInterval(interval);
     }, [clients])
 
-    function renderClientsList(clients: ClientDto[]) {
-        return (
-            <ClientList clients={clients} />
-        )
-    }
-
     function renderChannelList() {
         return (
             <>
                 {channels.map(function (channel, index) {
                     return (
                         <>
-                            <li key={"header-" + { index }} className="border-solid py-2 border-b-2 rounded">
+                            <li key={"header-" + index} className="border-solid py-2 border-b-2 rounded">
                                 <ul>
-                                    <li key={"channel-" + index} className="ml-2 font-semibold"><FiCornerDownRight className="mr-1" />{channel.name}</li>
+                                    <li key={channel.name} className="ml-2 font-semibold">
+                                        <FiCornerDownRight className="mr-1" />{channel.name}
+                                    </li>
                                     <ul className="ml-2">
-                                        {renderClientsList(clients.filter(x => x.channelId === channel.id))}
+                                        <ClientList clients={clients.filter(x => x.channelId === channel.id)} />
                                     </ul>
                                 </ul>
                             </li>
@@ -75,14 +71,14 @@ export const StatusPage = () => {
             <svg width="38" height="38" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                     <linearGradient x1="8.042%" y1="0%" x2="65.682%" y2="23.865%" id="a">
-                        <stop stop-color="#fff" stop-opacity="0" offset="0%" />
-                        <stop stop-color="#fff" stop-opacity=".631" offset="63.146%" />
-                        <stop stop-color="#fff" offset="100%" />
+                        <stop stopColor="#fff" stopOpacity="0" offset="0%" />
+                        <stop stopColor="#fff" stopOpacity=".631" offset="63.146%" />
+                        <stop stopColor="#fff" offset="100%" />
                     </linearGradient>
                 </defs>
-                <g fill="none" fill-rule="evenodd">
+                <g fill="none" fillRule="evenodd">
                     <g transform="translate(1 1)">
-                        <path d="M36 18c0-9.94-8.06-18-18-18" id="Oval-2" stroke="url(#a)" stroke-width="2">
+                        <path d="M36 18c0-9.94-8.06-18-18-18" id="Oval-2" stroke="url(#a)" strokeWidth="2">
                             <animateTransform
                                 attributeName="transform"
                                 type="rotate"
@@ -107,16 +103,16 @@ export const StatusPage = () => {
     }
 
     const renderClients = () => {
-        return(
+        return (
             <div className="m-2 p-2 bg-gray-800 rounded-md w-3/4 text-left">
-            <ul className="m-4">
-                <li key="server-name" className="text-lg font-bold"><FiServer className="mr-1" />{server?.name}</li>
-                <ul className="ml-4">
-                    {renderChannelList()}
+                <ul className="m-4">
+                    <li key={server?.name} className="text-lg font-bold"><FiServer className="mr-1" />{server?.name}</li>
+                    <ul className="ml-4">
+                        {renderChannelList()}
+                    </ul>
                 </ul>
-            </ul>
-        </div>
-                )
+            </div>
+        )
     }
 
     return (
@@ -127,7 +123,7 @@ export const StatusPage = () => {
                 <div className="justify-center items-center space-y-4 sm:flex sm:space-y-0 sm:space-x-4">
                     <div
                         className="w-full mt-3 md:w-1/4 bg-gray-800 text-white rounded-lg inline-flex items-center justify-center px-4 py-2.5 dark:bg-gray-700">
-                            {(server && channels) ? renderClients() : renderLoader()}
+                        {(server && channels) ? renderClients() : renderLoader()}
                     </div>
                 </div>
             </div>

@@ -13,7 +13,7 @@ export const ClientList = ({ clients }: ClientListProps) => {
         }
 
         return (
-            <li className="ml-4" title={client.detail?.description ?? ""}>
+            <li key={client.id} className="ml-4" title={client.detail?.description ?? ""}>
                 {client.detail?.inputMuted ? <FiMicOff className="mr-1" /> : <FiUser className="mr-1" />}
                 
                 {client.nickName}
