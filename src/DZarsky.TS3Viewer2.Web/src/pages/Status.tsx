@@ -23,22 +23,25 @@ export const StatusPage = () => {
         setChannels(await ChannelService.getApiV1ServerChannels())
     }
 
+    const getAll = () => {
+        getServerInfo().then(async ()=> {
+            await getChannelList().then(() => {
+                getClientsList()
+            })
+        })
+    }
 
     if (!server) {
-        getServerInfo()
-        getChannelList()
-        getClientsList()
+        getAll()
     }
 
     useEffect(() => {
         const interval = setInterval(() => {
-            getServerInfo()
-            getChannelList()
-            getClientsList()
+            getAll()
         }, refreshInterval)
 
         return () => clearInterval(interval);
-    }, [server, clients, channels])
+    }, [clients])
 
     function renderClientsList(clients: ClientDto[]) {
         return (
