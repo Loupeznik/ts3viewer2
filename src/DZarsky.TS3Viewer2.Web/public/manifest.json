@@ -1,15 +1,67 @@
 {
   "short_name": "TS3Viewer2",
-  "name": "TS3Viewer2 Client App",
+  "name": "TeamSpeak3 Viewer",
+  "description": "TeamSpeak 3 Server visualization and management app",
   "icons": [
+    {
+      "src": "maskable_icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "android_icon_512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "apple_touch_icon_512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
     {
       "src": "favicon.ico",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     }
   ],
-  "start_url": ".",
+  "shortcuts": [
+    {
+      "name": "Server status",
+      "url": "/status"
+    },
+    {
+      "name": "Audiobot",
+      "url": "/bot"
+    },
+    {
+      "name": "Connect to server",
+      "url": "/connect"
+    },
+    {
+      "name": "Upload audio files",
+      "url": "/upload"
+    },
+    {
+      "name": "Home",
+      "url": "/"
+    }
+  ],
+  "start_url": "./",
+  "scope": ".",
   "display": "standalone",
+  "lang": "en-GB",
+  "dir": "auto",
+  "orientation": "portrait",
   "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "background_color": "#ffffff",
+  "display_override": [
+    "standalone",
+    "fullscreen",
+    "minimal-ui",
+    "browser",
+    "window-controls-overlay"
+  ]
 }
