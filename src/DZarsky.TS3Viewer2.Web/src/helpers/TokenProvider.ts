@@ -4,13 +4,11 @@ import { UserService, UserDto } from '../api';
 const _localAppTokenStorageKey : string = 'api_app_token'
 const _localAppTokenExpirationStorageKey : string = 'app_token_expiration'
 
-export const getAppToken = async () => {
-    let localToken = localStorage.getItem(_localAppTokenStorageKey)
-    let localTokenExpiration = localStorage.getItem(_localAppTokenExpirationStorageKey)
-    let token;
-    const isLocalTokenExpired = localTokenExpiration === null ? false : Date.now() > Date.parse(localTokenExpiration)
+const getAppToken = async () => {
+    const localToken = localStorage.getItem(_localAppTokenStorageKey)
+    let token
 
-    if (localToken === null || isLocalTokenExpired)
+    if (localToken === null || isTokenExpired())
     {
         const credentials : UserDto = {
             login: import.meta.env.VITE_APP_LOGIN as string,
@@ -22,10 +20,7 @@ export const getAppToken = async () => {
         if (tokenResult.token != null)
         {
             localStorage.setItem(_localAppTokenStorageKey, tokenResult.token)
-            let currentDate = new Date()
-            currentDate.setHours(currentDate.getHours() + tokenResult.expiresIn!)
-
-            localStorage.setItem(_localAppTokenExpirationStorageKey, currentDate.toUTCString())
+            setTokenExpiration(tokenResult.expiresIn!)
 
             token = tokenResult.token
         }
@@ -33,6 +28,19 @@ export const getAppToken = async () => {
         token = localToken
     }
 
-    OpenAPI.TOKEN = token;
-    return token as string;
-};
+    OpenAPI.TOKEN = token
+}
+
+const isTokenExpired = () : boolean => {
+    const localTokenExpiration = localStorage.getItem(_localAppTokenExpirationStorageKey)
+    return localTokenExpiration === null ? false : Date.now() > Date.parse(localTokenExpiration)
+}
+
+const setTokenExpiration = (expiresIn: number) => {
+    let currentDate = new Date()
+    currentDate.setHours(currentDate.getHours() + expiresIn)
+
+    localStorage.setItem(_localAppTokenExpirationStorageKey, currentDate.toUTCString())
+}
+
+export { getAppToken, isTokenExpired, setTokenExpiration }

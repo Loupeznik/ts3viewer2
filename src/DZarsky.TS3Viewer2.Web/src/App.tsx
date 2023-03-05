@@ -6,6 +6,7 @@ import { MainPage } from "./pages/Main"
 import { ConnectPage } from './pages/Connect';
 import { UploadPage } from './pages/Upload';
 import { AudioBotPage } from './pages/AudioBot';
+import { AdminPage } from './pages/Admin';
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         <Route path="/connect" element={<ConnectPage />} />
         <Route path="/upload" element={<UploadPage />} />
         <Route path="/bot" element={<AudioBotPage />} />
+        <Route path="/admin" element={<AdminPage />} />
       </Routes>
     </div>
   );
