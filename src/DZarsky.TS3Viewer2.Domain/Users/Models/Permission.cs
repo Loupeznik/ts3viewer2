@@ -6,6 +6,6 @@ public enum Permission : short
     AudioBotAdmin, // permissions for AudioBot and files
     ServerAdmin, // permissions to change server settings
     ChannelAdmin, // permissions to change channel settings, create channels, move users
-    UserAdmin, // permissions to kick and ban users
+    ClientAdmin, // permissions to kick and ban clients
     ApiUserAdmin, // permissions to manage API users
 }

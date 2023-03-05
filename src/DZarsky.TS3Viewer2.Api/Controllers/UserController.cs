@@ -5,6 +5,7 @@ using DZarsky.TS3Viewer2.Domain.Users.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using DZarsky.TS3Viewer2.Api.Common;
 
 namespace DZarsky.TS3Viewer2.Api.Controllers;
 
@@ -29,7 +30,7 @@ public sealed class UserController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [HttpPost]
-    [Authorize(Policy = "App")]
+    [Authorize(Policy = EndpointPolicyConstants.AppAuthorizationPolicy)]
     public async Task<ActionResult> AddUser([FromBody] UserDto user)
     {
         var claimsIdentity = User.Identity as ClaimsIdentity;

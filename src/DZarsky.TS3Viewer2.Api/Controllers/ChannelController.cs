@@ -1,4 +1,5 @@
-﻿using DZarsky.TS3Viewer2.Domain.Server.Dto;
+﻿using DZarsky.TS3Viewer2.Api.Common;
+using DZarsky.TS3Viewer2.Domain.Server.Dto;
 using DZarsky.TS3Viewer2.Domain.Server.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +21,7 @@ public class ChannelController : ApiControllerBase
     [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [HttpGet]
-    [Authorize(Policy = AppAuthorizationPolicy)]
+    [Authorize(Policy = EndpointPolicyConstants.AppAuthorizationPolicy)]
     public async Task<ActionResult<List<ChannelDto>>> GetChannels()
         => ApiResultToActionResult(await _channelService.GetChannels());
 
@@ -33,7 +34,8 @@ public class ChannelController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
     [HttpPost("{id:int}/message")]
-    [Authorize(Policy = UserAuthorizationPolicy)]
+    [Authorize(Policy = EndpointPolicyConstants.UserAuthorizationPolicy)]
+    [Authorize(Policy = EndpointPolicyConstants.ChannelAdminPolicy)]
     public async Task<ActionResult<bool>> SendMessage(int id, [FromBody] MessageDto message) =>
         ApiResultToActionResult((await _channelService.SendMessage(id, message)));
 }
