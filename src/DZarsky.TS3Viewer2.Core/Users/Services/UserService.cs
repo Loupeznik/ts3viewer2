@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DZarsky.TS3Viewer2.Data.Infrastructure;
+using DZarsky.TS3Viewer2.Domain.Infrastructure.General;
 using DZarsky.TS3Viewer2.Domain.Server.Services;
 using DZarsky.TS3Viewer2.Domain.Users.Dto;
 using DZarsky.TS3Viewer2.Domain.Users.General;
@@ -22,9 +23,9 @@ public sealed class UserService : IUserService
         _clientService = clientService;
     }
 
-    public async Task<AddUserResult> AddUser(UserDto user)
+    public async Task<AddUserResult> AddUser(UserDto user, string? addedBy)
     {
-        if (string.IsNullOrWhiteSpace(user.Login) || string.IsNullOrWhiteSpace(user.Secret))
+        if (string.IsNullOrWhiteSpace(user.Login) || string.IsNullOrWhiteSpace(user.Secret) || string.IsNullOrWhiteSpace(addedBy))
         {
             return AddUserResult.BadRequest;
         }
@@ -42,15 +43,29 @@ public sealed class UserService : IUserService
 
         var isClientAdmin = await _clientService.IsClientAdmin(databaseId);
 
-        if (!isClientAdmin)
+        if (addedBy == ApiRole.App && !isClientAdmin)
         {
             return AddUserResult.NotServerAdmin;
+        }
+
+        if (isClientAdmin)
+        {
+            user.Permissions.Clear();
+            user.Permissions.Add(Permission.SuperAdmin);
         }
 
         var newUser = _mapper.Map<User>(user);
 
         newUser.Type = UserType.User;
         newUser.Secret = BCrypt.Net.BCrypt.HashPassword(user.Secret);
+
+        foreach (var permission in user.Permissions)
+        {
+            newUser.Roles.Add(new UserRole
+            {
+                Permission = permission
+            });
+        }
 
         await _dataContext.AddAsync(newUser);
         await _dataContext.SaveChangesAsync();
@@ -67,6 +82,7 @@ public sealed class UserService : IUserService
 
         var user = await _dataContext
             .Set<User>()
+            .Include(x => x.Roles)
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Login == credentials.Login);
 
@@ -84,11 +100,6 @@ public sealed class UserService : IUserService
             ? BCrypt.Net.BCrypt.Verify(credentials.Secret, user.Secret)
             : credentials.Secret == user.Secret;
 
-        if (!isValid)
-        {
-            return new ValidateCredentialsResult(ValidationResult.BadCredentials);
-        }
-
-        return new ValidateCredentialsResult(user, ValidationResult.Success);
+        return !isValid ? new ValidateCredentialsResult(ValidationResult.BadCredentials) : new ValidateCredentialsResult(user, ValidationResult.Success);
     }
 }
