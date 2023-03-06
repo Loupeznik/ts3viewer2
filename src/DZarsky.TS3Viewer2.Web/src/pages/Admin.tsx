@@ -48,9 +48,9 @@ export const AdminPage = () => {
             <div
                 className="p-4 w-full text-center bg-white sm:p-8 dark:bg-gray-800">
                 <h1 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white">Server administration</h1>
-                <div className="flex flex-row">
+                <div className="flex flex-row dark:bg-gray-700 px-4 py-2.5 mt-3 text-white rounded-lg">
                     <AdminSideNav username={currentUser.username} permissions={currentUser.permissions} />
-                    <div className="mx-auto">
+                    <div className="mx-auto w-screen">
                         <Outlet />
                     </div>
                 </div>

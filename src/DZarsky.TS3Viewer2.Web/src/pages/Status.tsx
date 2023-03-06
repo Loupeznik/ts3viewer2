@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { FiCornerDownRight, FiServer } from 'react-icons/fi';
 import { ChannelDto, ChannelService, ClientDto, ClientService, ServerInfoDto, ServerService } from '../api';
 import { ClientList } from '../components/ClientList';
+import { Loader } from '../components/loader';
 import { getAppToken } from '../helpers/TokenProvider';
 
 export const StatusPage = () => {
@@ -66,42 +67,6 @@ export const StatusPage = () => {
         )
     }
 
-    const renderLoader = () => {
-        return (
-            <svg width="38" height="38" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                    <linearGradient x1="8.042%" y1="0%" x2="65.682%" y2="23.865%" id="a">
-                        <stop stopColor="#fff" stopOpacity="0" offset="0%" />
-                        <stop stopColor="#fff" stopOpacity=".631" offset="63.146%" />
-                        <stop stopColor="#fff" offset="100%" />
-                    </linearGradient>
-                </defs>
-                <g fill="none" fillRule="evenodd">
-                    <g transform="translate(1 1)">
-                        <path d="M36 18c0-9.94-8.06-18-18-18" id="Oval-2" stroke="url(#a)" strokeWidth="2">
-                            <animateTransform
-                                attributeName="transform"
-                                type="rotate"
-                                from="0 18 18"
-                                to="360 18 18"
-                                dur="0.9s"
-                                repeatCount="indefinite" />
-                        </path>
-                        <circle fill="#fff" cx="36" cy="18" r="1">
-                            <animateTransform
-                                attributeName="transform"
-                                type="rotate"
-                                from="0 18 18"
-                                to="360 18 18"
-                                dur="0.9s"
-                                repeatCount="indefinite" />
-                        </circle>
-                    </g>
-                </g>
-            </svg>
-        )
-    }
-
     const renderClients = () => {
         return (
             <div className="m-2 p-2 bg-gray-800 rounded-md w-3/4 text-left">
@@ -123,7 +88,7 @@ export const StatusPage = () => {
                 <div className="justify-center items-center space-y-4 sm:flex sm:space-y-0 sm:space-x-4">
                     <div
                         className="w-full mt-3 md:w-1/4 bg-gray-800 text-white rounded-lg inline-flex items-center justify-center px-4 py-2.5 dark:bg-gray-700">
-                        {(server && channels) ? renderClients() : renderLoader()}
+                        {(server && channels) ? renderClients() : <Loader />}
                     </div>
                 </div>
             </div>
