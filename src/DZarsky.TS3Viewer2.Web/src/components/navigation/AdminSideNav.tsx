@@ -1,4 +1,5 @@
 import { FiFile, FiPhoneCall, FiServer, FiUser, FiUserCheck, FiUsers } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
 import { checkPermissions, CurrentUserProps } from '../../helpers/UserHelper';
 
 export const AdminSideNav = ({ username, permissions }: {
@@ -16,46 +17,46 @@ export const AdminSideNav = ({ username, permissions }: {
                             {
                                 checkPermissions(permissions, defaultServerPermissions.concat(['AudioBotAdmin'])) &&
                                 <li className="rounded-lg hover:bg-gray-700">
-                                    <a rel="noopener noreferrer" href="#" className="flex items-center p-2 space-x-3 rounded-md">
+                                    <Link to="/admin/files" className="flex items-center p-2 space-x-3 rounded-md">
                                         <FiFile className="w-5 h-5" />
                                         <span className="font-semibold">Files</span>
-                                    </a>
+                                    </Link>
                                 </li>
                             }
                             {
                                 checkPermissions(permissions, defaultServerPermissions.concat(['ClientAdmin'])) &&
                                 <li className="rounded-lg hover:bg-gray-700">
-                                    <a rel="noopener noreferrer" href="#" className="flex items-center p-2 space-x-3 rounded-md">
+                                    <Link to="/admin/clients" className="flex items-center p-2 space-x-3 rounded-md">
                                         <FiUsers className="w-5 h-5" />
                                         <span className="font-semibold">Clients</span>
-                                    </a>
+                                    </Link>
                                 </li>
                             }
                             {
                                 checkPermissions(permissions, defaultServerPermissions.concat(['ChannelAdmin'])) &&
                                 <li className="rounded-lg hover:bg-gray-700">
-                                    <a rel="noopener noreferrer" href="#" className="flex items-center p-2 space-x-3 rounded-md">
+                                    <Link to="/admin/channels" className="flex items-center p-2 space-x-3 rounded-md">
                                         <FiPhoneCall className="w-5 h-5" />
                                         <span className="font-semibold">Channels</span>
-                                    </a>
+                                    </Link>
                                 </li>
                             }
                             {
                                 checkPermissions(permissions, defaultServerPermissions) &&
                                 <li className="rounded-lg hover:bg-gray-700">
-                                    <a rel="noopener noreferrer" href="#" className="flex items-center p-2 space-x-3 rounded-md">
+                                    <Link to="/admin/server" className="flex items-center p-2 space-x-3 rounded-md">
                                         <FiServer className="w-5 h-5" />
                                         <span className="font-semibold">Server</span>
-                                    </a>
+                                    </Link>
                                 </li>
                             }
                             {
                                 checkPermissions(permissions, ['SuperAdmin', 'ApiUserAdmin']) &&
                                 <li className="rounded-lg hover:bg-gray-700">
-                                    <a rel="noopener noreferrer" href="#" className="flex items-center p-2 space-x-3 rounded-md">
+                                    <Link to="/admin/users" className="flex items-center p-2 space-x-3 rounded-md">
                                         <FiUserCheck className="w-5 h-5" />
                                         <span className="font-semibold">API users</span>
-                                    </a>
+                                    </Link>
                                 </li>
                             }
                         </ul>

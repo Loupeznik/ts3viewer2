@@ -16,6 +16,7 @@ export { Codec } from './models/Codec';
 export type { FileDto } from './models/FileDto';
 export type { MessageDto } from './models/MessageDto';
 export type { MoveBotDto } from './models/MoveBotDto';
+export { Permission } from './models/Permission';
 export type { ProblemDetails } from './models/ProblemDetails';
 export type { ServerInfoDto } from './models/ServerInfoDto';
 export type { SongDto } from './models/SongDto';
