@@ -11,7 +11,7 @@ Sentry.init({
   dsn: import.meta.env.VITE_SENTRY_DSN as string,
   integrations: [new BrowserTracing()],
   release: import.meta.env.VITE_VERSION as string,
-  enabled: false,
+  enabled: import.meta.env.VITE_SENTRY_ENABLED as boolean,
 
   tracesSampleRate: 1.0,
   environment: import.meta.env.VITE_SENTRY_ENVIRONMENT as string,
