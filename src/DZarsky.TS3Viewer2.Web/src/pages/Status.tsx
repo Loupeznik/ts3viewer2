@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { FiCornerDownRight, FiServer } from 'react-icons/fi';
 import { ChannelDto, ChannelService, ClientDto, ClientService, ServerInfoDto, ServerService } from '../api';
 import { ClientList } from '../components/ClientList';
-import { Loader } from '../components/loader';
+import { Loader } from '../components/Loader';
 import { getAppToken } from '../helpers/TokenProvider';
 
 export const StatusPage = () => {
@@ -86,6 +86,7 @@ export const StatusPage = () => {
                 className="p-4 w-full text-center bg-white border shadow-md sm:p-8 dark:bg-gray-800 dark:border-gray-700">
                 <h1 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white">Detailed status page</h1>
                 <div className="justify-center items-center space-y-4 sm:flex sm:space-y-0 sm:space-x-4">
+                    
                     <div
                         className="w-full mt-3 md:w-1/4 bg-gray-800 text-white rounded-lg inline-flex items-center justify-center px-4 py-2.5 dark:bg-gray-700">
                         {(server && channels) ? renderClients() : <Loader />}

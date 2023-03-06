@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { ClientDto, ClientService, OpenAPI } from "../../api"
 import { ClientList } from "../../components/ClientList"
-import { Loader } from "../../components/loader"
+import { Loader } from "../../components/Loader"
 import { getAppToken } from "../../helpers/TokenProvider"
 
 export const ClientsPage = () => {
