@@ -16,9 +16,13 @@ export const FilesPage = () => {
             return
         }
 
-        await FileService.deleteApiV1Files(file.fullName).then(() => {
-            getSongList()
-        })
+        const confirm = window.confirm(`Are you sure you want to delete ${file.fullName}?`)
+
+        if (confirm) {
+            await FileService.deleteApiV1Files(file.fullName).then(() => {
+                getSongList()
+            })
+        }
     }
 
     async function getSongList() {
