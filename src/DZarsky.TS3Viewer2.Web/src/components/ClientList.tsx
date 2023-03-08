@@ -1,5 +1,5 @@
 import React from 'react';
-import { FiMicOff, FiMinusCircle, FiTrash, FiUser } from 'react-icons/fi';
+import { FiMessageCircle, FiMessageSquare, FiMicOff, FiMinusCircle, FiTrash, FiUser } from 'react-icons/fi';
 import { ClientDto, ClientType } from '../api';
 
 type ClientListProps = {
@@ -7,9 +7,10 @@ type ClientListProps = {
     isAdmin?: boolean,
     kickAction?: (client: ClientDto) => void,
     banAction?: (client: ClientDto) => void,
+    messageAction?: (client: ClientDto) => void
 }
 
-export const ClientList = ({ clients, isAdmin = false, kickAction, banAction }: ClientListProps) => {
+export const ClientList = ({ clients, isAdmin = false, kickAction, banAction, messageAction }: ClientListProps) => {
     const formattedList = clients.map(function (client) {
         if (client.type === ClientType._1) {
             return null
@@ -37,6 +38,8 @@ export const ClientList = ({ clients, isAdmin = false, kickAction, banAction }: 
                             onClick={() => kickAction != undefined ? kickAction(client) : null} />
                         <FiMinusCircle className="mr-2 hover:text-red-400 cursor-pointer" title="Ban client"
                             onClick={() => banAction != undefined ? banAction(client) : null} />
+                        <FiMessageSquare className="mr-2 hover:text-blue-400 cursor-pointer" title="Poke a the client"
+                            onClick={() => messageAction != undefined ? messageAction(client) : null} />
                     </div>
                 </div>
             </li>

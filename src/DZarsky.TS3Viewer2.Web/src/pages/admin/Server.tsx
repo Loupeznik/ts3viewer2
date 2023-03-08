@@ -1,20 +1,22 @@
 import { useEffect, useState } from "react"
 import { FiCircle, FiMessageSquare } from "react-icons/fi"
 import { ServerInfoDto, ServerService } from "../../api"
+import { TextFieldPopup } from "../../components/TextFieldPopup"
 import { getAppToken } from "../../helpers/TokenProvider"
 
 export const ServerPage = () => {
     getAppToken()
     const [server, setServer] = useState<ServerInfoDto>()
     const [uptime, setUptime] = useState<string>()
+    const [isMessagePopupVisible, setIsMessagePopupVisible] = useState<boolean>(false)
 
     const getServerInfo = async () => {
         setServer(await ServerService.getApiV1ServerInfo())
     }
 
-    const sendGlobalMessage = async () => {
+    const sendGlobalMessage = async (message: string) => {
         await ServerService.postApiV1ServerMessagesGlobal({
-            message: "Sample message"
+            message: message
         })
     }
 
@@ -70,11 +72,16 @@ export const ServerPage = () => {
                     <div className="w-3/4">
                         <p className="text-gray-100 font-semibold">Available actions</p>
                         <div className="flex flex-row justify-between my-2 text-2xl">
-                            <FiMessageSquare className="cursor-pointer hover:text-blue-400" title="Send global message" onClick={() => sendGlobalMessage()} />
+                            <FiMessageSquare className="cursor-pointer hover:text-blue-400" title="Send global message" 
+                                onClick={() => setIsMessagePopupVisible(true)} />
                         </div>
                     </div>
                 </div>
             </div>
+            {isMessagePopupVisible && 
+                <TextFieldPopup title="Send global message" onUpdate={sendGlobalMessage} action="Send" isVisible={isMessagePopupVisible} 
+                                label="Message" setVisible={setIsMessagePopupVisible} />
+            }
         </div>
     )
 }
