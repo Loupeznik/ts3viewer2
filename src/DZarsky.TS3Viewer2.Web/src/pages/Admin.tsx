@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom';
 import { UserDto } from '../api';
 import { Login } from '../components/Login';
 import { AdminSideNav } from '../components/navigation/AdminSideNav';
+import { revokeToken } from '../helpers/TokenProvider';
 import { CurrentUserProps, getCurrentUser, signIn } from '../helpers/UserHelper';
 
 export const AdminPage = () => {
@@ -43,13 +44,18 @@ export const AdminPage = () => {
         )
     }
 
+    const onLogout = () => {
+        revokeToken()
+        setAuthenticated(false)
+    }
+
     return (
         <div>
             <div
                 className="p-4 w-full text-center bg-white sm:p-8 dark:bg-gray-800">
                 <h1 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white">Administration</h1>
                 <div className="flex flex-row dark:bg-gray-700 px-4 py-2.5 mt-3 text-white rounded-lg">
-                    <AdminSideNav username={currentUser.username} permissions={currentUser.permissions} />
+                    <AdminSideNav username={currentUser.username} permissions={currentUser.permissions} onLogout={onLogout} />
                     <div className="mx-auto w-screen">
                         <Outlet />
                     </div>

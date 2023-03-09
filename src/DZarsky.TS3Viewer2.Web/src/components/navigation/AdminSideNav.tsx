@@ -2,9 +2,10 @@ import { FiFile, FiLogOut, FiPhoneCall, FiServer, FiUser, FiUserCheck, FiUsers }
 import { Link } from 'react-router-dom';
 import { checkPermissions, CurrentUserProps } from '../../helpers/UserHelper';
 
-export const AdminSideNav = ({ username, permissions }: {
+export const AdminSideNav = ({ username, permissions, onLogout }: {
     username: CurrentUserProps['username'],
     permissions: CurrentUserProps['permissions']
+    onLogout: () => void
 }) => {
     const defaultServerPermissions = ['ServerAdmin', 'SuperAdmin']
 
@@ -69,7 +70,7 @@ export const AdminSideNav = ({ username, permissions }: {
                     </div>
                 </div>
                 <div className="hover:text-red-400 cursor-pointer mx-2">
-                    <FiLogOut className="w-8 h-8" /> Logout
+                    <FiLogOut className="w-8 h-8" onClick={onLogout} /> Logout
                 </div>
             </div>
         </div>

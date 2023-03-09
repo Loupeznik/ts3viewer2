@@ -43,4 +43,9 @@ const setTokenExpiration = (expiresIn: number) => {
     localStorage.setItem(_localAppTokenExpirationStorageKey, currentDate.toUTCString())
 }
 
-export { getAppToken, isTokenExpired, setTokenExpiration }
+const revokeToken = () => {
+    localStorage.removeItem(_localAppTokenStorageKey)
+    localStorage.removeItem(_localAppTokenExpirationStorageKey)
+}
+
+export { getAppToken, isTokenExpired, setTokenExpiration, revokeToken }
