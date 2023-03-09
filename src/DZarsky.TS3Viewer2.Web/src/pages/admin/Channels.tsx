@@ -3,14 +3,16 @@ import { FiMessageSquare } from "react-icons/fi"
 import { ChannelDto, ChannelService } from "../../api"
 import { Loader } from "../../components/Loader"
 import { TextFieldPopup } from "../../components/TextFieldPopup"
+import { getAppToken } from "../../helpers/TokenProvider"
 import { EntityMessageProps } from "../../models/EntityMessageProps"
 
 export const ChannelsPage = () => {
+    getAppToken()
     const [channels, setChannels] = useState<ChannelDto[]>([])
     const [messageProps, setMessageProps] = useState<EntityMessageProps<ChannelDto>>({ entity: {}, isPopupVisible: false })
 
     const getChannels = async () => {
-        setChannels(await ChannelService.getApiV1ServerChannels())
+        await ChannelService.getApiV1ServerChannels().then((response) => setChannels(response))
     }
 
     const sendMessage = async (message: string) => {
@@ -25,7 +27,7 @@ export const ChannelsPage = () => {
 
     useEffect(() => {
         getChannels()
-    }, [channels])
+    }, [])
 
     const renderChannels = () => {
         return (
