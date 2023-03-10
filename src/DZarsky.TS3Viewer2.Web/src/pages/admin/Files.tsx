@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { FiEdit, FiTrash } from "react-icons/fi";
 import { FileDto, FileService, SongDto } from "../../api";
+import { TextFieldPopup } from "../../components/TextFieldPopup";
 import { getAppToken } from "../../helpers/TokenProvider";
+import { EntityMessageProps } from "../../models/EntityMessageProps";
 
 export const FilesPage = () => {
     getAppToken()
-    const [files, setFiles] = useState<FileDto[]>([]);
+    const [files, setFiles] = useState<FileDto[]>([])
+    const [fileRenameProps, setFileRenameProps] = useState<EntityMessageProps<FileDto>>({ entity: {}, isPopupVisible: false })
 
     useEffect(() => {
         getSongList()
@@ -25,25 +28,35 @@ export const FilesPage = () => {
         }
     }
 
-    async function getSongList() {
+    const getSongList = async () => {
         const songs = await FileService.getApiV1Files()
 
         setFiles(songs)
+    }
+
+    const renameFile = async (newName: string) => {
+        if (!fileRenameProps.entity.fullName || !newName) {
+            return
+        }
+
+        await FileService.putApiV1FilesRename(fileRenameProps.entity.fullName, newName).then(() => {
+            getSongList()
+        })
     }
 
     const renderSongs = files?.map(function (file, index) {
         return (
             <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600" key={index}>
                 <th scope="row" className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap uppercase font-semibold">
-                    {file.name}
+                    {file.fullName}
                 </th>
                 <td>
-                    <FiEdit className="cursor-pointer hover:text-blue-400 text-2xl" />
+                    <FiEdit className="cursor-pointer hover:text-blue-400 text-2xl" onClick={() => setFileRenameProps({entity: file, isPopupVisible: true})} />
                     <FiTrash className="cursor-pointer hover:text-red-400 text-2xl" onClick={() => deleteFile(file)} />
                 </td>
             </tr>
         )
-    });
+    })
 
     return (
         <div className="w-3/4 m-auto">
@@ -67,6 +80,11 @@ export const FilesPage = () => {
                     </table>
                 </div>
             </div>
+            {fileRenameProps.isPopupVisible &&
+                <TextFieldPopup title={`Set new file name for ${fileRenameProps.entity.fullName}`} onUpdate={renameFile} action="Rename" 
+                    isVisible={fileRenameProps.isPopupVisible} label="New name" description="Set new file name (with suffix)" 
+                    setVisible={(value: boolean) => setFileRenameProps({...fileRenameProps, isPopupVisible: value})} />
+            }
         </div>
     )
 }
