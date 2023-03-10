@@ -35,15 +35,8 @@ public class FileController : ApiControllerBase
     [Authorize(Policy = EndpointPolicyConstants.AppAuthorizationPolicy)]
     public async Task<ActionResult<AddFilesResultDto>> AddFiles(IList<IFormFile> files)
     {
-        var validFiles = new Dictionary<string, Stream>();
-
-        foreach (var file in files)
-        {
-            if (file.Length > 1)
-            {
-                validFiles.Add(file.FileName, file.OpenReadStream());
-            }
-        }
+        var validFiles = files.Where(file => file.Length > 1)
+            .ToDictionary(file => file.FileName, file => file.OpenReadStream());
 
         var result = await _fileService.AddFiles(validFiles);
 
@@ -58,8 +51,26 @@ public class FileController : ApiControllerBase
     [ProducesResponseType(typeof(object), StatusCodes.Status403Forbidden)]
     [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status404NotFound)]
     [HttpDelete("{fullFileName}")]
     [Authorize(Policy = EndpointPolicyConstants.UserAuthorizationPolicy)]
     [Authorize(Policy = EndpointPolicyConstants.AudioBotAdminPolicy)]
-    public ActionResult<bool> DeleteFiles(string? fullFileName) => ApiResultToActionResult(_fileService.DeleteFile(fullFileName));
+    public ActionResult<bool> DeleteFile(string? fullFileName)
+        => ApiResultToActionResult(_fileService.DeleteFile(fullFileName));
+
+    /// <summary>
+    /// Rename a file
+    /// </summary>
+    /// <param name="fullFileName">The current full file name</param>
+    /// <param name="newFileName">The new file name</param>
+    /// <returns></returns>
+    [ProducesResponseType(typeof(object), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status404NotFound)]
+    [HttpPut("{fullFileName}/rename")]
+    [Authorize(Policy = EndpointPolicyConstants.UserAuthorizationPolicy)]
+    [Authorize(Policy = EndpointPolicyConstants.AudioBotAdminPolicy)]
+    public ActionResult<bool> RenameFile(string? fullFileName, [FromQuery] string? newFileName)
+        => ApiResultToActionResult(_fileService.RenameFile(fullFileName, newFileName));
 }
