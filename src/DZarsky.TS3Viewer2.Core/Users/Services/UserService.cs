@@ -39,9 +39,7 @@ public sealed class UserService : IUserService
             return AddUserResult.UserExists;
         }
 
-        var databaseId = await _clientService.GetUserFromDatabase(user.Login);
-
-        var isClientAdmin = await _clientService.IsClientAdmin(databaseId);
+        var isClientAdmin = await IsClientAdmin(user.Login);
 
         if (addedBy == ApiRole.App && !isClientAdmin)
         {
@@ -101,5 +99,79 @@ public sealed class UserService : IUserService
             : credentials.Secret == user.Secret;
 
         return !isValid ? new ValidateCredentialsResult(ValidationResult.BadCredentials) : new ValidateCredentialsResult(user, ValidationResult.Success);
+    }
+
+    public async Task<ApiResult<List<UserInfoDto>>> GetUsers(bool onlyActive)
+    {
+        var query = _dataContext.Set<User>()
+            .Include(x => x.Roles)
+            .AsNoTracking();
+
+        if (onlyActive)
+        {
+            query = query.Where(x => x.IsActive);
+        }
+
+        var result = _mapper.Map<List<UserInfoDto>>(await query.ToListAsync());
+
+        return ApiResult.Build(result);
+    }
+
+    public async Task<ApiResult<UserInfoDto>> UpdateUser(UserInfoDto user)
+    {
+        if (user.Id == 0)
+        {
+            return ApiResult.Build(user, false, ReasonCodes.InvalidArgument, "UserID was not specified");
+        }
+
+        var dbUser = await _dataContext.Set<User>()
+            .Include(x => x.Roles)
+            .FirstOrDefaultAsync(x => x.Id == user.Id && x.Login == user.Login);
+
+        if (dbUser == null)
+        {
+            return ApiResult.Build(user, false, ReasonCodes.NotFound, "User not found");
+        }
+
+        if (await IsClientAdmin(user.Login!))
+        {
+            return ApiResult.Build(user, false, ReasonCodes.Forbidden, "Cannot edit ServerAdmin user");
+        }
+
+        _mapper.Map(user, dbUser);
+
+        _dataContext.Update(dbUser);
+        await _dataContext.SaveChangesAsync();
+
+        return ApiResult.Build(_mapper.Map(dbUser, new UserInfoDto()));
+    }
+
+    public async Task<DeleteUserResult> DeleteUser(int id)
+    {
+        var user = await _dataContext
+            .Set<User>()
+            .FirstOrDefaultAsync(x => x.Id == id);
+
+        if (user == null)
+        {
+            return DeleteUserResult.UserNotFound;
+        }
+
+        if (await IsClientAdmin(user.Login!))
+        {
+            return DeleteUserResult.UserNotDeleted;
+        }
+
+        _dataContext.Set<User>().Remove(user);
+        await _dataContext.SaveChangesAsync();
+
+        return DeleteUserResult.Success;
+    }
+
+    private async Task<bool> IsClientAdmin(string login)
+    {
+        var databaseId = await _clientService.GetUserFromDatabase(login);
+
+        return await _clientService.IsClientAdmin(databaseId);
     }
 }

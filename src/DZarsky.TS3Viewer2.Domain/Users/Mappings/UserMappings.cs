@@ -9,5 +9,7 @@ public sealed class UserMappings : Profile
     public UserMappings()
     {
         CreateMap<User, UserDto>().ReverseMap();
+        CreateMap<User, UserInfoDto>().ReverseMap();
+        CreateMap<UserRole, UserRoleDto>().ReverseMap();
     }
 }

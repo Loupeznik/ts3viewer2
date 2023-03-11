@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using DZarsky.TS3Viewer2.Api.Common;
+using DZarsky.TS3Viewer2.Domain.Users.General;
 
 namespace DZarsky.TS3Viewer2.Api.Controllers;
 
@@ -37,7 +38,7 @@ public sealed class UserController : ApiControllerBase
         var result = await _userService.AddUser(user, claimsIdentity?
             .FindFirst(x => x.Type == claimsIdentity.RoleClaimType)?.Value);
 
-        if (result != Domain.Users.General.AddUserResult.Success)
+        if (result != AddUserResult.Success)
         {
             return BadRequest(new ProblemDetails
             {
@@ -47,6 +48,60 @@ public sealed class UserController : ApiControllerBase
         }
 
         return Ok();
+    }
+
+    /// <summary>
+    /// Gets all users
+    /// </summary>
+    /// <returns></returns>
+    [ProducesResponseType(typeof(object), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    [HttpGet]
+    [Authorize(Policy = EndpointPolicyConstants.UserAuthorizationPolicy)]
+    [Authorize(Policy = EndpointPolicyConstants.ApiUserAdminPolicy)]
+    public async Task<ActionResult<List<UserInfoDto>>> GetUsers([FromQuery] bool? onlyActive = true) =>
+        ApiResultToActionResult(await _userService.GetUsers(onlyActive.GetValueOrDefault()));
+
+    /// <summary>
+    /// Update a user
+    /// </summary>
+    /// <param name="userId">The ID of the user to update</param>
+    /// <param name="user">The user model</param>
+    /// <returns></returns>
+    [ProducesResponseType(typeof(object), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    [HttpPut("{userId:int}")]
+    [Authorize(Policy = EndpointPolicyConstants.UserAuthorizationPolicy)]
+    [Authorize(Policy = EndpointPolicyConstants.ApiUserAdminPolicy)]
+    public async Task<ActionResult<UserInfoDto>> UpdateUser(int userId, [FromBody] UserInfoDto user) =>
+        ApiResultToActionResult(await _userService.UpdateUser(user));
+
+    /// <summary>
+    /// Delete a user
+    /// </summary>
+    /// <param name="userID">The ID of the user to delete</param>
+    /// <returns></returns>
+    [ProducesResponseType(typeof(object), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    [HttpDelete("{userId:int}")]
+    [Authorize(Policy = EndpointPolicyConstants.UserAuthorizationPolicy)]
+    [Authorize(Policy = EndpointPolicyConstants.ApiUserAdminPolicy)]
+    public async Task<ActionResult> DeleteUser(int userID)
+    {
+        var result = await _userService.DeleteUser(userID);
+
+        return result switch
+        {
+            DeleteUserResult.Success => Ok(),
+            DeleteUserResult.UserNotFound => NotFound(),
+            _ => BadRequest(new ProblemDetails { Title = "Bad request", Detail = "Cannot delete ServerAdmin user" })
+        };
     }
 
     /// <summary>
@@ -62,7 +117,7 @@ public sealed class UserController : ApiControllerBase
     {
         var validationResult = await _userService.ValidateCredentials(credentials);
 
-        if (validationResult.Result != Domain.Users.General.ValidationResult.Success)
+        if (validationResult.Result != ValidationResult.Success)
         {
             return BadRequest(new ProblemDetails
             {

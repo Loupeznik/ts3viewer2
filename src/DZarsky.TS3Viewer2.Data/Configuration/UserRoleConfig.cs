@@ -11,5 +11,11 @@ public static class UserRoleConfig
 
         entity
             .HasKey(x => x.Id);
+
+        entity.HasIndex(x => new
+        {
+            x.UserId,
+            x.Permission
+        }).IsUnique();
     }
 }
