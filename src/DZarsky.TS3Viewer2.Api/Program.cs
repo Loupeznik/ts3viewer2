@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Serilog.Events;
 using System.Text;
+using System.Text.Json.Serialization;
 using DZarsky.TS3Viewer2.Api.Infrastructure.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -54,7 +55,12 @@ builder.Host.UseSerilog();
 
 builder.Services.AddAutoMapper(typeof(ClientMappings));
 builder.Services.AddSingleton(Log.Logger);
-builder.Services.AddControllers();
+
+builder.Services.AddControllers().AddJsonOptions(opt =>
+{
+    opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTeamSpeakApi(builder.Configuration);
