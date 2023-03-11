@@ -4,14 +4,26 @@ import { ServerInfoDto, ServerService } from "../../api"
 import { TextFieldPopup } from "../../components/TextFieldPopup"
 import { getAppToken } from "../../helpers/TokenProvider"
 
-export const ServerPage = () => {
+type ServerPageProps = {
+    showActions?: boolean
+}
+
+export const ServerPage = ({ showActions = true }: ServerPageProps) => {
     getAppToken()
     const [server, setServer] = useState<ServerInfoDto>()
     const [uptime, setUptime] = useState<string>()
     const [isMessagePopupVisible, setIsMessagePopupVisible] = useState<boolean>(false)
 
+    const refreshInterval = 60_000
+
     const getServerInfo = async () => {
-        setServer(await ServerService.getApiV1ServerInfo())
+        await ServerService.getApiV1ServerInfo().then((response) => {
+            setServer(response)
+
+            if (response.uptime) {
+                setUptime(response.uptime)
+            }
+        })
     }
 
     const sendGlobalMessage = async (message: string) => {
@@ -21,12 +33,16 @@ export const ServerPage = () => {
     }
 
     useEffect(() => {
-        getServerInfo().then(() => {
-            if (server?.uptime) {
-                setUptime(server.uptime)
-            }
-        })
-    }, [])
+        if (!server) {
+            getServerInfo()
+        }
+
+        const interval = setInterval(() => {
+            getServerInfo()
+        }, refreshInterval)
+
+        return () => clearInterval(interval);
+    }, [server])
 
     useEffect(() => {
         if (uptime) {
@@ -69,18 +85,20 @@ export const ServerPage = () => {
                         {server?.clientsOnline} / {server?.maxClients}
                         <span className="text-sm ml-2">({server?.queriesOnline} query users)</span>
                     </div>
-                    <div className="w-3/4">
-                        <p className="text-gray-100 font-semibold">Available actions</p>
-                        <div className="flex flex-row justify-between my-2 text-2xl">
-                            <FiMessageSquare className="cursor-pointer hover:text-blue-400" title="Send global message" 
-                                onClick={() => setIsMessagePopupVisible(true)} />
+                    {showActions &&
+                        <div className="w-3/4">
+                            <p className="text-gray-100 font-semibold">Available actions</p>
+                            <div className="flex flex-row justify-between my-2 text-2xl">
+                                <FiMessageSquare className="cursor-pointer hover:text-blue-400" title="Send global message"
+                                    onClick={() => setIsMessagePopupVisible(true)} />
+                            </div>
                         </div>
-                    </div>
+                    }
                 </div>
             </div>
-            {isMessagePopupVisible && 
-                <TextFieldPopup title="Send global message" onUpdate={sendGlobalMessage} action="Send" isVisible={isMessagePopupVisible} 
-                                label="Message" setVisible={setIsMessagePopupVisible} />
+            {isMessagePopupVisible &&
+                <TextFieldPopup title="Send global message" onUpdate={sendGlobalMessage} action="Send" isVisible={isMessagePopupVisible}
+                    label="Message" setVisible={setIsMessagePopupVisible} />
             }
         </div>
     )
