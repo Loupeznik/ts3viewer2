@@ -1,5 +1,5 @@
 import React from 'react';
-import { FiMessageCircle, FiMessageSquare, FiMicOff, FiMinusCircle, FiTrash, FiUser } from 'react-icons/fi';
+import { FiMessageSquare, FiMicOff, FiMinusCircle, FiTrash, FiUser } from 'react-icons/fi';
 import { ClientDto, ClientType } from '../api';
 
 type ClientListProps = {
@@ -12,7 +12,7 @@ type ClientListProps = {
 
 export const ClientList = ({ clients, isAdmin = false, kickAction, banAction, messageAction }: ClientListProps) => {
     const formattedList = clients.map(function (client) {
-        if (client.type === ClientType._1) {
+        if (client.type === ClientType.QUERY) {
             return null
         }
 

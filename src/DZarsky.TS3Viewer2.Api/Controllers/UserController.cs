@@ -83,7 +83,7 @@ public sealed class UserController : ApiControllerBase
     /// <summary>
     /// Delete a user
     /// </summary>
-    /// <param name="userID">The ID of the user to delete</param>
+    /// <param name="userId">The ID of the user to delete</param>
     /// <returns></returns>
     [ProducesResponseType(typeof(object), StatusCodes.Status403Forbidden)]
     [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
@@ -92,9 +92,9 @@ public sealed class UserController : ApiControllerBase
     [HttpDelete("{userId:int}")]
     [Authorize(Policy = EndpointPolicyConstants.UserAuthorizationPolicy)]
     [Authorize(Policy = EndpointPolicyConstants.ApiUserAdminPolicy)]
-    public async Task<ActionResult> DeleteUser(int userID)
+    public async Task<ActionResult> DeleteUser(int userId)
     {
-        var result = await _userService.DeleteUser(userID);
+        var result = await _userService.DeleteUser(userId);
 
         return result switch
         {

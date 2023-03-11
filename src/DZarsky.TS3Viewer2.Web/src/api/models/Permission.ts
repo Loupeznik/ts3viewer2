@@ -3,10 +3,10 @@
 /* eslint-disable */
 
 export enum Permission {
-    '_0' = 0,
-    '_1' = 1,
-    '_2' = 2,
-    '_3' = 3,
-    '_4' = 4,
-    '_5' = 5,
+    SUPER_ADMIN = 'SuperAdmin',
+    AUDIO_BOT_ADMIN = 'AudioBotAdmin',
+    SERVER_ADMIN = 'ServerAdmin',
+    CHANNEL_ADMIN = 'ChannelAdmin',
+    CLIENT_ADMIN = 'ClientAdmin',
+    API_USER_ADMIN = 'ApiUserAdmin',
 }

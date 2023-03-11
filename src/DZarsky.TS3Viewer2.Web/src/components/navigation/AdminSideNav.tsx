@@ -66,7 +66,7 @@ export const AdminSideNav = ({ username, permissions, onLogout }: {
                 <div className="flex flex-row space-x-2">
                     <FiUser className="w-8 h-8" />
                     <div>
-                        <h2 className="text-lg font-semibold">{username}</h2>
+                        <h2 className="text-lg font-semibold text-ellipsis">{username}</h2>
                     </div>
                 </div>
                 <div className="hover:text-red-400 cursor-pointer mx-2">

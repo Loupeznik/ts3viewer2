@@ -1,10 +1,60 @@
+import { useEffect, useState } from "react"
+import { UserInfoDto, UserService } from "../../api"
+import { UpdateUserForm } from "../../components/forms/UpdateUserForm"
+import { Loader } from "../../components/Loader"
+import { UserTable } from "../../components/UserTable"
+import { EntityMessageProps } from "../../models/EntityMessageProps"
+
 export const UsersPage = () => {
+    const [users, setUsers] = useState<UserInfoDto[]>()
+    const [updateUserProps, setUpdateUserProps] = useState<EntityMessageProps<UserInfoDto>>({ entity: {}, isPopupVisible: false })
+
+    const getUsers = async () => {
+        await UserService.getApiV1Users().then((response) => {
+            setUsers(response)
+        })
+    }
+
+    const deleteUser = async (user: UserInfoDto) => {
+        const confirm = window.confirm(`Are you sure you want to delete user ${user.login}?`)
+
+        if (!user.id || !confirm) {
+            return
+        }
+        
+        await UserService.deleteApiV1Users(user.id).then(() => {
+            setUsers(users?.filter((u) => u.id !== user.id))
+        })
+    }
+
+    const updateUser = async (user: UserInfoDto) => {
+        if (!user.id) {
+            return
+        }
+
+        await UserService.putApiV1Users(user.id, user).then(() => {
+            getUsers()
+        })
+    }
+
+    useEffect(() => {
+        getUsers()
+    }, [])
+
     return (
-        <div className="w-1/2 m-auto">
+        <div className="w-3/4 m-auto">
             <h2 className="text-2xl font-bold m-4">User administration</h2>
-            <div className="bg-gray-600 p-4 my-4 w-full md:w-1/2 mx-auto gap-4 justify-center rounded-lg">
-                <p>To be implemented</p>
-            </div>
+            {
+                users?.length ?
+                    <UserTable users={users} onEdit={(user) => {setUpdateUserProps({entity: user, isPopupVisible: true})}} 
+                        onDelete={(user) => deleteUser(user)} /> :
+                    <div className="m-4">
+                        <Loader />
+                    </div>
+            }
+            {updateUserProps.isPopupVisible && <UpdateUserForm user={updateUserProps.entity} 
+                setVisible={(value) => setUpdateUserProps({...updateUserProps, isPopupVisible: value})} isVisible={updateUserProps.isPopupVisible}
+                onSubmit={updateUser} />}
         </div>
     )
 }
