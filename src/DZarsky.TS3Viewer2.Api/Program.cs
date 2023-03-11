@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Serilog.Events;
 using System.Text;
+using DZarsky.TS3Viewer2.Api.Infrastructure.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 //const string allowedOriginsPolicy = "_allowedOriginsPolicy";
@@ -117,6 +118,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 //app.UseCors(allowedOriginsPolicy);
+
+app.UseMiddleware<GlobalErrorHandler>();
 
 app.MapControllers();
 
