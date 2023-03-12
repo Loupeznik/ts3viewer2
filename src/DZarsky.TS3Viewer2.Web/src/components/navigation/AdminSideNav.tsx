@@ -77,8 +77,8 @@ export const AdminSideNav = ({ username, permissions, onLogout }: {
                         </div>
                         */
                     }
-                    <div className="hover:text-red-400 cursor-pointer mx-2 my-1">
-                        <FiLogOut className="w-8 h-8" onClick={onLogout} /> <p className="text-xs md:text-base">Logout</p>
+                    <div className="hover:text-red-400 cursor-pointer mx-2 my-1" onClick={onLogout}>
+                        <FiLogOut className="w-8 h-8" /> <p className="text-xs md:text-base">Logout</p>
                     </div>
                 </div>
             </div>
