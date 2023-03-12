@@ -78,13 +78,15 @@ export const ServerPage = ({ showActions = true }: ServerPageProps) => {
                 <div className="flex flex-col items-center p-8 mx-auto rounded-md sm:px-12 dark:bg-gray-900 dark:text-gray-100">
                     <div className="text-center">
                         <h2 className="text-xl font-semibold">{server?.name}</h2>
-                        <p className="text-gray-400">Up {uptime}</p>
+                        <p className="text-gray-400">{server ? `Up ${uptime}` : 'Down'}</p>
                     </div>
                     <FiCircle className={server?.status == 'online' ? "w-32 h-32 p-6 text-green-400" : "w-32 h-32 p-6 text-red-400"} />
-                    <div className="mb-2 text-3xl font-semibold">
-                        {server?.clientsOnline} / {server?.maxClients}
-                        <span className="text-sm ml-2">({server?.queriesOnline} query users)</span>
-                    </div>
+                    {server &&
+                        <div className="mb-2 text-3xl font-semibold">
+                            {server?.clientsOnline} / {server?.maxClients}
+                            <span className="text-sm ml-2">({server?.queriesOnline} query users)</span>
+                        </div>
+                    }
                     {showActions &&
                         <div className="w-3/4">
                             <p className="text-gray-100 font-semibold">Available actions</p>

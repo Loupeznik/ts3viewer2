@@ -14,7 +14,6 @@ import { ServerPage } from './pages/admin/Server';
 import { UsersPage } from './pages/admin/Users';
 import { AdminMainPage } from './pages/admin/Main';
 
-
 function App() {
   return (
     <div className="dark h-screen bg-gray-800">

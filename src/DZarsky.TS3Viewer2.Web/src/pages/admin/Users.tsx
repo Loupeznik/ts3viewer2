@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { UserInfoDto, UserService } from "../../api"
-import { UpdateUserForm } from "../../components/forms/UpdateUserForm"
+import { FormType, UserForm } from "../../components/forms/UserForm"
 import { Loader } from "../../components/Loader"
 import { UserTable } from "../../components/UserTable"
 import { EntityMessageProps } from "../../models/EntityMessageProps"
@@ -21,7 +21,7 @@ export const UsersPage = () => {
         if (!user.id || !confirm) {
             return
         }
-        
+
         await UserService.deleteApiV1Users(user.id).then(() => {
             setUsers(users?.filter((u) => u.id !== user.id))
         })
@@ -46,15 +46,15 @@ export const UsersPage = () => {
             <h2 className="text-2xl font-bold m-4">User administration</h2>
             {
                 users?.length ?
-                    <UserTable users={users} onEdit={(user) => {setUpdateUserProps({entity: user, isPopupVisible: true})}} 
+                    <UserTable users={users} onEdit={(user) => { setUpdateUserProps({ entity: user, isPopupVisible: true }) }}
                         onDelete={(user) => deleteUser(user)} /> :
                     <div className="m-4">
                         <Loader />
                     </div>
             }
-            {updateUserProps.isPopupVisible && <UpdateUserForm user={updateUserProps.entity} 
-                setVisible={(value) => setUpdateUserProps({...updateUserProps, isPopupVisible: value})} isVisible={updateUserProps.isPopupVisible}
-                onSubmit={updateUser} />}
+            {updateUserProps.isPopupVisible && <UserForm user={updateUserProps.entity}
+                setVisible={(value) => setUpdateUserProps({ ...updateUserProps, isPopupVisible: value })} isVisible={updateUserProps.isPopupVisible}
+                onSubmit={updateUser} isFromAdmin={true} type={FormType.Update} />}
         </div>
     )
 }

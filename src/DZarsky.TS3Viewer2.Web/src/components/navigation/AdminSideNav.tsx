@@ -1,6 +1,8 @@
-import { FiFile, FiLogOut, FiPhoneCall, FiServer, FiUser, FiUserCheck, FiUsers } from 'react-icons/fi';
+import { useState } from 'react';
+import { FiEdit, FiFile, FiLogOut, FiPhoneCall, FiServer, FiUser, FiUserCheck, FiUsers } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import { checkPermissions, CurrentUserProps } from '../../helpers/UserHelper';
+import { EntityMessageProps } from '../../models/EntityMessageProps';
 
 export const AdminSideNav = ({ username, permissions, onLogout }: {
     username: CurrentUserProps['username'],
@@ -62,15 +64,23 @@ export const AdminSideNav = ({ username, permissions, onLogout }: {
                     </ul>
                 </div>
             </div>
-            <div className="flex items-center p-2 mt-12  justify-between rounded-lg shadow-md dark:bg-gray-700">
+            <div className="flex items-center p-2 mt-12 justify-between rounded-lg shadow-md dark:bg-gray-700">
                 <div className="flex flex-row space-x-2">
                     <FiUser className="w-8 h-8" />
                     <div>
                         <h2 className="text-lg font-semibold text-ellipsis">{username}</h2>
                     </div>
                 </div>
-                <div className="hover:text-red-400 cursor-pointer mx-2">
-                    <FiLogOut className="w-8 h-8" onClick={onLogout} /> Logout
+                <div className="flex flex-col">
+                    {
+                        /*<div className="hover:text-gray-400 cursor-pointer mx-2 my-1">
+                            <FiEdit className="w-8 h-8" /> <p>Change password</p>
+                        </div>
+                        */
+                    }
+                    <div className="hover:text-red-400 cursor-pointer mx-2 my-1">
+                        <FiLogOut className="w-8 h-8" onClick={onLogout} /> <p>Logout</p>
+                    </div>
                 </div>
             </div>
         </div>
