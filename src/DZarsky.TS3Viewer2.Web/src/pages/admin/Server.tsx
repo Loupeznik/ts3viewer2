@@ -72,9 +72,9 @@ export const ServerPage = ({ showActions = true }: ServerPageProps) => {
     }, [uptime])
 
     return (
-        <div className="w-1/2 m-auto">
+        <div className="md:w-1/2 m-auto">
             <h2 className="text-2xl font-bold m-4">Server administration</h2>
-            <div className="bg-gray-600 p-4 my-4 w-full md:w-1/2 mx-auto gap-4 justify-center rounded-lg">
+            <div className="bg-gray-600 p-4 md:my-4 w-full md:w-1/2 mx-auto gap-4 justify-center rounded-lg">
                 <div className="flex flex-col items-center p-8 mx-auto rounded-md sm:px-12 dark:bg-gray-900 dark:text-gray-100">
                     <div className="text-center">
                         <h2 className="text-xl font-semibold">{server?.name}</h2>

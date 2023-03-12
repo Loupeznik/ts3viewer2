@@ -48,7 +48,7 @@ export const ClientsPage = () => {
     const sortedClients = clients.sort((a, b) => a.nickName!.localeCompare(b.nickName!))
 
     return (
-        <div className="w-1/2 m-auto">
+        <div className="md:w-1/2 w-full m-auto">
             <h2 className="text-2xl font-bold m-4">Client administration</h2>
             <p className="text-lg">Connected clients</p>
             {

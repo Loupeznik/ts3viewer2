@@ -27,13 +27,13 @@ export const ClientList = ({ clients, isAdmin = false, kickAction, banAction, me
         }
 
         return (
-            <li key={client.id} className="bg-gray-900 p-1 mt-1 rounded font-semibold text-lg">
-                <div className="flex justify-between p-2 align-middle">
+            <li key={client.id} className="bg-gray-900 p-1 mt-1 rounded font-semibold md:text-lg text-base">
+                <div className="flex justify-between md:p-2 p-1 align-middle">
                     <div>
                         <FiUser className="mr-1" />
                         {client.nickName}
                     </div>
-                    <div className="text-xl">
+                    <div className="md:text-xl text-lg">
                         <FiTrash className="mr-2 hover:text-red-400 cursor-pointer" title="Kick client"
                             onClick={() => kickAction != undefined ? kickAction(client) : null} />
                         <FiMinusCircle className="mr-2 hover:text-red-400 cursor-pointer" title="Ban client"

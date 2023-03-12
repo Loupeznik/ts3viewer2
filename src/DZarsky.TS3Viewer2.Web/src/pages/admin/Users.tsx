@@ -66,10 +66,11 @@ export const UsersPage = () => {
     }, [])
 
     return (
-        <div className="w-3/4 m-auto">
+        <div className="md:w-3/4 w-full m-auto">
             <Toaster />
             <h2 className="text-2xl font-bold m-4">User administration</h2>
-            <div className="text-xl w-1/4 ml-4 my-1 p-1 bg-gray-800 rounded-lg cursor-pointer hover:bg-blue-500" onClick={() => setIsAddUserPopupVisible(!isAddUserPopupVisible)}>
+            <div className="text-xl md:w-1/4 w-3/4 ml-4 my-1 p-1 bg-gray-800 rounded-lg cursor-pointer hover:bg-blue-500" 
+                onClick={() => setIsAddUserPopupVisible(!isAddUserPopupVisible)}>
                 <FiPlusCircle className="w-8 h-8" /> Add user
             </div>
             {

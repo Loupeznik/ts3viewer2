@@ -41,9 +41,9 @@ export const Login = ({ onLogin }: LoginProps) => {
     }
 
     return (
-        <div className="flex items-center justify-center h-screen">
+        <div className="flex justify-center">
             <Toaster />
-            <form onSubmit={handleSubmit} className="w-full max-w-xs">
+            <form onSubmit={handleSubmit} className="w-full max-w-xs mt-48">
                 <div className="mb-4">
                     <label htmlFor="username" className="block mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">Username</label>
                     <Input id="username" type="text" onChange={(event) => setUsername(event.target.value)} />
@@ -53,11 +53,12 @@ export const Login = ({ onLogin }: LoginProps) => {
                     <Input id="password" type="password" onChange={(event) => setPassword(event.target.value)} />
                 </div>
                 <div className="flex items-center justify-between">
-                    <button type="submit" className="px-4 py-2 text-sm font-medium text-white bg-blue-500 border border-transparent rounded-md hover:bg-blue-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500">Login</button>
+                    <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 
+            focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700">Login</button>
                     <button
-                        className="px-4 py-2 text-sm font-medium text-white bg-blue-500 border 
-                        border-transparent rounded-md hover:bg-blue-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 
-                        focus-visible:ring-blue-500" onClick={() => setIsRegisterPopupVisible(!isRegisterPopupVisible)}>Register</button>
+                        className="text-white bg-blue-700 hover:bg-blue-800 
+                        focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700"
+                        onClick={() => setIsRegisterPopupVisible(!isRegisterPopupVisible)}>Register</button>
                 </div>
             </form>
             {isRegisterPopupVisible && <UserForm user={{}} onSubmit={(user) => handleRegistration(user as UserDto)}

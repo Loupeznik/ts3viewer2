@@ -52,7 +52,7 @@ export const ChannelsPage = () => {
     }
 
     return (
-        <div className="w-1/2 m-auto">
+        <div className="md:w-1/2 w-full m-auto">
             <h2 className="text-2xl font-bold m-4">Channel administration</h2>
             {
                 channels.length > 0 ?

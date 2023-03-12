@@ -59,7 +59,7 @@ export const FilesPage = () => {
     })
 
     return (
-        <div className="w-3/4 m-auto">
+        <div className="md:w-3/4 w-full m-auto">
             <h2 className="text-2xl font-bold m-4">Files administration</h2>
             <div className="bg-gray-600 p-4 my-4 w-full md:w-1/2 mx-auto gap-4 justify-center rounded-lg">
                 <div className="relative overflow-x-auto shadow-md sm:rounded-lg">

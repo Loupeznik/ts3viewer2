@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import { FiEdit, FiFile, FiLogOut, FiPhoneCall, FiServer, FiUser, FiUserCheck, FiUsers } from 'react-icons/fi';
+import { FiFile, FiLogOut, FiPhoneCall, FiServer, FiUser, FiUserCheck, FiUsers } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import { checkPermissions, CurrentUserProps } from '../../helpers/UserHelper';
-import { EntityMessageProps } from '../../models/EntityMessageProps';
 
 export const AdminSideNav = ({ username, permissions, onLogout }: {
     username: CurrentUserProps['username'],
@@ -12,8 +11,8 @@ export const AdminSideNav = ({ username, permissions, onLogout }: {
     const defaultServerPermissions = ['ServerAdmin', 'SuperAdmin']
 
     return (
-        <div className="flex flex-col p-3 dark:bg-gray-900 dark:text-gray-100 rounded">
-            <div className="w-80">
+        <div className="flex flex-col p-3 dark:bg-gray-900 dark:text-gray-100 rounded max-w-screen">
+            <div>
                 <div className="flex-1">
                     <ul className="pt-2 pb-4 space-y-1 text-sm">
                         {
@@ -64,11 +63,11 @@ export const AdminSideNav = ({ username, permissions, onLogout }: {
                     </ul>
                 </div>
             </div>
-            <div className="flex items-center p-2 mt-12 justify-between rounded-lg shadow-md dark:bg-gray-700">
-                <div className="flex flex-row space-x-2">
+            <div className="flex items-center py-2 mt-12 justify-between rounded-lg shadow-md dark:bg-gray-700">
+                <div className="flex md:flex-row flex-col md:items-center space-x-2 md:space-x-4 md:w-auto">
                     <FiUser className="w-8 h-8" />
                     <div>
-                        <h2 className="text-lg font-semibold text-ellipsis">{username}</h2>
+                        <h2 className="text-lg font-semibold text-ellipsis text-xs md:text-base">{username}</h2>
                     </div>
                 </div>
                 <div className="flex flex-col">
@@ -79,7 +78,7 @@ export const AdminSideNav = ({ username, permissions, onLogout }: {
                         */
                     }
                     <div className="hover:text-red-400 cursor-pointer mx-2 my-1">
-                        <FiLogOut className="w-8 h-8" onClick={onLogout} /> <p>Logout</p>
+                        <FiLogOut className="w-8 h-8" onClick={onLogout} /> <p className="text-xs md:text-base">Logout</p>
                     </div>
                 </div>
             </div>
