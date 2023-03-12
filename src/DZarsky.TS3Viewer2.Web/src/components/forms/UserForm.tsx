@@ -22,7 +22,7 @@ type UserFormProps = {
 
 export const UserForm = (props: UserFormProps) => {
     const [user, setUser] = React.useState<UserInfoDto>(props.user)
-    const [userToCreate, setUserToCreate] = React.useState<UserDto>({})
+    const [userToCreate, setUserToCreate] = React.useState<UserDto>({login: '', secret: '', permissions: []})
     const [isHelpPopupVisible, setIsHelpPopupVisible] = React.useState<boolean>(false)
 
     const onFormSubmit = (event: React.SyntheticEvent) => {
@@ -43,6 +43,15 @@ export const UserForm = (props: UserFormProps) => {
         } else {
             user.roles?.push({ permission: permission })
             setUser({ ...user, roles: user.roles })
+        }
+    }
+
+    const addPermission = (permission: Permission) => {
+        if (userToCreate.permissions?.includes(permission)) {
+            setUserToCreate({ ...userToCreate, permissions: userToCreate.permissions.filter(p => p !== permission)})
+        } else {
+            userToCreate.permissions?.push(permission)
+            setUserToCreate({ ...userToCreate, permissions: userToCreate.permissions })
         }
     }
 
@@ -84,7 +93,7 @@ export const UserForm = (props: UserFormProps) => {
                         <label htmlFor="password" className="block my-2 text-sm font-semibold text-gray-200">Password</label>
                         <Input id="password" type="password" onChange={(event) => setUserToCreate({ ...userToCreate, secret: event.target.value })} />
                     </div>
-                    {props.isFromAdmin && <PermissionSelect user={user} updateRoles={updateRoles} />}
+                    {props.isFromAdmin && <PermissionSelect user={user} updateRoles={addPermission} />}
                     <div className="flex flex-col gap-6 mt-6 sm:flex-row justify-end">
                         <SubmitButton value="Register" />
                     </div>
