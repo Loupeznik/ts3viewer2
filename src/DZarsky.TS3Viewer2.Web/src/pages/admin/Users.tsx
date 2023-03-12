@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
-import { UserInfoDto, UserService } from "../../api"
+import toast, { Toaster } from "react-hot-toast"
+import { ApiError, ProblemDetails, UserInfoDto, UserService } from "../../api"
 import { FormType, UserForm } from "../../components/forms/UserForm"
 import { Loader } from "../../components/Loader"
 import { UserTable } from "../../components/UserTable"
@@ -22,8 +23,13 @@ export const UsersPage = () => {
             return
         }
 
-        await UserService.deleteApiV1Users(user.id).then(() => {
+        await UserService.deleteApiV1Users(user.id).then(onFulfilled => {
+            toast.success(`User ${user.login} deleted`)
             setUsers(users?.filter((u) => u.id !== user.id))
+        }, onRejected => {
+            const error = onRejected as ApiError
+            const body = JSON.parse(error.body) as ProblemDetails
+            toast.error(`Failed to delete user: ${body.detail}`)
         })
     }
 
@@ -43,6 +49,7 @@ export const UsersPage = () => {
 
     return (
         <div className="w-3/4 m-auto">
+            <Toaster />
             <h2 className="text-2xl font-bold m-4">User administration</h2>
             {
                 users?.length ?
