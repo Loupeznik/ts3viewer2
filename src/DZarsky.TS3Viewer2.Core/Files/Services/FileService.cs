@@ -88,6 +88,35 @@ public sealed class FileService : IFileService
         return ApiResult.Build(true);
     }
 
+    public ApiResult<bool> RenameFile(string? fullFileName, string? newFileName)
+    {
+        if (string.IsNullOrWhiteSpace(fullFileName) || string.IsNullOrWhiteSpace(newFileName) ||
+            !FilesDirectoryExists() || !Path.HasExtension(newFileName))
+        {
+            return ApiResult.Build(false, false, ReasonCodes.InvalidArgument, nameof(fullFileName));
+        }
+
+        var filePath = Path.Combine(_fileConfig.BasePath!, fullFileName);
+        var newFilePath = Path.Combine(_fileConfig.BasePath!, newFileName);
+
+        if (!File.Exists(filePath))
+        {
+            return ApiResult.Build(false, false, ReasonCodes.NotFound);
+        }
+
+        try
+        {
+            File.Move(filePath, newFilePath);
+        }
+        catch (Exception ex)
+        {
+            _logger.Error($"Could not rename file {filePath} to {newFilePath}: {ex}", ex);
+            return ApiResult.Build(false, false);
+        }
+
+        return ApiResult.Build(true);
+    }
+
     public ApiResult<List<FileDto>> GetFiles()
     {
         var files = new List<FileDto>();

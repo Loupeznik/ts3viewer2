@@ -64,6 +64,34 @@ fullFileName: string,
             errors: {
                 401: `Unauthorized`,
                 403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
+     * @param fullFileName 
+     * @param newFileName 
+     * @returns boolean Success
+     * @throws ApiError
+     */
+    public static putApiV1FilesRename(
+fullFileName: string,
+newFileName?: string,
+): CancelablePromise<boolean> {
+        return __request(OpenAPI, {
+            method: 'PUT',
+            url: '/api/v1/files/{fullFileName}/rename',
+            path: {
+                'fullFileName': fullFileName,
+            },
+            query: {
+                'newFileName': newFileName,
+            },
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
             },
         });
     }

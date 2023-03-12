@@ -7,22 +7,28 @@ import { BrowserRouter } from 'react-router-dom';
 import * as Sentry from "@sentry/react";
 import { BrowserTracing } from '@sentry/tracing';
 
-Sentry.init({
-  dsn: import.meta.env.VITE_SENTRY_DSN as string,
-  integrations: [new BrowserTracing()],
-  release: import.meta.env.VITE_VERSION as string,
+function stringToBoolean(str: string): boolean {
+  return str === 'true';
+}
 
-  tracesSampleRate: 1.0,
-  environment: import.meta.env.VITE_SENTRY_ENVIRONMENT as string,
-});
+if (stringToBoolean(import.meta.env.VITE_SENTRY_ENABLED) === true) {
+  Sentry.init({
+    dsn: import.meta.env.VITE_SENTRY_DSN as string,
+    integrations: [new BrowserTracing()],
+    release: import.meta.env.VITE_VERSION as string,
+
+    tracesSampleRate: 1.0,
+    environment: import.meta.env.VITE_SENTRY_ENVIRONMENT as string,
+  });
+}
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-      <BrowserRouter>
-          <App />
-      </BrowserRouter>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </React.StrictMode>
 );

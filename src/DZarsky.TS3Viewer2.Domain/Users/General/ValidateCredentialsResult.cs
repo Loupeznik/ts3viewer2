@@ -4,7 +4,7 @@ namespace DZarsky.TS3Viewer2.Domain.Users.General;
 
 public sealed class ValidateCredentialsResult
 {
-    public User User { get; set; } = new User();
+    public User User { get; set; } = new();
 
     public ValidationResult Result { get; set; }
 

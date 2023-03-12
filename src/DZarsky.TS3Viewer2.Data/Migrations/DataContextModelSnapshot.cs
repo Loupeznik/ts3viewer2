@@ -43,6 +43,42 @@ namespace DZarsky.TS3Viewer2.Data.Migrations
 
                     b.ToTable("Users");
                 });
+
+            modelBuilder.Entity("DZarsky.TS3Viewer2.Domain.Users.Models.UserRole", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<short>("Permission")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId", "Permission")
+                        .IsUnique();
+
+                    b.ToTable("UserRoles");
+                });
+
+            modelBuilder.Entity("DZarsky.TS3Viewer2.Domain.Users.Models.UserRole", b =>
+                {
+                    b.HasOne("DZarsky.TS3Viewer2.Domain.Users.Models.User", "User")
+                        .WithMany("Roles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("DZarsky.TS3Viewer2.Domain.Users.Models.User", b =>
+                {
+                    b.Navigation("Roles");
+                });
 #pragma warning restore 612, 618
         }
     }

@@ -7,6 +7,7 @@ namespace DZarsky.TS3Viewer2.Data.Infrastructure;
 public sealed class DataContext : DbContext
 {
     public DbSet<User> Users { get; set; } = default!;
+    public DbSet<UserRole> UserRoles { get; set; } = default!;
 
     public DataContext(DbContextOptions options) : base(options)
     {
@@ -18,5 +19,6 @@ public sealed class DataContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.AddUserConfig();
+        modelBuilder.AddUserRoleConfig();
     }
 }

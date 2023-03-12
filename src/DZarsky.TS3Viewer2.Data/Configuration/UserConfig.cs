@@ -19,5 +19,10 @@ public static class UserConfig
         entity
             .Property(x => x.IsActive)
             .HasDefaultValue(true);
+
+        entity
+            .HasMany(x => x.Roles)
+            .WithOne(x => x.User)
+            .HasForeignKey(x => x.UserId);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DZarsky.TS3Viewer2.Data.Infrastructure;
+using DZarsky.TS3Viewer2.Domain.Infrastructure.General;
 using DZarsky.TS3Viewer2.Domain.Server.Services;
 using DZarsky.TS3Viewer2.Domain.Users.Dto;
 using DZarsky.TS3Viewer2.Domain.Users.General;
@@ -22,9 +23,9 @@ public sealed class UserService : IUserService
         _clientService = clientService;
     }
 
-    public async Task<AddUserResult> AddUser(UserDto user)
+    public async Task<AddUserResult> AddUser(UserDto user, string? addedBy)
     {
-        if (string.IsNullOrWhiteSpace(user.Login) || string.IsNullOrWhiteSpace(user.Secret))
+        if (string.IsNullOrWhiteSpace(user.Login) || string.IsNullOrWhiteSpace(user.Secret) || string.IsNullOrWhiteSpace(addedBy))
         {
             return AddUserResult.BadRequest;
         }
@@ -38,19 +39,31 @@ public sealed class UserService : IUserService
             return AddUserResult.UserExists;
         }
 
-        var databaseId = await _clientService.GetUserFromDatabase(user.Login);
+        var isClientAdmin = await IsClientAdmin(user.Login);
 
-        var isClientAdmin = await _clientService.IsClientAdmin(databaseId);
-
-        if (!isClientAdmin)
+        if (addedBy == ApiRole.App && !isClientAdmin)
         {
             return AddUserResult.NotServerAdmin;
+        }
+
+        if (isClientAdmin)
+        {
+            user.Permissions.Clear();
+            user.Permissions.Add(Permission.SuperAdmin);
         }
 
         var newUser = _mapper.Map<User>(user);
 
         newUser.Type = UserType.User;
         newUser.Secret = BCrypt.Net.BCrypt.HashPassword(user.Secret);
+
+        foreach (var permission in user.Permissions)
+        {
+            newUser.Roles.Add(new UserRole
+            {
+                Permission = permission
+            });
+        }
 
         await _dataContext.AddAsync(newUser);
         await _dataContext.SaveChangesAsync();
@@ -67,6 +80,7 @@ public sealed class UserService : IUserService
 
         var user = await _dataContext
             .Set<User>()
+            .Include(x => x.Roles)
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Login == credentials.Login);
 
@@ -84,11 +98,80 @@ public sealed class UserService : IUserService
             ? BCrypt.Net.BCrypt.Verify(credentials.Secret, user.Secret)
             : credentials.Secret == user.Secret;
 
-        if (!isValid)
+        return !isValid ? new ValidateCredentialsResult(ValidationResult.BadCredentials) : new ValidateCredentialsResult(user, ValidationResult.Success);
+    }
+
+    public async Task<ApiResult<List<UserInfoDto>>> GetUsers(bool onlyActive)
+    {
+        var query = _dataContext.Set<User>()
+            .Include(x => x.Roles)
+            .AsNoTracking();
+
+        if (onlyActive)
         {
-            return new ValidateCredentialsResult(ValidationResult.BadCredentials);
+            query = query.Where(x => x.IsActive);
         }
 
-        return new ValidateCredentialsResult(user, ValidationResult.Success);
+        var result = _mapper.Map<List<UserInfoDto>>(await query.ToListAsync());
+
+        return ApiResult.Build(result);
+    }
+
+    public async Task<ApiResult<UserInfoDto>> UpdateUser(UserInfoDto user)
+    {
+        if (user.Id == 0)
+        {
+            return ApiResult.Build(user, false, ReasonCodes.InvalidArgument, "UserID was not specified");
+        }
+
+        var dbUser = await _dataContext.Set<User>()
+            .Include(x => x.Roles)
+            .FirstOrDefaultAsync(x => x.Id == user.Id && x.Login == user.Login);
+
+        if (dbUser == null)
+        {
+            return ApiResult.Build(user, false, ReasonCodes.NotFound, "User not found");
+        }
+
+        if (await IsClientAdmin(user.Login!))
+        {
+            return ApiResult.Build(user, false, ReasonCodes.Forbidden, "Cannot edit ServerAdmin user");
+        }
+
+        _mapper.Map(user, dbUser);
+
+        _dataContext.Update(dbUser);
+        await _dataContext.SaveChangesAsync();
+
+        return ApiResult.Build(_mapper.Map(dbUser, new UserInfoDto()));
+    }
+
+    public async Task<DeleteUserResult> DeleteUser(int id)
+    {
+        var user = await _dataContext
+            .Set<User>()
+            .FirstOrDefaultAsync(x => x.Id == id);
+
+        if (user == null)
+        {
+            return DeleteUserResult.UserNotFound;
+        }
+
+        if (await IsClientAdmin(user.Login!))
+        {
+            return DeleteUserResult.UserNotDeleted;
+        }
+
+        _dataContext.Set<User>().Remove(user);
+        await _dataContext.SaveChangesAsync();
+
+        return DeleteUserResult.Success;
+    }
+
+    private async Task<bool> IsClientAdmin(string login)
+    {
+        var databaseId = await _clientService.GetUserFromDatabase(login);
+
+        return await _clientService.IsClientAdmin(databaseId);
     }
 }

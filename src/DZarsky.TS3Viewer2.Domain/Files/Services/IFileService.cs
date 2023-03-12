@@ -10,4 +10,6 @@ public interface IFileService
     public Task<ApiResult<AddFilesResultDto>> AddFiles(IDictionary<string, Stream> files);
 
     public ApiResult<bool> DeleteFile(string? fullFileName);
+
+    public ApiResult<bool> RenameFile(string? fullFileName, string? newFileName);
 }

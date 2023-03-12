@@ -3,10 +3,10 @@
 /* eslint-disable */
 
 export enum Codec {
-    '_0' = 0,
-    '_1' = 1,
-    '_2' = 2,
-    '_3' = 3,
-    '_4' = 4,
-    '_5' = 5,
+    SPEEX_NARROWBAND = 'SpeexNarrowband',
+    SPEEX_WIDEBAND = 'SpeexWideband',
+    SPEEX_ULTRA_WIDEBAND = 'SpeexUltraWideband',
+    CELT_MONO = 'CeltMono',
+    OPUS_VOICE = 'OpusVoice',
+    OPUS_MUSIC = 'OpusMusic',
 }

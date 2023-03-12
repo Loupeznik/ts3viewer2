@@ -5,13 +5,13 @@ using DZarsky.TS3Viewer2.Core.Users.Services;
 using DZarsky.TS3Viewer2.Data.Infrastructure.Extensions;
 using DZarsky.TS3Viewer2.Domain.Infrastructure.Configuration;
 using DZarsky.TS3Viewer2.Domain.Server.Mappings;
-using DZarsky.TS3Viewer2.Domain.Users.Models;
 using DZarsky.TS3Viewer2.Domain.Users.Services;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Serilog.Events;
-using System.Security.Claims;
 using System.Text;
+using System.Text.Json.Serialization;
+using DZarsky.TS3Viewer2.Api.Infrastructure.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 //const string allowedOriginsPolicy = "_allowedOriginsPolicy";
@@ -28,7 +28,7 @@ var logger = new LoggerConfiguration()
         .MinimumLevel.Warning()
         .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day);
 
-if (sentryConfig != null && sentryConfig.IsEnabled)
+if (sentryConfig is { IsEnabled: true })
 {
     Log.Logger = logger
     .WriteTo.Sentry(options =>
@@ -55,7 +55,12 @@ builder.Host.UseSerilog();
 
 builder.Services.AddAutoMapper(typeof(ClientMappings));
 builder.Services.AddSingleton(Log.Logger);
-builder.Services.AddControllers();
+
+builder.Services.AddControllers().AddJsonOptions(opt =>
+{
+    opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTeamSpeakApi(builder.Configuration);
@@ -85,8 +90,7 @@ builder.Services
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy(UserType.App.ToString(), policy => policy.RequireClaim(ClaimTypes.Role, UserType.App.ToString(), UserType.User.ToString()));
-    options.AddPolicy(UserType.User.ToString(), policy => policy.RequireClaim(ClaimTypes.Role, UserType.User.ToString()));
+    options.RegisterPolicies();
 });
 
 /*
@@ -120,6 +124,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 //app.UseCors(allowedOriginsPolicy);
+
+app.UseMiddleware<GlobalErrorHandler>();
 
 app.MapControllers();
 
