@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { ClientDto, ClientService, ClientType, MessageDto, OpenAPI } from "../../api"
+import { ClientDto, ClientService, ClientType } from "../../api"
 import { ClientList } from "../../components/ClientList"
 import { Loader } from "../../components/Loader"
 import { TextFieldPopup } from "../../components/TextFieldPopup"

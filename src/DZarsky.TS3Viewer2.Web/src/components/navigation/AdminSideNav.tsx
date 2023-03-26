@@ -1,6 +1,5 @@
-import { useState } from 'react';
 import { FiFile, FiLogOut, FiPhoneCall, FiServer, FiUser, FiUserCheck, FiUsers } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { checkPermissions, CurrentUserProps } from '../../helpers/UserHelper';
 
 export const AdminSideNav = ({ username, permissions, onLogout }: {
@@ -9,6 +8,11 @@ export const AdminSideNav = ({ username, permissions, onLogout }: {
     onLogout: () => void
 }) => {
     const defaultServerPermissions = ['ServerAdmin', 'SuperAdmin']
+    const pathname = useLocation()
+
+    const highlightRoute = (path: string): string => {
+        return pathname.pathname == '/admin'.concat(path) ? 'bg-gray-700' : ''
+    }
 
     return (
         <div className="flex flex-col p-3 dark:bg-gray-900 dark:text-gray-100 rounded max-w-screen">
@@ -17,7 +21,7 @@ export const AdminSideNav = ({ username, permissions, onLogout }: {
                     <ul className="pt-2 pb-4 space-y-1 text-sm">
                         {
                             checkPermissions(permissions, defaultServerPermissions.concat(['AudioBotAdmin'])) &&
-                            <li className="rounded-lg hover:bg-gray-700">
+                            <li className={`rounded-lg hover:bg-gray-700 ${highlightRoute('/files')}`}>
                                 <Link to="/admin/files" className="flex items-center p-2 space-x-3 rounded-md">
                                     <FiFile className="w-5 h-5" />
                                     <span className="font-semibold">Files</span>
@@ -26,7 +30,7 @@ export const AdminSideNav = ({ username, permissions, onLogout }: {
                         }
                         {
                             checkPermissions(permissions, defaultServerPermissions.concat(['ClientAdmin'])) &&
-                            <li className="rounded-lg hover:bg-gray-700">
+                            <li className={`rounded-lg hover:bg-gray-700 ${highlightRoute('/clients')}`}>
                                 <Link to="/admin/clients" className="flex items-center p-2 space-x-3 rounded-md">
                                     <FiUsers className="w-5 h-5" />
                                     <span className="font-semibold">Clients</span>
@@ -35,7 +39,7 @@ export const AdminSideNav = ({ username, permissions, onLogout }: {
                         }
                         {
                             checkPermissions(permissions, defaultServerPermissions.concat(['ChannelAdmin'])) &&
-                            <li className="rounded-lg hover:bg-gray-700">
+                            <li className={`rounded-lg hover:bg-gray-700 ${highlightRoute('/channels')}`}>
                                 <Link to="/admin/channels" className="flex items-center p-2 space-x-3 rounded-md">
                                     <FiPhoneCall className="w-5 h-5" />
                                     <span className="font-semibold">Channels</span>
@@ -44,7 +48,7 @@ export const AdminSideNav = ({ username, permissions, onLogout }: {
                         }
                         {
                             checkPermissions(permissions, defaultServerPermissions) &&
-                            <li className="rounded-lg hover:bg-gray-700">
+                            <li className={`rounded-lg hover:bg-gray-700 ${highlightRoute('/server')}`}>
                                 <Link to="/admin/server" className="flex items-center p-2 space-x-3 rounded-md">
                                     <FiServer className="w-5 h-5" />
                                     <span className="font-semibold">Server</span>
@@ -53,7 +57,7 @@ export const AdminSideNav = ({ username, permissions, onLogout }: {
                         }
                         {
                             checkPermissions(permissions, ['SuperAdmin', 'ApiUserAdmin']) &&
-                            <li className="rounded-lg hover:bg-gray-700">
+                            <li className={`rounded-lg hover:bg-gray-700 ${highlightRoute('/users')}`}>
                                 <Link to="/admin/users" className="flex items-center p-2 space-x-3 rounded-md">
                                     <FiUserCheck className="w-5 h-5" />
                                     <span className="font-semibold">API users</span>
