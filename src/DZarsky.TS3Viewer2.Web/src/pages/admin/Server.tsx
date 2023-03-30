@@ -41,19 +41,25 @@ export const ServerPage = ({ showActions = true }: ServerPageProps) => {
             getServerInfo()
         }, refreshInterval)
 
-        return () => clearInterval(interval);
+        return () => clearInterval(interval)
     }, [server])
 
     useEffect(() => {
         if (uptime) {
-            const interval = setInterval(function () {
-                const timeParts = uptime.split(":")
-                let hours = parseInt(timeParts[0])
-                let minutes = parseInt(timeParts[1])
-                let seconds = parseInt(timeParts[2])
+            const timeParts = uptime.split('.')
+            let days = 0
+            let time = uptime
 
+            if (timeParts.length === 2) {
+                days = parseInt(timeParts[0])
+                time = timeParts[1]
+            }
+
+            let [hours, minutes, seconds] = time.split(':').map(part => parseInt(part))
+
+            const interval = setInterval(() => {
                 seconds++
-
+                
                 if (seconds > 59) {
                     seconds = 0
                     minutes++
@@ -64,7 +70,20 @@ export const ServerPage = ({ showActions = true }: ServerPageProps) => {
                     hours++
                 }
 
-                setUptime(("0" + hours).slice(-2) + ":" + ("0" + minutes).slice(-2) + ":" + ("0" + seconds).slice(-2))
+                if (hours > 23) {
+                    hours = 0
+                    days++
+                }
+
+                let uptimeString = ''
+
+                if (days > 0) {
+                    uptimeString += days + '.'
+                }
+
+                uptimeString += ("0" + hours).slice(-2) + ":" + ("0" + minutes).slice(-2) + ":" + ("0" + seconds).slice(-2)
+
+                setUptime(uptimeString)
             }, 1000)
 
             return () => clearInterval(interval)
