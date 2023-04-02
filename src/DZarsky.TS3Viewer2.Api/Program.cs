@@ -14,7 +14,7 @@ using System.Text.Json.Serialization;
 using DZarsky.TS3Viewer2.Api.Infrastructure.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
-//const string allowedOriginsPolicy = "_allowedOriginsPolicy";
+const string allowedOriginsPolicy = "_allowedOriginsPolicy";
 
 var sentryConfig = builder.Configuration.GetSection("Sentry").Get<SentryConfig>();
 var jwtConfig = builder.Configuration.GetSection("Security").GetSection("Jwt").Get<JwtConfig>();
@@ -93,15 +93,18 @@ builder.Services.AddAuthorization(options =>
     options.RegisterPolicies();
 });
 
-/*
+var allowedOriginsConfig = builder.Configuration.GetSection("Security").GetSection("AllowedOrigins").Get<List<string>>()!.ToArray();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(allowedOriginsPolicy, policy =>
     {
-        policy.WithOrigins("http://localhost:3000");
+        policy.WithOrigins(allowedOriginsConfig)
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
     });
 });
-*/
 
 builder.Services.AddCors();
 
@@ -123,7 +126,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
-//app.UseCors(allowedOriginsPolicy);
+app.UseCors(allowedOriginsPolicy);
 
 app.UseMiddleware<GlobalErrorHandler>();
 
