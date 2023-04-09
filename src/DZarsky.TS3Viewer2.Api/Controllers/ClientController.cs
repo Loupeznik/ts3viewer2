@@ -68,7 +68,7 @@ public class ClientController : ApiControllerBase
         ApiResultToActionResult(await _clientService.PokeClient(id, pokeInfo));
 
     /// <summary>
-    /// Adds permission to client by current ID
+    /// Adds permission to client by database ID
     /// </summary>
     /// <returns></returns>
     [ProducesResponseType(typeof(object), StatusCodes.Status403Forbidden)]
@@ -76,14 +76,14 @@ public class ClientController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(object), StatusCodes.Status500InternalServerError)]
-    [HttpPost("{id:int}/permissions")]
+    [HttpPost("{databaseId:int}/permissions")]
     [Authorize(Policy = EndpointPolicyConstants.UserAuthorizationPolicy)]
     [Authorize(Policy = EndpointPolicyConstants.ClientAdminPolicy)]
-    public async Task<ActionResult> AddClientPermissions(int id, [FromQuery] int permissionId) =>
-        ApiResultToActionResult(await _clientService.UpdateClientPermission(id, permissionId, UpdatePermissionAction.Add));
+    public async Task<ActionResult> AddClientPermissions(int databaseId, [FromBody] UpdateClientServerGroupDto request) =>
+        ApiResultToActionResult(await _clientService.UpdateClientServerGroup(databaseId, request.ServerGroupId, UpdatePermissionAction.Add));
 
     /// <summary>
-    /// Removes permission of client by current ID
+    /// Removes permission of client by database ID
     /// </summary>
     /// <returns></returns>
     [ProducesResponseType(typeof(object), StatusCodes.Status403Forbidden)]
@@ -91,9 +91,9 @@ public class ClientController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(object), StatusCodes.Status500InternalServerError)]
-    [HttpDelete("{id:int}/permissions")]
+    [HttpDelete("{databaseId:int}/permissions")]
     [Authorize(Policy = EndpointPolicyConstants.UserAuthorizationPolicy)]
     [Authorize(Policy = EndpointPolicyConstants.ClientAdminPolicy)]
-    public async Task<ActionResult> RemoveClientPermissions(int id, [FromQuery] int permissionId) =>
-        ApiResultToActionResult(await _clientService.UpdateClientPermission(id, permissionId, UpdatePermissionAction.Remove));
+    public async Task<ActionResult> RemoveClientPermissions(int databaseId, [FromBody] UpdateClientServerGroupDto request) =>
+        ApiResultToActionResult(await _clientService.UpdateClientServerGroup(databaseId, request.ServerGroupId, UpdatePermissionAction.Remove));
 }

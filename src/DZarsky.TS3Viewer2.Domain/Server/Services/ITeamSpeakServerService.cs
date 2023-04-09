@@ -9,5 +9,5 @@ public interface ITeamSpeakServerService
 
     public Task<ApiResult<ServerInfoDto>> GetServerInfo();
 
-    public Task<ApiResult<List<ServerGroupDto>>> GetServerGroups();
+    public Task<ApiResult<List<ServerGroupDto>>> GetServerGroups(bool? getAll = false);
 }

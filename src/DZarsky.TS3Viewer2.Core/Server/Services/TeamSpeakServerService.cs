@@ -58,11 +58,16 @@ public sealed class TeamSpeakServerService : ITeamSpeakServerService
         }
     }
 
-    public async Task<ApiResult<List<ServerGroupDto>>> GetServerGroups()
+    public async Task<ApiResult<List<ServerGroupDto>>> GetServerGroups(bool? getAll = false)
     {
         try
         {
             var groups = await _client.GetServerGroups();
+
+            if (!getAll.GetValueOrDefault())
+            {
+                return ApiResultExtensions.ToApiResult(_mapper.Map<List<ServerGroupDto>>(groups.Where(x => x.ServerGroupType == ServerGroupType.NormalGroup).ToList()));
+            }
 
             return ApiResultExtensions.ToApiResult(_mapper.Map<List<ServerGroupDto>>(groups));
         }

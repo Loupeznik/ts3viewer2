@@ -128,17 +128,28 @@ public sealed class TeamSpeakClientService : ITeamSpeakClientService
         }
     }
 
-    public async Task<ApiResult> UpdateClientPermission(int clientDatabaseId, int permission, UpdatePermissionAction action)
+    public async Task<ApiResult> UpdateClientServerGroup(int clientDatabaseId, int serverGroupId, UpdatePermissionAction action)
     {
+        var availableGroups = (await _client.GetServerGroups())
+            .Where(x => x.ServerGroupType == ServerGroupType.NormalGroup)
+            .ToList();
+
+        if (!availableGroups.Any(x => x.Id == serverGroupId))
+        {
+            const string message = "Server group {serverGroupId} was not found or is not assignable";
+            _logger.Warning(message);
+            return ApiResultExtensions.ToApiResult(false, ReasonCodes.InvalidArgument, message);
+        }
+
         try
         {
             switch(action)
             {
                 case UpdatePermissionAction.Add:
-                    await _client.AddServerGroup(permission, clientDatabaseId);
+                    await _client.AddServerGroup(serverGroupId, clientDatabaseId);
                     break;
                 case UpdatePermissionAction.Remove:
-                    await _client.RemoveServerGroup(permission, clientDatabaseId);
+                    await _client.RemoveServerGroup(serverGroupId, clientDatabaseId);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(action), action, null);
@@ -148,7 +159,7 @@ public sealed class TeamSpeakClientService : ITeamSpeakClientService
         }
         catch (Exception ex)
         {
-            _logger.Error($"Could not {action} permission {permission} to user {clientDatabaseId}: {ex}", ex);
+            _logger.Error($"Could not {action} permission {serverGroupId} to user {clientDatabaseId}: {ex}", ex);
             return ApiResultExtensions.ToApiResult(false, ReasonCodes.InternalServerError, ex.Message);
         }
     }

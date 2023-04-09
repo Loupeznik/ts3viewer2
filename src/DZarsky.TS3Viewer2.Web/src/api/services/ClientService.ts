@@ -4,6 +4,7 @@
 import type { BanClientDto } from '../models/BanClientDto';
 import type { ClientDto } from '../models/ClientDto';
 import type { MessageDto } from '../models/MessageDto';
+import type { UpdateClientServerGroupDto } from '../models/UpdateClientServerGroupDto';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -106,24 +107,23 @@ requestBody?: MessageDto,
     }
 
     /**
-     * @param id 
-     * @param permissionId 
+     * @param databaseId 
+     * @param requestBody 
      * @returns any Success
      * @throws ApiError
      */
     public static postApiV1ServerClientsPermissions(
-id: number,
-permissionId?: number,
+databaseId: number,
+requestBody?: UpdateClientServerGroupDto,
 ): CancelablePromise<any> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/api/v1/server/clients/{id}/permissions',
+            url: '/api/v1/server/clients/{databaseId}/permissions',
             path: {
-                'id': id,
+                'databaseId': databaseId,
             },
-            query: {
-                'permissionId': permissionId,
-            },
+            body: requestBody,
+            mediaType: 'application/json',
             errors: {
                 400: `Bad Request`,
                 401: `Unauthorized`,
@@ -134,24 +134,23 @@ permissionId?: number,
     }
 
     /**
-     * @param id 
-     * @param permissionId 
+     * @param databaseId 
+     * @param requestBody 
      * @returns any Success
      * @throws ApiError
      */
     public static deleteApiV1ServerClientsPermissions(
-id: number,
-permissionId?: number,
+databaseId: number,
+requestBody?: UpdateClientServerGroupDto,
 ): CancelablePromise<any> {
         return __request(OpenAPI, {
             method: 'DELETE',
-            url: '/api/v1/server/clients/{id}/permissions',
+            url: '/api/v1/server/clients/{databaseId}/permissions',
             path: {
-                'id': id,
+                'databaseId': databaseId,
             },
-            query: {
-                'permissionId': permissionId,
-            },
+            body: requestBody,
+            mediaType: 'application/json',
             errors: {
                 400: `Bad Request`,
                 401: `Unauthorized`,

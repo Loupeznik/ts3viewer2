@@ -23,6 +23,7 @@ export { ServerGroupType } from './models/ServerGroupType';
 export type { ServerInfoDto } from './models/ServerInfoDto';
 export type { SongDto } from './models/SongDto';
 export type { TokenResult } from './models/TokenResult';
+export type { UpdateClientServerGroupDto } from './models/UpdateClientServerGroupDto';
 export type { UserDto } from './models/UserDto';
 export type { UserInfoDto } from './models/UserInfoDto';
 export type { UserRoleDto } from './models/UserRoleDto';

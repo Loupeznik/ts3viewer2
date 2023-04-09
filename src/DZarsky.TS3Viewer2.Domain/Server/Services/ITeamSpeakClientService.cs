@@ -28,5 +28,5 @@ public interface ITeamSpeakClientService
     /// <returns>The TeamSpeak server database ID</returns>
     public Task<int> GetUserFromDatabase(string teamspeakId);
 
-    public Task<ApiResult> UpdateClientPermission(int clientDatabaseId, int permission, UpdatePermissionAction action);
+    public Task<ApiResult> UpdateClientServerGroup(int clientDatabaseId, int serverGroupId, UpdatePermissionAction action);
 }
