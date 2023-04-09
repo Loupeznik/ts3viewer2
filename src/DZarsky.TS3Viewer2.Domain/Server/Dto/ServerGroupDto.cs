@@ -9,10 +9,4 @@ public sealed class ServerGroupDto
     public string? Name { get; set; }
 
     public ServerGroupType ServerGroupType { get; set; }
-
-    public int IconId { get; set; }
-
-    public int SaveDb { get; set; }
-
-    public int SortId { get; set; }
 }

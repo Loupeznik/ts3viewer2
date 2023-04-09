@@ -9,5 +9,6 @@ public class ServerInfoMappings : Profile
     public ServerInfoMappings()
     {
         CreateMap<GetServerListInfo, ServerInfoDto>();
+        CreateMap<GetServerGroupListInfo, ServerGroupDto>();
     }
 }

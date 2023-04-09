@@ -1,5 +1,6 @@
 ﻿using DZarsky.TS3Viewer2.Domain.Infrastructure.General;
 using DZarsky.TS3Viewer2.Domain.Server.Dto;
+using DZarsky.TS3Viewer2.Domain.Server.Enums;
 
 namespace DZarsky.TS3Viewer2.Domain.Server.Services;
 
@@ -26,4 +27,6 @@ public interface ITeamSpeakClientService
     /// <param name="teamspeakId">The unique TeamSpeak client ID</param>
     /// <returns>The TeamSpeak server database ID</returns>
     public Task<int> GetUserFromDatabase(string teamspeakId);
+
+    public Task<ApiResult> UpdateClientPermission(int clientDatabaseId, int permission, UpdatePermissionAction action);
 }

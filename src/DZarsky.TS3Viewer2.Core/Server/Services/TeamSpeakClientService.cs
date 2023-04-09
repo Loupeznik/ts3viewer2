@@ -2,6 +2,7 @@
 using DZarsky.TS3Viewer2.Domain.Infrastructure.Extensions;
 using DZarsky.TS3Viewer2.Domain.Infrastructure.General;
 using DZarsky.TS3Viewer2.Domain.Server.Dto;
+using DZarsky.TS3Viewer2.Domain.Server.Enums;
 using DZarsky.TS3Viewer2.Domain.Server.Services;
 using Serilog;
 using TeamSpeak3QueryApi.Net.Specialized;
@@ -124,6 +125,31 @@ public sealed class TeamSpeakClientService : ITeamSpeakClientService
         {
             _logger.Error($"Could not find user in the database: {ex}", ex);
             return 0;
+        }
+    }
+
+    public async Task<ApiResult> UpdateClientPermission(int clientDatabaseId, int permission, UpdatePermissionAction action)
+    {
+        try
+        {
+            switch(action)
+            {
+                case UpdatePermissionAction.Add:
+                    await _client.AddServerGroup(permission, clientDatabaseId);
+                    break;
+                case UpdatePermissionAction.Remove:
+                    await _client.RemoveServerGroup(permission, clientDatabaseId);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(action), action, null);
+            }
+
+            return ApiResultExtensions.ToApiResult(true);
+        }
+        catch (Exception ex)
+        {
+            _logger.Error($"Could not {action} permission {permission} to user {clientDatabaseId}: {ex}", ex);
+            return ApiResultExtensions.ToApiResult(false, ReasonCodes.InternalServerError, ex.Message);
         }
     }
 }
