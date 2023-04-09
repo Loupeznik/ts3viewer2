@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DZarsky.TS3Viewer2.Data.Infrastructure;
+using DZarsky.TS3Viewer2.Domain.Infrastructure.Extensions;
 using DZarsky.TS3Viewer2.Domain.Infrastructure.General;
 using DZarsky.TS3Viewer2.Domain.Server.Services;
 using DZarsky.TS3Viewer2.Domain.Users.Dto;
@@ -114,14 +115,14 @@ public sealed class UserService : IUserService
 
         var result = _mapper.Map<List<UserInfoDto>>(await query.ToListAsync());
 
-        return ApiResult.Build(result);
+        return ApiResultExtensions.ToApiResult(result);
     }
 
     public async Task<ApiResult<UserInfoDto>> UpdateUser(UserInfoDto user)
     {
         if (user.Id == 0)
         {
-            return ApiResult.Build(user, false, ReasonCodes.InvalidArgument, "UserID was not specified");
+            return ApiResultExtensions.ToApiResult(user, false, ReasonCodes.InvalidArgument, "UserID was not specified");
         }
 
         var dbUser = await _dataContext.Set<User>()
@@ -130,12 +131,12 @@ public sealed class UserService : IUserService
 
         if (dbUser == null)
         {
-            return ApiResult.Build(user, false, ReasonCodes.NotFound, "User not found");
+            return ApiResultExtensions.ToApiResult(user, false, ReasonCodes.NotFound, "User not found");
         }
 
         if (await IsClientAdmin(user.Login!))
         {
-            return ApiResult.Build(user, false, ReasonCodes.Forbidden, "Cannot edit ServerAdmin user");
+            return ApiResultExtensions.ToApiResult(user, false, ReasonCodes.Forbidden, "Cannot edit ServerAdmin user");
         }
 
         _mapper.Map(user, dbUser);
@@ -143,7 +144,7 @@ public sealed class UserService : IUserService
         _dataContext.Update(dbUser);
         await _dataContext.SaveChangesAsync();
 
-        return ApiResult.Build(_mapper.Map(dbUser, new UserInfoDto()));
+        return ApiResultExtensions.ToApiResult(_mapper.Map(dbUser, new UserInfoDto()));
     }
 
     public async Task<DeleteUserResult> DeleteUser(int id)

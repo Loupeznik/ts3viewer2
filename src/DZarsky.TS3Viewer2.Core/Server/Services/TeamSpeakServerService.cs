@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DZarsky.TS3Viewer2.Domain.Infrastructure.Extensions;
 using DZarsky.TS3Viewer2.Domain.Infrastructure.General;
 using DZarsky.TS3Viewer2.Domain.Server.Dto;
 using DZarsky.TS3Viewer2.Domain.Server.Models;
@@ -23,19 +24,19 @@ public sealed class TeamSpeakServerService : ITeamSpeakServerService
         _mapper = mapper;
     }
 
-    public async Task<ApiResult<bool>> SendGlobalMessage(MessageDto message)
+    public async Task<ApiResult> SendGlobalMessage(MessageDto message)
     {
         try
         {
             await _client.SendGlobalMessage(message.Message);
 
-            return ApiResult.Build(true);
+            return ApiResultExtensions.ToApiResult(true);
         }
         catch (Exception ex)
         {
             _logger.Error($"Could not send global message: {ex}", ex);
 
-            return ApiResult.Build(false, false);
+            return ApiResultExtensions.ToApiResult(false);
         }
     }
 
@@ -45,7 +46,7 @@ public sealed class TeamSpeakServerService : ITeamSpeakServerService
         {
             var server = (await _client.GetServers()).FirstOrDefault(x => x.Id == _serverInstance.ServerId);
 
-            return ApiResult.Build(_mapper.Map(server, new ServerInfoDto()));
+            return ApiResultExtensions.ToApiResult(_mapper.Map(server, new ServerInfoDto()));
         }
         catch (Exception ex)
         {
@@ -53,7 +54,7 @@ public sealed class TeamSpeakServerService : ITeamSpeakServerService
 
             _logger.Error($"{message}: {ex}", ex);
 
-            return ApiResult.Build(new ServerInfoDto(), false, ReasonCodes.ExternalServerError, message);
+            return ApiResultExtensions.ToApiResult(new ServerInfoDto(), false, ReasonCodes.ExternalServerError, message);
         }
     }
 
@@ -63,7 +64,7 @@ public sealed class TeamSpeakServerService : ITeamSpeakServerService
         {
             var groups = await _client.GetServerGroups();
 
-            return ApiResult.Build(_mapper.Map<List<ServerGroupDto>>(groups));
+            return ApiResultExtensions.ToApiResult(_mapper.Map<List<ServerGroupDto>>(groups));
         }
         catch (Exception ex)
         {
@@ -71,7 +72,7 @@ public sealed class TeamSpeakServerService : ITeamSpeakServerService
 
             _logger.Error($"{message}: {ex}", ex);
 
-            return ApiResult.Build(new List<ServerGroupDto>(), false, ReasonCodes.ExternalServerError, message);
+            return ApiResultExtensions.ToApiResult(new List<ServerGroupDto>(), false, ReasonCodes.ExternalServerError, message);
         }
     }
 }

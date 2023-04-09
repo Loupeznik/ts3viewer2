@@ -24,7 +24,7 @@ public class ServerController : ApiControllerBase
     [HttpPost("messages/global")]
     [Authorize(Policy = EndpointPolicyConstants.UserAuthorizationPolicy)]
     [Authorize(Policy = EndpointPolicyConstants.ServerAdminPolicy)]
-    public async Task<ActionResult<bool>> SendGlobalMessage(MessageDto message) =>
+    public async Task<ActionResult> SendGlobalMessage(MessageDto message) =>
         ApiResultToActionResult(await _serverService.SendGlobalMessage(message));
 
     /// <summary>

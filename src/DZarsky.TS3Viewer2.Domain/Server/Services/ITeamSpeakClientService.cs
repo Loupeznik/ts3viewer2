@@ -7,11 +7,11 @@ public interface ITeamSpeakClientService
 {
     public Task<ApiResult<List<ClientDto>>> GetClients(bool? getDetails = false);
 
-    public Task<ApiResult<bool>> KickClient(int id);
+    public Task<ApiResult> KickClient(int id);
 
-    public Task<ApiResult<bool>> BanClient(int id, BanClientDto banInfo);
+    public Task<ApiResult> BanClient(int id, BanClientDto banInfo);
 
-    public Task<ApiResult<bool>> PokeClient(int id, MessageDto pokeInfo);
+    public Task<ApiResult> PokeClient(int id, MessageDto pokeInfo);
 
     /// <summary>
     /// Checks if the client is in the Server Admin group

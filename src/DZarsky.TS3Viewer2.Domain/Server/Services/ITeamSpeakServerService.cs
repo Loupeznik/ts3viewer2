@@ -5,7 +5,7 @@ namespace DZarsky.TS3Viewer2.Domain.Server.Services;
 
 public interface ITeamSpeakServerService
 {
-    public Task<ApiResult<bool>> SendGlobalMessage(MessageDto message);
+    public Task<ApiResult> SendGlobalMessage(MessageDto message);
 
     public Task<ApiResult<ServerInfoDto>> GetServerInfo();
 

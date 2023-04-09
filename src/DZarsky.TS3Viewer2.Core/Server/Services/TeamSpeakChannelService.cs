@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DZarsky.TS3Viewer2.Domain.Infrastructure.Extensions;
 using DZarsky.TS3Viewer2.Domain.Infrastructure.General;
 using DZarsky.TS3Viewer2.Domain.Server.Dto;
 using DZarsky.TS3Viewer2.Domain.Server.Services;
@@ -20,23 +21,23 @@ public sealed class TeamSpeakChannelService : ITeamSpeakChannelService
         _mapper = mapper;
     }
 
-    public async Task<ApiResult<bool>> SendMessage(int id, MessageDto message)
+    public async Task<ApiResult> SendMessage(int id, MessageDto message)
     {
         if (string.IsNullOrWhiteSpace(message.Message))
         {
-            return ApiResult.Build(false, false, ReasonCodes.NullArgumentException, nameof(message.Message));
+            return ApiResultExtensions.ToApiResult(false, ReasonCodes.NullArgumentException, nameof(message.Message));
         }
 
         try
         {
             await _client.SendMessage(message.Message, MessageTarget.Channel, id);
 
-            return ApiResult.Build(true);
+            return ApiResultExtensions.ToApiResult(true);
         }
         catch (Exception ex)
         {
             _logger.Error($"Could not send message to channel {id}: {ex}", ex);
-            return ApiResult.Build(false, false);
+            return ApiResultExtensions.ToApiResult(false);
         }
     }
 
@@ -44,6 +45,6 @@ public sealed class TeamSpeakChannelService : ITeamSpeakChannelService
     {
         var channels = _mapper.Map(await _client.GetChannels(), new List<ChannelDto>());
 
-        return ApiResult.Build(channels);
+        return ApiResultExtensions.ToApiResult(channels);
     }
 }

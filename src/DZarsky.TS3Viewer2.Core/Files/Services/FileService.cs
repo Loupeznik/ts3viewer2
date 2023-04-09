@@ -8,6 +8,7 @@ using HeyRed.Mime;
 using Serilog;
 using System.Text;
 using System.Text.RegularExpressions;
+using DZarsky.TS3Viewer2.Domain.Infrastructure.Extensions;
 
 namespace DZarsky.TS3Viewer2.Core.Files.Services;
 
@@ -28,7 +29,7 @@ public sealed class FileService : IFileService
 
         if (files.Count == 0)
         {
-            return ApiResult.Build(result, false, ReasonCodes.NullArgumentException, nameof(files));
+            return ApiResultExtensions.ToApiResult(result, false, ReasonCodes.NullArgumentException, nameof(files));
         }
 
         CreateFilesDirectoryIfNotExists();
@@ -53,26 +54,26 @@ public sealed class FileService : IFileService
             result.Successful.Add(file.Key);
         }
 
-        return ApiResult.Build(result);
+        return ApiResultExtensions.ToApiResult(result);
     }
 
-    public ApiResult<bool> DeleteFile(string? fullFileName)
+    public ApiResult DeleteFile(string? fullFileName)
     {
         if (string.IsNullOrWhiteSpace(fullFileName) || !FilesDirectoryExists())
         {
-            return ApiResult.Build(false, false, ReasonCodes.InvalidArgument, nameof(fullFileName));
+            return ApiResultExtensions.ToApiResult(false, ReasonCodes.InvalidArgument, nameof(fullFileName));
         }
 
         if (!FilesDirectoryExists())
         {
-            return ApiResult.Build(false, false, ReasonCodes.NotFound);
+            return ApiResultExtensions.ToApiResult(false, ReasonCodes.NotFound);
         }
 
         var filePath = Path.Combine(_fileConfig.BasePath!, fullFileName);
 
         if (!File.Exists(filePath))
         {
-            return ApiResult.Build(false, false, ReasonCodes.NotFound);
+            return ApiResultExtensions.ToApiResult(false, ReasonCodes.NotFound);
         }
 
         try
@@ -82,18 +83,18 @@ public sealed class FileService : IFileService
         catch (Exception ex)
         {
             _logger.Error($"Could not delete file {filePath}: {ex}", ex);
-            return ApiResult.Build(false, false);
+            return ApiResultExtensions.ToApiResult(false);
         }
 
-        return ApiResult.Build(true);
+        return ApiResultExtensions.ToApiResult(true);
     }
 
-    public ApiResult<bool> RenameFile(string? fullFileName, string? newFileName)
+    public ApiResult RenameFile(string? fullFileName, string? newFileName)
     {
         if (string.IsNullOrWhiteSpace(fullFileName) || string.IsNullOrWhiteSpace(newFileName) ||
             !FilesDirectoryExists() || !Path.HasExtension(newFileName))
         {
-            return ApiResult.Build(false, false, ReasonCodes.InvalidArgument, nameof(fullFileName));
+            return ApiResultExtensions.ToApiResult(false, ReasonCodes.InvalidArgument, nameof(fullFileName));
         }
 
         var filePath = Path.Combine(_fileConfig.BasePath!, fullFileName);
@@ -101,7 +102,7 @@ public sealed class FileService : IFileService
 
         if (!File.Exists(filePath))
         {
-            return ApiResult.Build(false, false, ReasonCodes.NotFound);
+            return ApiResultExtensions.ToApiResult(false, ReasonCodes.NotFound);
         }
 
         try
@@ -111,10 +112,10 @@ public sealed class FileService : IFileService
         catch (Exception ex)
         {
             _logger.Error($"Could not rename file {filePath} to {newFilePath}: {ex}", ex);
-            return ApiResult.Build(false, false);
+            return ApiResultExtensions.ToApiResult(false);
         }
 
-        return ApiResult.Build(true);
+        return ApiResultExtensions.ToApiResult(true);
     }
 
     public ApiResult<List<FileDto>> GetFiles()
@@ -123,7 +124,7 @@ public sealed class FileService : IFileService
 
         if (!FilesDirectoryExists())
         {
-            return ApiResult.Build(files, false, ReasonCodes.NotFound);
+            return ApiResultExtensions.ToApiResult(files, false, ReasonCodes.NotFound);
         }
 
         var directoryFiles = Directory.GetFiles(_fileConfig.BasePath!);
@@ -135,7 +136,7 @@ public sealed class FileService : IFileService
             Name = Path.GetFileNameWithoutExtension(file)
         }).OrderBy(x => x.FullName));
 
-        return ApiResult.Build(files);
+        return ApiResultExtensions.ToApiResult(files);
     }
 
     private bool FilesDirectoryExists() => Directory.Exists(_fileConfig.BasePath);

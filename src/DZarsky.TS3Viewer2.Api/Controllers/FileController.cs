@@ -55,7 +55,7 @@ public class FileController : ApiControllerBase
     [HttpDelete("{fullFileName}")]
     [Authorize(Policy = EndpointPolicyConstants.UserAuthorizationPolicy)]
     [Authorize(Policy = EndpointPolicyConstants.AudioBotAdminPolicy)]
-    public ActionResult<bool> DeleteFile(string? fullFileName)
+    public ActionResult DeleteFile(string? fullFileName)
         => ApiResultToActionResult(_fileService.DeleteFile(fullFileName));
 
     /// <summary>
@@ -71,6 +71,6 @@ public class FileController : ApiControllerBase
     [HttpPut("{fullFileName}/rename")]
     [Authorize(Policy = EndpointPolicyConstants.UserAuthorizationPolicy)]
     [Authorize(Policy = EndpointPolicyConstants.AudioBotAdminPolicy)]
-    public ActionResult<bool> RenameFile(string? fullFileName, [FromQuery] string? newFileName)
+    public ActionResult RenameFile(string? fullFileName, [FromQuery] string? newFileName)
         => ApiResultToActionResult(_fileService.RenameFile(fullFileName, newFileName));
 }

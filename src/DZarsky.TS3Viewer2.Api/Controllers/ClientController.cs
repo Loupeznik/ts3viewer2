@@ -34,7 +34,7 @@ public class ClientController : ApiControllerBase
     [HttpGet("{id:int}/kick")]
     [Authorize(Policy = EndpointPolicyConstants.UserAuthorizationPolicy)]
     [Authorize(Policy = EndpointPolicyConstants.ClientAdminPolicy)]
-    public async Task<ActionResult<bool>> KickClient(int id) =>
+    public async Task<ActionResult> KickClient(int id) =>
         ApiResultToActionResult((await _clientService.KickClient(id)));
 
     /// <summary>
@@ -48,7 +48,7 @@ public class ClientController : ApiControllerBase
     [HttpPost("{id:int}/ban")]
     [Authorize(Policy = EndpointPolicyConstants.UserAuthorizationPolicy)]
     [Authorize(Policy = EndpointPolicyConstants.ClientAdminPolicy)]
-    public async Task<ActionResult<bool>> BanClient(int id, [FromBody] BanClientDto banInfo) =>
+    public async Task<ActionResult> BanClient(int id, [FromBody] BanClientDto banInfo) =>
         ApiResultToActionResult((await _clientService.BanClient(id, banInfo)));
 
     /// <summary>
@@ -62,6 +62,6 @@ public class ClientController : ApiControllerBase
     [HttpPost("{id:int}/poke")]
     [Authorize(Policy = EndpointPolicyConstants.UserAuthorizationPolicy)]
     [Authorize(Policy = EndpointPolicyConstants.ClientAdminPolicy)]
-    public async Task<ActionResult<bool>> PokeClient(int id, [FromBody] MessageDto pokeInfo) =>
+    public async Task<ActionResult> PokeClient(int id, [FromBody] MessageDto pokeInfo) =>
         ApiResultToActionResult((await _clientService.PokeClient(id, pokeInfo)));
 }

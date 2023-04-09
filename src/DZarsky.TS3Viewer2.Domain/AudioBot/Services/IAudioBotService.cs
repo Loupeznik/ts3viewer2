@@ -17,5 +17,5 @@ public interface IAudioBotService
 
     public Task<ApiResult<SongDto>> PausePlayback();
 
-    public Task<ApiResult<bool>> MoveBotToChannel(MoveBotDto channel);
+    public Task<ApiResult> MoveBotToChannel(MoveBotDto channel);
 }

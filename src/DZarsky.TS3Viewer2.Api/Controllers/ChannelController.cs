@@ -36,6 +36,6 @@ public class ChannelController : ApiControllerBase
     [HttpPost("{id:int}/message")]
     [Authorize(Policy = EndpointPolicyConstants.UserAuthorizationPolicy)]
     [Authorize(Policy = EndpointPolicyConstants.ChannelAdminPolicy)]
-    public async Task<ActionResult<bool>> SendMessage(int id, [FromBody] MessageDto message) =>
-        ApiResultToActionResult((await _channelService.SendMessage(id, message)));
+    public async Task<ActionResult> SendMessage(int id, [FromBody] MessageDto message) =>
+        ApiResultToActionResult(await _channelService.SendMessage(id, message));
 }
