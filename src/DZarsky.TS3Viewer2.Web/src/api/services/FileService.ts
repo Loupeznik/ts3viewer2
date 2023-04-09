@@ -49,12 +49,12 @@ files?: Array<Blob>;
 
     /**
      * @param fullFileName 
-     * @returns boolean Success
+     * @returns any Success
      * @throws ApiError
      */
     public static deleteApiV1Files(
 fullFileName: string,
-): CancelablePromise<boolean> {
+): CancelablePromise<any> {
         return __request(OpenAPI, {
             method: 'DELETE',
             url: '/api/v1/files/{fullFileName}',
@@ -72,13 +72,13 @@ fullFileName: string,
     /**
      * @param fullFileName 
      * @param newFileName 
-     * @returns boolean Success
+     * @returns any Success
      * @throws ApiError
      */
     public static putApiV1FilesRename(
 fullFileName: string,
 newFileName?: string,
-): CancelablePromise<boolean> {
+): CancelablePromise<any> {
         return __request(OpenAPI, {
             method: 'PUT',
             url: '/api/v1/files/{fullFileName}/rename',

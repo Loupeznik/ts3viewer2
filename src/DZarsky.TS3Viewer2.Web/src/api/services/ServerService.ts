@@ -2,6 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { MessageDto } from '../models/MessageDto';
+import type { ServerGroupDto } from '../models/ServerGroupDto';
 import type { ServerInfoDto } from '../models/ServerInfoDto';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -12,12 +13,12 @@ export class ServerService {
 
     /**
      * @param requestBody 
-     * @returns boolean Success
+     * @returns any Success
      * @throws ApiError
      */
     public static postApiV1ServerMessagesGlobal(
 requestBody?: MessageDto,
-): CancelablePromise<boolean> {
+): CancelablePromise<any> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/v1/server/messages/global',
@@ -39,6 +40,22 @@ requestBody?: MessageDto,
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/v1/server/info',
+            errors: {
+                400: `Bad Request`,
+                401: `Unauthorized`,
+                403: `Forbidden`,
+            },
+        });
+    }
+
+    /**
+     * @returns ServerGroupDto Success
+     * @throws ApiError
+     */
+    public static getApiV1ServerGroups(): CancelablePromise<Array<ServerGroupDto>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/server/groups',
             errors: {
                 400: `Bad Request`,
                 401: `Unauthorized`,

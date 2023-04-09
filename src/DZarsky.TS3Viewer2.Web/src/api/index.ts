@@ -18,6 +18,8 @@ export type { MessageDto } from './models/MessageDto';
 export type { MoveBotDto } from './models/MoveBotDto';
 export { Permission } from './models/Permission';
 export type { ProblemDetails } from './models/ProblemDetails';
+export type { ServerGroupDto } from './models/ServerGroupDto';
+export { ServerGroupType } from './models/ServerGroupType';
 export type { ServerInfoDto } from './models/ServerInfoDto';
 export type { SongDto } from './models/SongDto';
 export type { TokenResult } from './models/TokenResult';
