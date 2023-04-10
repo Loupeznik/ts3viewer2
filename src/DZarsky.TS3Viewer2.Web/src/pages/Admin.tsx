@@ -5,6 +5,7 @@ import { Login } from '../components/Login';
 import { AdminSideNav } from '../components/navigation/AdminSideNav';
 import { revokeToken } from '../helpers/TokenProvider';
 import { CurrentUserProps, getCurrentUser, signIn } from '../helpers/UserHelper';
+import { getServerGroups } from '../helpers/ServerHelpers';
 
 export const AdminPage = () => {
     const [authenticated, setAuthenticated] = useState<boolean>(false)
@@ -44,6 +45,10 @@ export const AdminPage = () => {
         )
     }
 
+    if (authenticated) {
+        getServerGroups()
+    }
+
     const onLogout = () => {
         revokeToken()
         setAuthenticated(false)
@@ -53,7 +58,7 @@ export const AdminPage = () => {
         <div>
             <div
                 className="p-4 w-full text-center sm:p-8 bg-gray-800">
-                <h1 className="mb-2 text-3xl font-bold text-gray-900 text-white">Administration</h1>
+                <h1 className="mb-2 text-3xl font-bold text-white">Administration</h1>
                 <div className="flex md:flex-row flex-col bg-gray-700 px-4 py-2.5 mt-3 text-white rounded-lg">
                     <AdminSideNav username={currentUser.username} permissions={currentUser.permissions} onLogout={onLogout} />
                     <div className="mx-auto w-full md:w-screen">
