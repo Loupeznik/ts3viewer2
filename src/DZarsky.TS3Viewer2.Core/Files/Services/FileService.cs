@@ -29,7 +29,7 @@ public sealed class FileService : IFileService
 
         if (files.Count == 0)
         {
-            return ApiResultExtensions.ToApiResult(result, false, ReasonCodes.NullArgumentException, nameof(files));
+            return result.ToApiResult(false, ReasonCodes.NullArgumentException, nameof(files));
         }
 
         CreateFilesDirectoryIfNotExists();
@@ -54,7 +54,7 @@ public sealed class FileService : IFileService
             result.Successful.Add(file.Key);
         }
 
-        return ApiResultExtensions.ToApiResult(result);
+        return result.ToApiResult();
     }
 
     public ApiResult DeleteFile(string? fullFileName)
@@ -86,7 +86,7 @@ public sealed class FileService : IFileService
             return ApiResultExtensions.ToApiResult(false);
         }
 
-        return ApiResultExtensions.ToApiResult(true);
+        return ApiResultExtensions.ToApiResult();
     }
 
     public ApiResult RenameFile(string? fullFileName, string? newFileName)
@@ -115,7 +115,7 @@ public sealed class FileService : IFileService
             return ApiResultExtensions.ToApiResult(false);
         }
 
-        return ApiResultExtensions.ToApiResult(true);
+        return ApiResultExtensions.ToApiResult();
     }
 
     public ApiResult<List<FileDto>> GetFiles()
@@ -124,7 +124,7 @@ public sealed class FileService : IFileService
 
         if (!FilesDirectoryExists())
         {
-            return ApiResultExtensions.ToApiResult(files, false, ReasonCodes.NotFound);
+            return files.ToApiResult(false, ReasonCodes.NotFound);
         }
 
         var directoryFiles = Directory.GetFiles(_fileConfig.BasePath!);
@@ -136,7 +136,7 @@ public sealed class FileService : IFileService
             Name = Path.GetFileNameWithoutExtension(file)
         }).OrderBy(x => x.FullName));
 
-        return ApiResultExtensions.ToApiResult(files);
+        return files.ToApiResult();
     }
 
     private bool FilesDirectoryExists() => Directory.Exists(_fileConfig.BasePath);

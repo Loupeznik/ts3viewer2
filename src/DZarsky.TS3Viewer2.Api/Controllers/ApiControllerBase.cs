@@ -21,48 +21,25 @@ public class ApiControllerBase : ControllerBase
     /// <returns>Action result</returns>
     protected ActionResult<TResult> ApiResultToActionResult<TResult>(IApiResult<TResult> result) where TResult : class
     {
-        if (!string.IsNullOrWhiteSpace(result.ReasonCode))
-        {
-            return GetResponse(result);
-        }
-
-        return Ok(result.Result);
+        return !string.IsNullOrWhiteSpace(result.ReasonCode) ? GetResponse(result) : Ok(result.Result);
     }
 
     protected ActionResult ApiResultToActionResult(IApiResult result)
     {
-        if (!string.IsNullOrWhiteSpace(result.ReasonCode))
-        {
-            return GetResponse(result);
-        }
-
-        return Ok();
+        return !string.IsNullOrWhiteSpace(result.ReasonCode) ? GetResponse(result) : Ok();
     }
 
     private ActionResult GetResponse(IApiResult result)
     {
-        switch (result.ReasonCode)
+        return result.ReasonCode switch
         {
-            case ReasonCodes.Forbidden:
-                return Forbid();
-            case ReasonCodes.NotFound:
-                return NotFound();
-            case ReasonCodes.NoContent:
-                return NoContent();
-            case ReasonCodes.TooManyRequests:
-                return StatusCode(StatusCodes.Status429TooManyRequests);
-            case ReasonCodes.ExternalServerError:
-                return StatusCode(502, new ProblemDetails
-                {
-                    Title = "Bad Gateway",
-                    Detail = result.Message
-                });
-            default:
-                return BadRequest(new ProblemDetails
-                {
-                    Title = result.ReasonCode,
-                    Detail = result.Message
-                });
-        }
+            ReasonCodes.Forbidden => Forbid(),
+            ReasonCodes.NotFound => NotFound(),
+            ReasonCodes.NoContent => NoContent(),
+            ReasonCodes.TooManyRequests => StatusCode(StatusCodes.Status429TooManyRequests),
+            ReasonCodes.ExternalServerError => StatusCode(502,
+                new ProblemDetails { Title = "Bad Gateway", Detail = result.Message }),
+            _ => BadRequest(new ProblemDetails { Title = result.ReasonCode, Detail = result.Message })
+        };
     }
 }

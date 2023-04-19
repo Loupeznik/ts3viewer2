@@ -30,7 +30,7 @@ public sealed class TeamSpeakServerService : ITeamSpeakServerService
         {
             await _client.SendGlobalMessage(message.Message);
 
-            return ApiResultExtensions.ToApiResult(true);
+            return ApiResultExtensions.ToApiResult();
         }
         catch (Exception ex)
         {
@@ -46,7 +46,7 @@ public sealed class TeamSpeakServerService : ITeamSpeakServerService
         {
             var server = (await _client.GetServers()).FirstOrDefault(x => x.Id == _serverInstance.ServerId);
 
-            return ApiResultExtensions.ToApiResult(_mapper.Map(server, new ServerInfoDto()));
+            return _mapper.Map(server, new ServerInfoDto()).ToApiResult();
         }
         catch (Exception ex)
         {
@@ -54,7 +54,7 @@ public sealed class TeamSpeakServerService : ITeamSpeakServerService
 
             _logger.Error($"{message}: {ex}", ex);
 
-            return ApiResultExtensions.ToApiResult(new ServerInfoDto(), false, ReasonCodes.ExternalServerError, message);
+            return new ServerInfoDto().ToApiResult(false, ReasonCodes.ExternalServerError, message);
         }
     }
 
@@ -66,10 +66,10 @@ public sealed class TeamSpeakServerService : ITeamSpeakServerService
 
             if (!getAll.GetValueOrDefault())
             {
-                return ApiResultExtensions.ToApiResult(_mapper.Map<List<ServerGroupDto>>(groups.Where(x => x.ServerGroupType == ServerGroupType.NormalGroup).ToList()));
+                return _mapper.Map<List<ServerGroupDto>>(groups.Where(x => x.ServerGroupType == ServerGroupType.NormalGroup).ToList()).ToApiResult();
             }
 
-            return ApiResultExtensions.ToApiResult(_mapper.Map<List<ServerGroupDto>>(groups));
+            return _mapper.Map<List<ServerGroupDto>>(groups).ToApiResult();
         }
         catch (Exception ex)
         {
@@ -77,7 +77,7 @@ public sealed class TeamSpeakServerService : ITeamSpeakServerService
 
             _logger.Error($"{message}: {ex}", ex);
 
-            return ApiResultExtensions.ToApiResult(new List<ServerGroupDto>(), false, ReasonCodes.ExternalServerError, message);
+            return new List<ServerGroupDto>().ToApiResult(false, ReasonCodes.ExternalServerError, message);
         }
     }
 }

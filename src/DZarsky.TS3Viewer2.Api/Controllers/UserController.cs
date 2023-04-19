@@ -128,9 +128,7 @@ public sealed class UserController : ApiControllerBase
 
         var permissions = validationResult.User.Roles.Select(x => x.Permission.ToString()).ToArray();
 
-        var token = _tokenProvider.GenerateToken(validationResult.User.Login!,
-            validationResult.User.Type.ToString(), permissions);
-
-        return Ok(new TokenResult(token.Item1, token.Item2));
+        return Ok(_tokenProvider.GenerateToken(validationResult.User.Login!,
+            validationResult.User.Type.ToString(), permissions));
     }
 }

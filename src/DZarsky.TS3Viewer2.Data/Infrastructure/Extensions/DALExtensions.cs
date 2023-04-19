@@ -6,7 +6,7 @@ namespace DZarsky.TS3Viewer2.Data.Infrastructure.Extensions;
 
 public static class DALExtensions
 {
-    public static string GetConnectionString(this IConfiguration config)
+    private static string GetConnectionString(this IConfiguration config)
     {
         var connectionString = config.GetConnectionString("db");
 

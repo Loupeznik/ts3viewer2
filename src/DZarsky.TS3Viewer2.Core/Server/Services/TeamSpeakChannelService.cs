@@ -45,6 +45,6 @@ public sealed class TeamSpeakChannelService : ITeamSpeakChannelService
     {
         var channels = _mapper.Map(await _client.GetChannels(), new List<ChannelDto>());
 
-        return ApiResultExtensions.ToApiResult(channels);
+        return channels.ToApiResult();
     }
 }

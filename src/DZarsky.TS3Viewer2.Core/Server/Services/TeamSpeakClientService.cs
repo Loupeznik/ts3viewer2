@@ -14,7 +14,7 @@ public sealed class TeamSpeakClientService : ITeamSpeakClientService
     private readonly TeamSpeakClient _client;
     private readonly ILogger _logger;
     private readonly IMapper _mapper;
-    private const string _adminGroup = "Server Admin";
+    private const string AdminGroup = "Server Admin";
 
     public TeamSpeakClientService(TeamSpeakClient client, ILogger logger, IMapper mapper)
     {
@@ -40,7 +40,7 @@ public sealed class TeamSpeakClientService : ITeamSpeakClientService
             }
         }
 
-        return ApiResultExtensions.ToApiResult(clients);
+        return clients.ToApiResult();
     }
 
     public async Task<ApiResult> KickClient(int id)
@@ -49,7 +49,7 @@ public sealed class TeamSpeakClientService : ITeamSpeakClientService
         {
             await _client.KickClient(id, KickOrigin.Server);
 
-            return ApiResultExtensions.ToApiResult(true);
+            return ApiResultExtensions.ToApiResult();
         }
         catch (Exception ex)
         {
@@ -64,7 +64,7 @@ public sealed class TeamSpeakClientService : ITeamSpeakClientService
         {
             await _client.BanClient(id, TimeSpan.FromSeconds(banInfo.Duration), banInfo.Reason);
 
-            return ApiResultExtensions.ToApiResult(true);
+            return ApiResultExtensions.ToApiResult();
         }
         catch (Exception ex)
         {
@@ -79,7 +79,7 @@ public sealed class TeamSpeakClientService : ITeamSpeakClientService
         {
             await _client.PokeClient(id, pokeInfo.Message);
 
-            return ApiResultExtensions.ToApiResult(true);
+            return ApiResultExtensions.ToApiResult();
         }
         catch (Exception ex)
         {
@@ -93,7 +93,7 @@ public sealed class TeamSpeakClientService : ITeamSpeakClientService
         try
         {
             var groupId = (await _client.GetServerGroups())
-                .FirstOrDefault(x => x.Name == _adminGroup && x.ServerGroupType == ServerGroupType.NormalGroup)?.Id;
+                .FirstOrDefault(x => x.Name == AdminGroup && x.ServerGroupType == ServerGroupType.NormalGroup)?.Id;
 
             if (groupId == null)
             {
@@ -134,7 +134,7 @@ public sealed class TeamSpeakClientService : ITeamSpeakClientService
             .Where(x => x.ServerGroupType == ServerGroupType.NormalGroup)
             .ToList();
 
-        if (!availableGroups.Any(x => x.Id == serverGroupId))
+        if (availableGroups.All(x => x.Id != serverGroupId))
         {
             const string message = "Server group {serverGroupId} was not found or is not assignable";
             _logger.Warning(message);
@@ -155,7 +155,7 @@ public sealed class TeamSpeakClientService : ITeamSpeakClientService
                     throw new ArgumentOutOfRangeException(nameof(action), action, null);
             }
 
-            return ApiResultExtensions.ToApiResult(true);
+            return ApiResultExtensions.ToApiResult();
         }
         catch (Exception ex)
         {

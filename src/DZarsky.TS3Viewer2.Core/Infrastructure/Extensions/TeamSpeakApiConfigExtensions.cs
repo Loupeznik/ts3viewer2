@@ -39,12 +39,10 @@ public static class TeamSpeakApiConfigExtensions
         return client;
     }
 
-    private static IServiceCollection AddTeamSpeakServices(this IServiceCollection services)
+    private static void AddTeamSpeakServices(this IServiceCollection services)
     {
         services.AddScoped<ITeamSpeakClientService, TeamSpeakClientService>();
         services.AddScoped<ITeamSpeakServerService, TeamSpeakServerService>();
         services.AddScoped<ITeamSpeakChannelService, TeamSpeakChannelService>();
-
-        return services;
     }
 }

@@ -2,5 +2,5 @@
 
 public class MessageDto
 {
-    public string Message { get; set; } = string.Empty;
+    public string Message { get; init; } = string.Empty;
 }

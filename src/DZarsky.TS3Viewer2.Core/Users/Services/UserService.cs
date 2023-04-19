@@ -115,14 +115,14 @@ public sealed class UserService : IUserService
 
         var result = _mapper.Map<List<UserInfoDto>>(await query.ToListAsync());
 
-        return ApiResultExtensions.ToApiResult(result);
+        return result.ToApiResult();
     }
 
     public async Task<ApiResult<UserInfoDto>> UpdateUser(UserInfoDto user)
     {
         if (user.Id == 0)
         {
-            return ApiResultExtensions.ToApiResult(user, false, ReasonCodes.InvalidArgument, "UserID was not specified");
+            return user.ToApiResult(false, ReasonCodes.InvalidArgument, "UserID was not specified");
         }
 
         var dbUser = await _dataContext.Set<User>()
@@ -131,12 +131,12 @@ public sealed class UserService : IUserService
 
         if (dbUser == null)
         {
-            return ApiResultExtensions.ToApiResult(user, false, ReasonCodes.NotFound, "User not found");
+            return user.ToApiResult(false, ReasonCodes.NotFound, "User not found");
         }
 
         if (await IsClientAdmin(user.Login!))
         {
-            return ApiResultExtensions.ToApiResult(user, false, ReasonCodes.Forbidden, "Cannot edit ServerAdmin user");
+            return user.ToApiResult(false, ReasonCodes.Forbidden, "Cannot edit ServerAdmin user");
         }
 
         _mapper.Map(user, dbUser);
@@ -144,7 +144,7 @@ public sealed class UserService : IUserService
         _dataContext.Update(dbUser);
         await _dataContext.SaveChangesAsync();
 
-        return ApiResultExtensions.ToApiResult(_mapper.Map(dbUser, new UserInfoDto()));
+        return _mapper.Map(dbUser, new UserInfoDto()).ToApiResult();
     }
 
     public async Task<DeleteUserResult> DeleteUser(int id)

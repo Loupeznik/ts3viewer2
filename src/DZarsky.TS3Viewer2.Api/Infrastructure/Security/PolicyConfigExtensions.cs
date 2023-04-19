@@ -13,7 +13,7 @@ internal static class PolicyConfigExtensions
         options.RegisterRolePolicies(Enum.GetNames<Permission>());
     }
 
-    public static void RegisterRolePolicies(this AuthorizationOptions options, params string[] permissions)
+    private static void RegisterRolePolicies(this AuthorizationOptions options, params string[] permissions)
     {
         foreach (var permission in permissions)
         {
