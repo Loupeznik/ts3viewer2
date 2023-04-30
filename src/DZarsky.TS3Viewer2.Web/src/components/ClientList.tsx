@@ -1,5 +1,5 @@
 import React from 'react';
-import { FiChevronsUp, FiMessageSquare, FiMicOff, FiMinusCircle, FiPlus, FiTrash, FiUser } from 'react-icons/fi';
+import { FiChevronsUp, FiMessageSquare, FiMicOff, FiMinusCircle, FiMoon, FiPhoneOff, FiPlus, FiTrash, FiUser, FiVolumeX, FiZapOff } from 'react-icons/fi';
 import { ClientDto, ClientType, ServerGroupDto } from '../api';
 import { ServerGroup } from './ServerGroup';
 
@@ -21,10 +21,24 @@ export const ClientList = ({ clients, isAdmin = false, serverGroups, kickAction,
             return null
         }
 
+        const getClientIcon = () => {
+            if (client.detail?.away) {
+                return <FiMoon className="mr-1" title="Away" />
+            }
+            else if (client.detail?.outputMuted) {
+                return <FiVolumeX className="mr-1" title="Sound muted" />
+            }
+            else if (client.detail?.inputMuted) {
+                return <FiMicOff className="mr-1" title="Microphone muted" />
+            }
+
+            return <FiUser className="mr-1" />
+        }
+
         if (!isAdmin) {
             return (
                 <li key={client.id} className="ml-4" title={client.detail?.description ?? ""}>
-                    {client.detail?.inputMuted ? <FiMicOff className="mr-1" /> : <FiUser className="mr-1" />}
+                    {getClientIcon()}
 
                     {client.nickName}
                 </li>
