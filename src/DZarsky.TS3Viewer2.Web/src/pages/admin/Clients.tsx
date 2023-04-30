@@ -127,7 +127,7 @@ export const ClientsPage = () => {
             {
                 addServerGroupProps.isPopupVisible &&
                 <SelectPopup title="Add server group" description="Add client to server group" onUpdate={addClientToGroup} action="Add"
-                    isVisible={addServerGroupProps.isPopupVisible} label="Message"
+                    isVisible={addServerGroupProps.isPopupVisible} label="Select group"
                     setVisible={(value: boolean) => setAddServerGroupProps({ ...addServerGroupProps, isPopupVisible: value })}
                     options={getServerGroupsAsMap()} />
             }
