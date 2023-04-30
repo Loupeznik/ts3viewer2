@@ -6,15 +6,17 @@ import { TextFieldPopup } from "../../components/TextFieldPopup"
 import { getAppToken } from "../../helpers/TokenProvider"
 import { EntityMessageProps } from "../../models/EntityMessageProps"
 import toast, { Toaster } from "react-hot-toast"
+import { SelectPopup } from "../../components/SelectPopup"
 
 export const ClientsPage = () => {
     getAppToken()
     const refreshInterval = 5000
-    const _serverGroupsStorageKey : string = 'api_server_groups'
+    const _serverGroupsStorageKey: string = 'api_server_groups'
 
     const [clients, setClients] = useState<ClientDto[]>()
     const [serverGroups, setServerGroups] = useState<ServerGroupDto[]>()
     const [messageProps, setMessageProps] = useState<EntityMessageProps<ClientDto>>({ entity: {}, isPopupVisible: false })
+    const [addServerGroupProps, setAddServerGroupProps] = useState<EntityMessageProps<ClientDto>>({ entity: {}, isPopupVisible: false })
 
     const getClientsList = async () => {
         await ClientService.getApiV1ServerClients(true).then((response) => setClients(response))
@@ -61,6 +63,29 @@ export const ClientsPage = () => {
         })
     }
 
+    const addClientToGroup = async (serverGroupId: number) => {
+        await ClientService.postApiV1ServerClientsPermissions(addServerGroupProps.entity.databaseId!, {
+            serverGroupId: serverGroupId
+        }).then(onFulfilled => {
+            toast.success("Client added to group")
+            getClientsList()
+        }, onRejected => {
+            const error = onRejected as ApiError
+            const body = JSON.parse(error.body) as ProblemDetails
+            toast.error(`Failed to add user to group: ${body.detail}`)
+        })
+    }
+
+    const getServerGroupsAsMap = () => {
+        const map = new Map<number, string>()
+
+        serverGroups?.forEach(x => {
+            map.set(x.id!, x.name!)
+        })
+
+        return map
+    }
+
     useEffect(() => {
         setServerGroups(JSON.parse(localStorage.getItem(_serverGroupsStorageKey)!))
         getClientsList()
@@ -84,7 +109,8 @@ export const ClientsPage = () => {
                     clients.filter(x => x.type == ClientType.FULL_CLIENT).length > 0 ?
                         <ClientList clients={sortedClients!} isAdmin={true} kickAction={kickClient} banAction={banClient}
                             messageAction={(client) => setMessageProps({ ...messageProps, entity: client, isPopupVisible: true })} serverGroups={serverGroups}
-                            deleteServerGroupAction={removeClientFromGroup} /> :
+                            deleteServerGroupAction={removeClientFromGroup}
+                            addServerGroupAction={(client) => setAddServerGroupProps({ ...addServerGroupProps, entity: client, isPopupVisible: true })} /> :
                         <div className="m-4">
                             <p>No clients connected</p>
                         </div> :
@@ -97,6 +123,13 @@ export const ClientsPage = () => {
                 <TextFieldPopup title="Poke client" description="Send a message via a Poke" onUpdate={sendMessage} action="Send"
                     isVisible={messageProps.isPopupVisible} label="Message"
                     setVisible={(value: boolean) => setMessageProps({ ...messageProps, isPopupVisible: value })} />
+            }
+            {
+                addServerGroupProps.isPopupVisible &&
+                <SelectPopup title="Add server group" description="Add client to server group" onUpdate={addClientToGroup} action="Add"
+                    isVisible={addServerGroupProps.isPopupVisible} label="Message"
+                    setVisible={(value: boolean) => setAddServerGroupProps({ ...addServerGroupProps, isPopupVisible: value })}
+                    options={getServerGroupsAsMap()} />
             }
         </div>
     )

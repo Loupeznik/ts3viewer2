@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom';
 import { UserDto } from '../api';
 import { Login } from '../components/Login';
 import { AdminSideNav } from '../components/navigation/AdminSideNav';
-import { revokeToken } from '../helpers/TokenProvider';
+import { getAppToken, revokeToken } from '../helpers/TokenProvider';
 import { CurrentUserProps, getCurrentUser, signIn } from '../helpers/UserHelper';
 import { getServerGroups } from '../helpers/ServerHelpers';
 
@@ -46,6 +46,7 @@ export const AdminPage = () => {
     }
 
     if (authenticated) {
+        getAppToken()
         getServerGroups()
     }
 

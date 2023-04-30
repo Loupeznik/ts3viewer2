@@ -1,5 +1,5 @@
 import React from 'react';
-import { FiChevronsUp, FiMessageSquare, FiMicOff, FiMinusCircle, FiTrash, FiUser } from 'react-icons/fi';
+import { FiChevronsUp, FiMessageSquare, FiMicOff, FiMinusCircle, FiPlus, FiTrash, FiUser } from 'react-icons/fi';
 import { ClientDto, ClientType, ServerGroupDto } from '../api';
 import { ServerGroup } from './ServerGroup';
 
@@ -10,10 +10,12 @@ type ClientListProps = {
     kickAction?: (client: ClientDto) => void,
     banAction?: (client: ClientDto) => void,
     messageAction?: (client: ClientDto) => void
-    deleteServerGroupAction?: (serverGroupId: number, clientDatabaseId: number) => void
+    deleteServerGroupAction?: (serverGroupId: number, clientDatabaseId: number) => void,
+    addServerGroupAction?: (client: ClientDto) => void
 }
 
-export const ClientList = ({ clients, isAdmin = false, serverGroups, kickAction, banAction, messageAction, deleteServerGroupAction }: ClientListProps) => {
+export const ClientList = ({ clients, isAdmin = false, serverGroups, kickAction, banAction,
+    messageAction, deleteServerGroupAction, addServerGroupAction }: ClientListProps) => {
     const formattedList = clients.map(function (client) {
         if (client.type === ClientType.QUERY) {
             return null
@@ -39,10 +41,15 @@ export const ClientList = ({ clients, isAdmin = false, serverGroups, kickAction,
                             <FiChevronsUp />
                             {serverGroups && client.detail?.serverGroupIds?.map(function (serverGroup) {
                                 return (
-                                    <ServerGroup key={serverGroup} serverGroup={serverGroups?.find(x => x.id === serverGroup)!} clientdDatabaseId={client.databaseId!} 
-                                    onDelete={deleteServerGroupAction!} />
+                                    <ServerGroup key={serverGroup} serverGroup={serverGroups?.find(x => x.id === serverGroup)!} clientdDatabaseId={client.databaseId!}
+                                        onDelete={deleteServerGroupAction!} />
                                 )
                             })}
+                            <div className="relative inline-flex items-center justify-center md:w-6 md:h-6 w-4 h-4 overflow-hidden rounded-full bg-gray-600 cursor-pointer 
+                                hover:bg-blue-400" title="Assign server group">
+                                <FiPlus className="font-bold md:text-md text-xs text-gray-300"
+                                    onClick={() => addServerGroupAction != undefined ? addServerGroupAction(client) : null} />
+                            </div>
                         </div>
                     </div>
                     <div className="md:text-xl text-md">

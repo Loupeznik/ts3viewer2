@@ -1,11 +1,10 @@
-import React from "react"
 import { FiX } from "react-icons/fi"
-import { Input } from "./forms/Input"
-import { SubmitButton } from "./forms/SubmitButton"
 import { InputPopupProps } from "../models/InputPopupProps"
+import { SubmitButton } from "./forms/SubmitButton"
+import React from "react"
 
-export const TextFieldPopup = (props: InputPopupProps<string>) => {
-    const [fieldValue, setFieldValue] = React.useState<string>('')
+export const SelectPopup = (props: InputPopupProps<number>) => {
+    const [fieldValue, setFieldValue] = React.useState<number>()
 
     const onSubmit = (event: React.SyntheticEvent) => {
         event.preventDefault()
@@ -30,7 +29,11 @@ export const TextFieldPopup = (props: InputPopupProps<string>) => {
                     <form onSubmit={onSubmit}>
                         <div>
                             <label htmlFor="field" className="block mb-2 text-sm font-semibold text-gray-200">{props.label}</label>
-                            <Input id="field" type="text" onChange={(event) => setFieldValue(event.target.value)} />
+                            <select id="field" className="rounded-md shadow-md dark:bg-gray-600 dark:text-gray-100" onChange={(event) => setFieldValue(parseInt(event.target.value))}>
+                                {Array.from(props.options || []).map(([key, value]) => (
+                                    <option key={key} value={key}>{value}</option>
+                                ))}
+                            </select>
                         </div>
                         <div className="flex flex-col gap-6 mt-6 sm:flex-row justify-end">
                             <SubmitButton value={props.action} />

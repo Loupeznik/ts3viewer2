@@ -40,7 +40,7 @@ public class ServerController : ApiControllerBase
         ApiResultToActionResult(await _serverService.GetServerInfo());
 
     /// <summary>
-    /// Sends global message
+    /// Gets list of Server Groups
     /// </summary>
     /// <returns></returns>
     [ProducesResponseType(typeof(object), StatusCodes.Status403Forbidden)]
