@@ -61,17 +61,29 @@ public sealed class AudioBotService : IAudioBotService
 
     public async Task<ApiResult> MoveBotToChannel(MoveBotDto channel)
     {
+        var message = string.Empty;
+        
         try
         {
-            _ = await _clientFactory.GetApiClient().BotMoveAsync(channel.ChannelId, channel.Password);
-
-            return ApiResultExtensions.ToApiResult(true);
+            await _clientFactory.GetApiClient().BotMoveAsync(channel.ChannelId, channel.Password);
+            
+            return ApiResultExtensions.ToApiResult();
+        }
+        catch (ApiException ex)
+        {
+            if (ex.StatusCode is > 200 and < 300)
+            {
+                return ApiResultExtensions.ToApiResult();
+            }
         }
         catch (Exception ex)
         {
             ConstructAndLogErrorMessage(nameof(MoveBotToChannel), ex);
-            return ApiResultExtensions.ToApiResult(false, ReasonCodes.ExternalServerError, ex.Message);
+            message = ex.Message;
         }
+        
+        return ApiResultExtensions.ToApiResult(false, ReasonCodes.ExternalServerError,
+            string.IsNullOrWhiteSpace(message) ? null : message);
     }
 
     public async Task<ApiResult<SongDto>> PausePlayback()

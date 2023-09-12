@@ -89,6 +89,6 @@ namespace DZarsky.TS3Viewer2.Api.Controllers
         [HttpPost("move")]
         [Authorize(Policy = EndpointPolicyConstants.UserAuthorizationPolicy)]
         [Authorize(Policy = EndpointPolicyConstants.AudioBotAdminPolicy)]
-        public async Task<ActionResult> MoveBot(MoveBotDto channel) => ApiResultToActionResult((await _audioBotService.MoveBotToChannel(channel)));
+        public async Task<ActionResult> MoveBot(MoveBotDto channel) => ApiResultToActionResult(await _audioBotService.MoveBotToChannel(channel));
     }
 }
