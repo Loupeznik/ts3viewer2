@@ -1,0 +1,13 @@
+[Unit]
+Description=TS3Viewer Notifier
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/ts3viewer2/notifier
+ExecStart=/usr/bin/env python3 /opt/ts3viewer2/notifier/main.py
+User=ts3
+Usergroup=ts3
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
