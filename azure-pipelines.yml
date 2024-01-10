@@ -62,7 +62,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      dotnet tool install --global dotnet-ef
+      dotnet tool install --global dotnet-ef --version 7.0.15
       
       $appsettingsPath = "$(Build.SourcesDirectory)\src\DZarsky.TS3Viewer2.Api\appsettings.json"
       $appsettings = Get-Content $appsettingsPath -raw | ConvertFrom-Json
