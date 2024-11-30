@@ -18,7 +18,7 @@ This project uses and depends on forked version of [TS3QueryApi](https://github.
 The fork is available as a nuget from my NuGet feed at `nuget.dzarsky.eu`. To add the feed to sources, run:
 
 ```powershell
-dotnet nuget add source https://nuget.dzarsky.eu --name nuget.dzarsky.eu
+dotnet nuget add source https://nuget.dzarsky.eu/v3/index.json --name nuget.dzarsky.eu
 ```
 
 ### Running TeamSpeak3 Server
