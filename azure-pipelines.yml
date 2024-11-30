@@ -20,10 +20,10 @@ variables:
 
 steps:
 - task: UseDotNet@2
-  displayName: 'Use .NET7'
+  displayName: 'Use .NET9'
   inputs:
     packageType: 'sdk'
-    version: '7.x'
+    version: '9.x'
 
 - task: NuGetToolInstaller@1
   displayName: 'Install NuGet tool'
@@ -62,7 +62,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      dotnet tool install --global dotnet-ef --version 7.0.15
+      dotnet tool install --global dotnet-ef --version 9.0.0
       
       $appsettingsPath = "$(Build.SourcesDirectory)\src\DZarsky.TS3Viewer2.Api\appsettings.json"
       $appsettings = Get-Content $appsettingsPath -raw | ConvertFrom-Json
