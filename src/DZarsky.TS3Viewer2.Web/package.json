@@ -51,16 +51,16 @@
   },
   "devDependencies": {
     "@types/validator": "^13.7.3",
-    "@vitejs/plugin-react": "^3.0.1",
+    "@vitejs/plugin-react": "^5.1.4",
     "autoprefixer": "^10.4.7",
     "flowbite": "^1.4.5",
     "openapi-typescript": "^5.3.0",
     "openapi-typescript-codegen": "^0.22.0",
     "postcss": "^8.4.13",
     "tailwindcss": "^3.0.24",
-    "vite": "^4.5.5",
-    "vite-plugin-pwa": "^0.14.4",
-    "vite-plugin-svgr": "^2.4.0",
+    "vite": "^7.3.1",
+    "vite-plugin-pwa": "^1.2.0",
+    "vite-plugin-svgr": "^4.5.0",
     "vite-tsconfig-paths": "^4.0.3"
   }
 }
