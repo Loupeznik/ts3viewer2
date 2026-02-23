@@ -1,17 +1,15 @@
-#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
-FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:10.0-alpine AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine AS build
 WORKDIR /src
 COPY ["DZarsky.TS3Viewer2.Api/DZarsky.TS3Viewer2.Api.csproj", "DZarsky.TS3Viewer2.Api/"]
 COPY ["DZarsky.TS3Viewer2.Core/DZarsky.TS3Viewer2.Core.csproj", "DZarsky.TS3Viewer2.Core/"]
 COPY ["DZarsky.TS3Viewer2.Data/DZarsky.TS3Viewer2.Data.csproj", "DZarsky.TS3Viewer2.Data/"]
 COPY ["DZarsky.TS3Viewer2.Domain/DZarsky.TS3Viewer2.Domain.csproj", "DZarsky.TS3Viewer2.Domain/"]
-RUN dotnet nuget add source https://nuget.dzarsky.eu/v3/index.json -n nuget.dzarsky.eu
+RUN dotnet nuget add source https://nuget.dzarsky.eu/v3/index.json -n nuget.dzarsky.eu --allow-insecure-connections
 RUN dotnet restore "DZarsky.TS3Viewer2.Api/DZarsky.TS3Viewer2.Api.csproj"
 COPY . .
 WORKDIR "/src/DZarsky.TS3Viewer2.Api"
