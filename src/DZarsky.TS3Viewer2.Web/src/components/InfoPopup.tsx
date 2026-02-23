@@ -1,8 +1,9 @@
+import React from "react"
 import { FiInfo, FiX } from "react-icons/fi"
 
 type InfoPopupProps = {
     title: string
-    children: JSX.Element
+    children: React.ReactNode
     isVisible: boolean
     setVisible: (visible: boolean) => void
 }

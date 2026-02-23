@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router';
 import { UserDto } from '../api';
 import { Login } from '../components/Login';
 import { AdminSideNav } from '../components/navigation/AdminSideNav';

@@ -3,39 +3,33 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@sentry/react": "^7.41.0",
-    "@sentry/tracing": "^7.41.0",
+    "@sentry/react": "^8.0.0",
     "@testing-library/jest-dom": "^6.5.0",
     "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.0.0",
-    "@types/jest": "^27.5.2",
-    "@types/react": "^18.2.66",
-    "@types/node": "^16.18.89",
-    "@types/react-dom": "^18.0.10",
+    "@types/jest": "^29.0.0",
+    "@types/react": "^19.0.0",
+    "@types/node": "^24.0.0",
+    "@types/react-dom": "^19.0.0",
     "axios": "^1.13.5",
     "env-cmd": "^10.1.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "react-hot-toast": "^2.4.0",
-    "react-icons": "^4.7.1",
-    "react-router-dom": "^6.30.3",
-    "typescript": "^4.9.5",
+    "react-icons": "^5.0.0",
+    "react-router": "^7.0.0",
+    "typescript": "^5.7.0",
     "validator": "^13.15.22",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^4.0.0"
   },
   "scripts": {
     "start": "vite",
     "build": "tsc && vite build",
     "test": "vite preview",
+    "build:development": "env-cmd -f .env.development npm run build",
     "build:prod": "env-cmd -f .env.production npm run build",
     "build:test": "env-cmd -f .env.test npm run build",
     "types:openapi": "openapi -i http://localhost:5274/swagger/v1/swagger.json -o src/api"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
   },
   "browserslist": {
     "production": [
@@ -50,17 +44,16 @@
     ]
   },
   "devDependencies": {
+    "@tailwindcss/vite": "^4.0.0",
     "@types/validator": "^13.7.3",
-    "@vitejs/plugin-react": "^3.0.1",
-    "autoprefixer": "^10.4.7",
-    "flowbite": "^1.4.5",
-    "openapi-typescript": "^5.3.0",
-    "openapi-typescript-codegen": "^0.22.0",
-    "postcss": "^8.4.13",
-    "tailwindcss": "^3.0.24",
-    "vite": "^4.5.5",
-    "vite-plugin-pwa": "^0.14.4",
-    "vite-plugin-svgr": "^2.4.0",
-    "vite-tsconfig-paths": "^4.0.3"
+    "@vitejs/plugin-react": "^4.5.0",
+    "flowbite": "^2.5.0",
+    "openapi-typescript": "^7.0.0",
+    "openapi-typescript-codegen": "^0.29.0",
+    "tailwindcss": "^4.0.0",
+    "vite": "^6.0.0",
+    "vite-plugin-pwa": "^0.21.0",
+    "vite-plugin-svgr": "^4.3.0",
+    "vite-tsconfig-paths": "^5.0.0"
   }
 }

@@ -1,14 +1,16 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import viteTsconfigPaths from 'vite-tsconfig-paths';
-import svgrPlugin from 'vite-plugin-svgr';
-import { VitePWA } from 'vite-plugin-pwa'
+import svgr from 'vite-plugin-svgr';
+import { VitePWA } from 'vite-plugin-pwa';
+import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   plugins: [
-    react(), 
-    viteTsconfigPaths(), 
-    svgrPlugin(),
+    react(),
+    viteTsconfigPaths(),
+    svgr(),
+    tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
       injectRegister: 'auto',

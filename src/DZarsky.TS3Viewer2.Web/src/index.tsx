@@ -3,9 +3,8 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import 'flowbite';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import * as Sentry from "@sentry/react";
-import { BrowserTracing } from '@sentry/tracing';
 
 function stringToBoolean(str: string): boolean {
   return str === 'true';
@@ -14,7 +13,7 @@ function stringToBoolean(str: string): boolean {
 if (stringToBoolean(import.meta.env.VITE_SENTRY_ENABLED) === true) {
   Sentry.init({
     dsn: import.meta.env.VITE_SENTRY_DSN as string,
-    integrations: [new BrowserTracing()],
+    integrations: [Sentry.browserTracingIntegration()],
     release: import.meta.env.VITE_VERSION as string,
 
     tracesSampleRate: 1.0,

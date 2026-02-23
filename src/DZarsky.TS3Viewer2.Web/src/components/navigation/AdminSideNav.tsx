@@ -1,5 +1,5 @@
 import { FiFile, FiLogOut, FiPhoneCall, FiServer, FiUser, FiUserCheck, FiUsers } from 'react-icons/fi';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router';
 import { checkPermissions, CurrentUserProps } from '../../helpers/UserHelper';
 
 export const AdminSideNav = ({ username, permissions, onLogout }: {
