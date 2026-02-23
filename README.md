@@ -8,8 +8,8 @@ The project is still under development.
 
 Prerequisities for local development:
 
-- Visual Studio 2022+ (with .NET7 installed)
-- NodeJS/NPM
+- .NET 10 SDK
+- Node.js 24+
 - TeamSpeak3 Server (local installation or Docker)
 - TS3AudioBot (optional)
 
@@ -21,11 +21,79 @@ The fork is available as a nuget from my NuGet feed at `nuget.dzarsky.eu`. To ad
 dotnet nuget add source https://nuget.dzarsky.eu/v3/index.json --name nuget.dzarsky.eu
 ```
 
-### Running TeamSpeak3 Server
+### Quick Start with Docker Compose
 
-For development, an instance of TeamSpeak3 server is required. The easiest way to run TeamSpeak3 server locally is via Docker:
+The easiest way to run the full stack locally:
 
-```powershell
+```bash
+docker compose up
+```
+
+This starts three services:
+- **TeamSpeak server** — ports 9987/udp, 10011, 30033
+- **API** — port 20800 (mapped to container port 8080)
+- **Web frontend** — port 20801 (mapped to container port 80)
+
+The `docker-compose.yml` includes all necessary environment variables for the API, including JWT configuration and TeamSpeak server query credentials. On first run, the API will automatically run EF Core migrations (controlled by `RUN_MIGRATIONS=true`) which creates a default `react-app` user with a random secret.
+
+To retrieve the react-app secret after first run:
+
+```bash
+docker compose exec api cat /app/data/ts3viewer2.db | strings | grep -A0 'react-app'
+# Or copy the database and query it directly:
+docker compose cp api:/app/data/ts3viewer2.db /tmp/ts3viewer2.db
+sqlite3 /tmp/ts3viewer2.db "SELECT Secret FROM Users WHERE Login='react-app';"
+```
+
+Update `src/DZarsky.TS3Viewer2.Web/.env.development` with the retrieved secret in `VITE_APP_SECRET`.
+
+#### Generating RSA JWK for JWT Signing
+
+The API uses RS256 (RSA) for JWT signing. The `Security__Jwt__Key` environment variable must contain a base64-encoded RSA JSON Web Key. To generate one:
+
+```python
+# pip install cryptography
+import json, base64
+from cryptography.hazmat.primitives.asymmetric import rsa
+from cryptography.hazmat.backends import default_backend
+
+key = rsa.generate_private_key(public_exponent=65537, key_size=2048, backend=default_backend())
+
+def int_to_base64url(n):
+    b = n.to_bytes((n.bit_length() + 7) // 8, 'big')
+    return base64.urlsafe_b64encode(b).rstrip(b'=').decode()
+
+priv = key.private_numbers()
+pub = priv.public_numbers
+
+jwk = {
+    "kty": "RSA",
+    "n": int_to_base64url(pub.n),
+    "e": int_to_base64url(pub.e),
+    "d": int_to_base64url(priv.d),
+    "p": int_to_base64url(priv.p),
+    "q": int_to_base64url(priv.q),
+    "dp": int_to_base64url(priv.dmp1),
+    "dq": int_to_base64url(priv.dmq1),
+    "qi": int_to_base64url(priv.iqmp),
+    "alg": "RS256",
+    "use": "sig"
+}
+
+print(base64.b64encode(json.dumps(jwk).encode()).decode())
+```
+
+The output is the value to use for `Security__Jwt__Key` in `docker-compose.yml`.
+
+#### Query IP Allowlist
+
+The `query_ip_allowlist.txt` file at the repo root is mounted into the TeamSpeak container to allow server query connections from Docker network IPs. The default content (`0.0.0.0/0`) allows all IPs, which is suitable for local development.
+
+### Running TeamSpeak3 Server (Without Docker Compose)
+
+For development without Docker Compose, an instance of TeamSpeak3 server is required. The easiest way to run TeamSpeak3 server locally is via Docker:
+
+```bash
 docker run -d -p 9987:9987/udp -p 10011:10011 -p 30033:30033 -e TS3SERVER_LICENSE=accept teamspeak
 ```
 
@@ -56,7 +124,7 @@ After configuring the Bot, message `!token` to the bot - this will generate a to
 Server requirements:
 
 - A web server with reverse proxy support (NGINX, Apache2/httpd, ...)
-- .NET7 Runtime (see [.NET documentation](https://learn.microsoft.com/en-us/dotnet/core/install/))
+- .NET 10 Runtime (see [.NET documentation](https://learn.microsoft.com/en-us/dotnet/core/install/))
 - TeamSpeak3 server (see *Running TeamSpeak3 Server* section above)
 - TS3AudioBot and its dependencies (optional - see [documentation](https://github.com/Splamy/TS3AudioBot))
 
@@ -131,8 +199,8 @@ server {
 Run
 
 ```bash
-ln -s /etc/nginx/sites-available/ts3viewer2-api /etc/nginx/sites-enabled/ts3viewer2-api 
-ln -s /etc/nginx/sites-available/ts3viewer2-web /etc/nginx/sites-enabled/ts3viewer2-web 
+ln -s /etc/nginx/sites-available/ts3viewer2-api /etc/nginx/sites-enabled/ts3viewer2-api
+ln -s /etc/nginx/sites-available/ts3viewer2-web /etc/nginx/sites-enabled/ts3viewer2-web
 ```
 
 Depending on how you use the API, you might not want to expose it to the internet. In that case, do not enable the API site configuration.
