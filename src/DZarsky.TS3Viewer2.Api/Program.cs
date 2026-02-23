@@ -12,6 +12,8 @@ using Serilog.Events;
 using System.Text;
 using System.Text.Json.Serialization;
 using DZarsky.TS3Viewer2.Api.Infrastructure.Middleware;
+using DZarsky.TS3Viewer2.Data.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 const string allowedOriginsPolicy = "_allowedOriginsPolicy";
@@ -109,6 +111,19 @@ builder.Services.AddCors(options =>
 builder.Services.AddCors();
 
 var app = builder.Build();
+
+if (string.Equals(Environment.GetEnvironmentVariable("RUN_MIGRATIONS"), "true", StringComparison.OrdinalIgnoreCase))
+{
+    using var scope = app.Services.CreateScope();
+    var db = scope.ServiceProvider.GetRequiredService<DataContext>();
+    db.Database.Migrate();
+
+    var reactAppUser = db.Users.AsNoTracking().FirstOrDefault(u => u.Login == "react-app");
+    if (reactAppUser != null)
+    {
+        Log.Logger.Warning("react-app secret: {Secret}", reactAppUser.Secret);
+    }
+}
 
 app.UseCors(x => x.AllowAnyHeader()
     .AllowAnyOrigin()
