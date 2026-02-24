@@ -1,238 +1,188 @@
-import React, { useEffect, useState } from 'react';
-import { AudioBotService, FileDto, FileService, SongDto, VolumeDto } from '../api';
-import { FiPlayCircle, FiPauseCircle, FiStopCircle, FiMinusCircle, FiPlusCircle, FiYoutube } from "react-icons/fi";
-import validator from 'validator';
-import { getAppToken } from '../helpers/TokenProvider';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Minus, Pause, Play, Plus, Square, Youtube } from "lucide-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { useCurrentSong, usePauseSong, usePlaySong, useSetVolume, useStopSong, useVolume } from "@/hooks/useAudioBot";
+import { useFiles } from "@/hooks/useFiles";
+import { getAppToken } from "../helpers/TokenProvider";
+
+const ytbSchema = z.object({
+  url: z.string().url("Invalid URL"),
+});
+
+type YtbFormValues = z.infer<typeof ytbSchema>;
 
 export const AudioBotPage = () => {
-    getAppToken()
-    const refreshInterval = 10000
-    const [currentSong, setCurrentSong] = useState<SongDto>()
-    const [availableSongs, setAvailableSongs] = useState<FileDto[]>()
-    const [filteredSongs, setFilteredSongs] = useState<FileDto[]>()
-    const [currentVolume, setCurrentVolume] = useState<number>()
-    const [ytbSong, setYtbSong] = useState<SongDto>()
-    const [errorMessage, setErrorMessage] = useState<string>()
-    const [filter, setFilter] = useState<string>()
+  getAppToken();
 
-    useEffect(() => {
-        const getCurrentSong = async () => {
-            setCurrentSong(await AudioBotService.getApiV1AudiobotSong())
-        }
+  const [filter, setFilter] = useState("");
 
-        const getCurrentVolume = async () => {
-            setCurrentVolume((await AudioBotService.getApiV1AudiobotVolume()).volume)
-        }
+  const { data: currentSong } = useCurrentSong();
+  const { data: volumeData } = useVolume();
+  const { data: files } = useFiles();
 
-        getSongList()
+  const playSong = usePlaySong();
+  const stopSong = useStopSong();
+  const pauseSong = usePauseSong();
+  const setVolumeMutation = useSetVolume();
 
-        const interval = setInterval(() => {
-            getCurrentSong()
-            getCurrentVolume()
-        }, refreshInterval)
+  const currentVolume = volumeData?.volume ?? 0;
 
-        if (!currentSong) {
-            getCurrentSong()
-        }
+  const form = useForm<YtbFormValues>({
+    resolver: zodResolver(ytbSchema),
+    defaultValues: { url: "" },
+  });
 
-        if (!currentVolume) {
-            getCurrentVolume()
-        }
+  const onSubmitYtb = (values: YtbFormValues) => {
+    playSong.mutate(values.url);
+    form.reset();
+  };
 
-        return () => clearInterval(interval);
-    }, [currentSong, currentVolume])
+  const filteredSongs = files?.filter((file) =>
+    filter ? file.name?.toLowerCase().includes(filter.toLowerCase()) : true,
+  );
 
-    useEffect(() => {
-        setFilteredSongs(availableSongs?.filter(function (song) {
-            if (filter) {
-                return song.name?.toLowerCase().includes(filter.toLowerCase())
-            }
-            else {
-                return song
-            }
-        }))
-    }, [filter])
+  return (
+    <div className="flex items-center justify-center min-h-screen p-4">
+      <Card className="w-full max-w-2xl">
+        <CardHeader>
+          <CardTitle>Audiobot</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <p className="text-lg font-semibold">
+            {currentSong?.title ? `Currently playing: ${currentSong.title}` : "Currently not playing any song"}
+          </p>
 
-    async function startPlayback(song: SongDto) {
-        setCurrentSong(await AudioBotService.postApiV1AudiobotSongPlay(song))
-    }
+          <TooltipProvider>
+            <div data-testid="audiobot-controls" className="flex items-center gap-2">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => pauseSong.mutate()}
+                    disabled={pauseSong.isPending}
+                  >
+                    {currentSong && !currentSong.paused ? <Pause className="size-4" /> : <Play className="size-4" />}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>{currentSong && !currentSong.paused ? "Pause" : "Play"}</TooltipContent>
+              </Tooltip>
 
-    async function stopPlayback() {
-        setCurrentSong(await AudioBotService.putApiV1AudiobotSongStop())
-    }
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="outline" size="icon" onClick={() => stopSong.mutate()} disabled={stopSong.isPending}>
+                    <Square className="size-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Stop</TooltipContent>
+              </Tooltip>
 
-    async function pausePlayback() {
-        setCurrentSong(await AudioBotService.putApiV1AudiobotSongPause())
-    }
+              <div className="flex items-center gap-2 ml-4">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => setVolumeMutation.mutate(currentVolume - 10)}
+                      disabled={setVolumeMutation.isPending}
+                    >
+                      <Minus className="size-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Decrease volume by 10%</TooltipContent>
+                </Tooltip>
 
-    async function getSongList() {
-        const songs = await FileService.getApiV1Files()
+                <span className="text-sm font-mono w-12 text-center">{currentVolume.toFixed(0)}</span>
 
-        setAvailableSongs(songs)
-
-        if (!filteredSongs) {
-            setFilteredSongs(songs)
-        }
-    }
-
-    async function increaseVolume() {
-        const volume: VolumeDto = {
-            volume: currentVolume ? currentVolume + 10 : 50
-        }
-
-        setCurrentVolume((await AudioBotService.putApiV1AudiobotVolume(volume)).volume)
-    }
-
-    async function decreaseVolume() {
-        const volume: VolumeDto = {
-            volume: currentVolume ? currentVolume - 10 : 50
-        }
-
-        setCurrentVolume((await AudioBotService.putApiV1AudiobotVolume(volume)).volume)
-    }
-
-    function renderPlaybackControls() {
-        if (currentSong && !currentSong.paused) {
-            return (
-                <FiPauseCircle onClick={pausePlayback} className="cursor-pointer hover:text-yellow-400" />
-            )
-        }
-        else {
-            return (
-                <FiPlayCircle onClick={pausePlayback} className="cursor-pointer hover:text-blue-400" />
-            )
-        }
-    }
-
-    const renderSongs = filteredSongs?.map(function (file, index) {
-        let song: SongDto = {
-            link: file.fullName
-        }
-
-        return (
-            <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600" key={index}>
-                <th scope="row" className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap uppercase font-semibold">
-                    {file.name}
-                </th>
-                <td>
-                    <FiPlayCircle onClick={() => startPlayback(song)} className="cursor-pointer hover:text-blue-400 text-2xl" />
-                </td>
-            </tr>
-        )
-    });
-
-    const onChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-        let song: SongDto = {
-            link: event.target.value
-        }
-
-        setYtbSong(song)
-    }
-
-    const handleSubmit = (event: React.SyntheticEvent) => {
-        event.preventDefault()
-
-        if (ytbSong) {
-            if (validator.isURL(ytbSong.link as string)) {
-                if (errorMessage) {
-                    setErrorMessage(undefined)
-                }
-                startPlayback(ytbSong)
-            }
-            else {
-                setErrorMessage(ytbSong.link as string + " is not a valid URL")
-            }
-        }
-    }
-
-    const onChangeFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setFilter(event.target.value)
-    }
-
-    function renderErrorMessage() {
-        if (errorMessage) {
-            return (
-                <div>
-                    <div className="p-4 w-full md:w-1/2 mx-auto text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800 mt-4" role="alert">
-                        <span className="font-bold">{errorMessage}</span>
-                    </div>
-                </div>
-            )
-        }
-    }
-
-    return (
-        <div>
-            <div
-                className="p-4 w-full text-center bg-white border shadow-md sm:p-8 dark:bg-gray-800 dark:border-gray-700">
-                <h1 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white">Audiobot</h1>
-                <div className="justify-center items-center space-y-4 sm:flex sm:space-y-0 sm:space-x-4">
-                    <div
-                        className="w-full mt-3 md:w-1/2 bg-gray-800 text-white rounded-lg items-center justify-center px-4 py-2.5 dark:bg-gray-700">
-                        <p className="text-xl font-semibold">{currentSong?.title ? "Currently playing " + currentSong.title : "Currently not playing any song"}</p>
-                        <div className="bg-gray-600 p-4 mt-8 w-full md:w-1/2 mx-auto grid grid-flow-col rounded-lg text-3xl items-center">
-                            <div className="flex flex-row gap-4 justify-center">
-                                {renderPlaybackControls()}
-                                <FiStopCircle onClick={stopPlayback} className="cursor-pointer hover:text-red-400" />
-                            </div>
-                            <div className="bg-gray-800 rounded-lg text-xl font-bold p-2">
-                                <p title="Current volume">{currentVolume?.toFixed(0)}</p>
-                            </div>
-                            <div className="flex flex-row gap-4 justify-center">
-                                <FiPlusCircle onClick={increaseVolume} className="cursor-pointer hover:text-green-400" title="Increase volume by 10%" />
-                                <FiMinusCircle onClick={decreaseVolume} className="cursor-pointer hover:text-red-400" title="Decrease volume by 10%" />
-                            </div>
-                        </div>
-                        <div>
-                            {renderErrorMessage()}
-                        </div>
-                        <div className="bg-gray-600 p-4 mt-12 w-full md:w-1/2 mx-auto rounded-lg text-left">
-                            <label htmlFor="play" className="mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Play music from YouTube</label>
-                            <div className="relative">
-                                <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                                    <FiYoutube />
-                                </div>
-                                <input type="text" id="play" className="block p-4 pl-10 w-full text-xs text-gray-900 bg-gray-50 rounded-lg border border-gray-300 
-                                    focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
-                                    dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    placeholder="https://www.youtube.com/watch?v=wjRWpwOTsUo" required onChange={onChangeInput} />
-                                <button type="submit" className="text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 
-                                    focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs px-4 py-2 dark:bg-blue-600 
-                                    dark:hover:bg-blue-700 dark:focus:ring-blue-800" onClick={handleSubmit}>
-                                    Play
-                                </button>
-                            </div>
-                        </div>
-                        <div className="bg-gray-600 p-4 mt-12 w-full md:w-1/2 mx-auto rounded-lg text-left">
-                            <label htmlFor="play" className="mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Filter songs</label>
-                            <div className="relative">
-                                <input type="text" id="play" className="block p-4 pl-10 w-full text-xs text-gray-900 bg-gray-50 rounded-lg border border-gray-300 
-                                    focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
-                                    dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required onChange={onChangeFilter} />
-                            </div>
-                        </div>
-                        <div className="bg-gray-600 p-4 my-4 w-full md:w-1/2 mx-auto gap-4 justify-center rounded-lg">
-                            <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-                                <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400 text-center">
-                                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                        <tr>
-                                            <th scope="col" className="px-6 py-3">
-                                                Song name
-                                            </th>
-                                            <th>
-                                                Action
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {renderSongs}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => setVolumeMutation.mutate(currentVolume + 10)}
+                      disabled={setVolumeMutation.isPending}
+                    >
+                      <Plus className="size-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Increase volume by 10%</TooltipContent>
+                </Tooltip>
+              </div>
             </div>
-        </div>
-    )
-}
+          </TooltipProvider>
+
+          <div className="space-y-2">
+            <p className="text-sm font-medium">Play music from YouTube</p>
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmitYtb)} className="flex gap-2">
+                <FormField
+                  control={form.control}
+                  name="url"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormControl>
+                        <div className="relative">
+                          <Youtube className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                          <Input
+                            {...field}
+                            placeholder="https://www.youtube.com/watch?v=wjRWpwOTsUo"
+                            className="pl-9"
+                          />
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button type="submit" disabled={playSong.isPending}>
+                  Play
+                </Button>
+              </form>
+            </Form>
+          </div>
+
+          <div className="space-y-2">
+            <p className="text-sm font-medium">Filter songs</p>
+            <Input placeholder="Search songs..." value={filter} onChange={(e) => setFilter(e.target.value)} />
+          </div>
+
+          <div data-testid="song-list">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Song name</TableHead>
+                  <TableHead className="w-16">Action</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredSongs?.map((file) => (
+                  <TableRow key={file.fullName}>
+                    <TableCell className="font-medium uppercase">{file.name}</TableCell>
+                    <TableCell>
+                      <Button
+                        variant="ghost"
+                        size="icon-sm"
+                        onClick={() => playSong.mutate(file.fullName ?? "")}
+                        disabled={playSong.isPending}
+                      >
+                        <Play className="size-4" />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
