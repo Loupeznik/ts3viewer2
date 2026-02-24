@@ -247,3 +247,34 @@
 - Clients table (`data-testid="clients-table"`) is conditionally rendered — only shown when `fullClients.length > 0`; mock with `type: "FullClient"` for `ClientType.FULL_CLIENT`
 
 ### Test results: 9/9 passed (4.6s)
+
+## Task 22 — Fix Biome lint command to exclude auto-generated API code
+
+### Issue 1: CLI path override
+- `biome ci src/` scans `src/api/` despite `experimentalScannerIgnores` in biome.json
+- Root cause: passing `src/` as a CLI path overrides the ignore config
+- Fix: change lint scripts to use explicit subdirectory paths: `src/hooks src/pages src/components src/lib src/helpers src/index.tsx src/App.tsx`
+
+### Issue 2: Implicit any type
+- `src/helpers/TokenProvider.ts` line 8: `let token;` had implicit `any` type
+- Fix: added explicit type annotation: `let token: string | undefined;`
+- Reasoning: `token` can be assigned from `tokenResult.token` (string) or `localToken` (string) or remain undefined
+
+### Changes made
+- **TokenProvider.ts**: line 8 — added type annotation
+- **package.json**: updated 4 lint scripts:
+  - `"lint"`: `biome check src/hooks src/pages src/components src/lib src/helpers src/index.tsx src/App.tsx`
+  - `"lint:fix"`: same paths
+  - `"format"`: same paths
+  - `"format:check"`: same paths
+
+### Verification
+- ✓ `npx biome ci src/hooks src/pages src/components src/lib src/helpers src/index.tsx src/App.tsx` exits 0 (2 warnings only, no errors)
+- ✓ `npm run lint` exits 0
+- ✓ `npm run build` passes (3.76s)
+- ✓ Commit: `fix(web): fix Biome lint command to exclude auto-generated API code`
+
+### Key insight
+- Biome's `experimentalScannerIgnores` only works when scanning the entire directory tree
+- Explicit CLI paths bypass the ignore config — must list all source dirs explicitly to exclude `src/api/`
+- This approach is cleaner than adding `biome-ignore` comments throughout the codebase
