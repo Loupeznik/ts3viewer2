@@ -1,0 +1,11 @@
+
+> ts3viewer2-web@1.0.0 lint
+> biome check src/
+
+The number of diagnostics exceeds the limit allowed. Use --max-diagnostics to increase it.
+Diagnostics not shown: 277.
+Checked 73 files in 14ms. No fixes applied.
+Found 144 errors.
+Found 129 warnings.
+Found 24 infos.
+Exit code: 1

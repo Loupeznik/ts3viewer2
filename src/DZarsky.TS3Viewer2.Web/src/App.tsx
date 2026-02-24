@@ -16,7 +16,7 @@ import { AdminMainPage } from './pages/admin/Main';
 
 function App() {
   return (
-    <div className="dark h-screen bg-gray-800">
+    <div className="h-screen bg-background">
       <Navbar />
       <Routes>
         <Route path="/" element={<MainPage />} />

@@ -1,0 +1,58 @@
+# Task 3: Initialize shadcn/ui with dark-only OKLCH theme
+
+## Build Output
+```
+> ts3viewer2-web@1.0.0 build
+> tsc && vite build
+
+vite v6.4.1 building for production...
+transforming...
+✓ 650 modules transformed.
+rendering chunks...
+computing gzip size...
+build/registerSW.js                0.13 kB
+build/manifest.webmanifest         0.17 kB
+build/index.html                   0.97 kB │ gzip:   0.50 kB
+build/assets/index-gaEQrB4Z.css   26.80 kB │ gzip:   5.65 kB
+build/assets/index-zmlThd4t.js   693.44 kB │ gzip: 209.03 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 1.76s
+
+PWA v0.21.2
+mode      generateSW
+precache  9 entries (941.07 KiB)
+files generated
+  build/sw.js
+  build/workbox-8c29f6e4.js
+```
+
+## Verification Checklist
+✓ components.json exists with "style": "new-york" and "config": "" (no tailwind.config.js)
+✓ src/lib/utils.ts exists with cn() helper function
+✓ src/index.css has OKLCH theme variables in :root (dark values)
+✓ No .dark {} block in src/index.css
+✓ No @custom-variant dark in src/index.css
+✓ No @source flowbite directive in src/index.css
+✓ svg { display: inline !important; vertical-align: middle; } present in src/index.css
+✓ App.tsx root div does NOT have dark class (changed to className="h-screen bg-background")
+✓ npm run build succeeds with zero errors
+
+## Files Modified
+- src/DZarsky.TS3Viewer2.Web/components.json (created by shadcn init)
+- src/DZarsky.TS3Viewer2.Web/src/lib/utils.ts (created by shadcn init)
+- src/DZarsky.TS3Viewer2.Web/src/index.css (transformed: dark values moved to :root, .dark block removed)
+- src/DZarsky.TS3Viewer2.Web/src/App.tsx (removed dark class, changed bg-gray-800 to bg-background)
+
+## Dependencies Added
+- @radix-ui/react-slot
+- class-variance-authority
+- clsx
+- tailwind-merge
+- tw-animate-css
+
+## Status
+✓ COMPLETE - shadcn/ui initialized with dark-only OKLCH theme
