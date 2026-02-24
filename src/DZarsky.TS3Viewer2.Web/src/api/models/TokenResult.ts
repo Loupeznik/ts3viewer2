@@ -3,6 +3,6 @@
 /* eslint-disable */
 
 export type TokenResult = {
-  token?: string | null;
-  expiresIn?: number;
+    token?: string | null;
+    expiresIn?: number;
 };

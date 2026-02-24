@@ -3,6 +3,6 @@
 /* eslint-disable */
 
 export type MoveBotDto = {
-  channelId?: number;
-  password?: string | null;
+    channelId?: number;
+    password?: string | null;
 };

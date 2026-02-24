@@ -3,5 +3,5 @@
 /* eslint-disable */
 
 export type MessageDto = {
-  message?: string | null;
+    message?: string | null;
 };

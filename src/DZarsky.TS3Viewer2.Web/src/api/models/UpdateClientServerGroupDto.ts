@@ -3,5 +3,5 @@
 /* eslint-disable */
 
 export type UpdateClientServerGroupDto = {
-  serverGroupId?: number;
+    serverGroupId?: number;
 };

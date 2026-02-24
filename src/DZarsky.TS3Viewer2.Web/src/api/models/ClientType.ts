@@ -3,6 +3,6 @@
 /* eslint-disable */
 
 export enum ClientType {
-  FULL_CLIENT = "FullClient",
-  QUERY = "Query",
+    FULL_CLIENT = 'FullClient',
+    QUERY = 'Query',
 }
