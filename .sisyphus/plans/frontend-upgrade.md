@@ -404,7 +404,7 @@ Max Concurrent: 8 (Wave 3)
   - Files: `components.json`, `src/lib/utils.ts`, `src/index.css`, `src/App.tsx`, `package.json`
   - Pre-commit: `npm run build`
 
-- [ ] 4. Dependency Cleanup
+- [x] 4. Dependency Cleanup
 
   **What to do**:
   - Remove unused dependencies from package.json:
@@ -462,7 +462,7 @@ Max Concurrent: 8 (Wave 3)
   - Pre-commit: `npm run build`
 
 
-- [ ] 5. TanStack Query Provider + QueryClient Setup
+- [x] 5. TanStack Query Provider + QueryClient Setup
 
   **What to do**:
   - Install `@tanstack/react-query` and `@tanstack/react-query-devtools`
@@ -525,7 +525,7 @@ Max Concurrent: 8 (Wave 3)
   - Files: `src/lib/queryClient.ts`, `src/index.tsx`, `package.json`
   - Pre-commit: `npm run build`
 
-- [ ] 6. Playwright Scaffold + Config + NPM Scripts
+- [x] 6. Playwright Scaffold + Config + NPM Scripts
 
   **What to do**:
   - Install `@playwright/test` as devDependency
@@ -591,7 +591,7 @@ Max Concurrent: 8 (Wave 3)
   - Files: `playwright.config.ts`, `e2e/**`, `package.json`, `.gitignore`
   - Pre-commit: `npx playwright test --list`
 
-- [ ] 7. Install react-hook-form + zod + sonner + lucide-react
+- [x] 7. Install react-hook-form + zod + sonner + lucide-react
 
   **What to do**:
   - Install dependencies:

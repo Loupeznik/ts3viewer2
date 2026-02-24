@@ -1,4 +1,5 @@
 import React from 'react';
+import { Toaster } from '@/components/ui/sonner';
 import { Navbar } from '@/components/navigation/Navbar';
 import { Routes, Route } from "react-router";
 import { StatusPage } from "./pages/Status";
@@ -33,6 +34,7 @@ function App() {
           <Route path="/admin" element={<AdminMainPage />} />
         </Route>
       </Routes>
+      <Toaster />
     </div>
   );
 }

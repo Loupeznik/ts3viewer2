@@ -37,3 +37,21 @@
 ## [Task 4] Dep cleanup
 - Removed: @testing-library/*, @types/jest, axios, web-vitals
 - Build: OK
+
+## [Task 6] Playwright E2E Infrastructure
+- **Config**: playwright.config.ts with webServer pointing to localhost:5173
+- **Browser**: Chromium only (no Firefox/WebKit)
+- **Smoke test**: e2e/specs/smoke.spec.ts — validates app loads and title matches /TS3Viewer/
+- **Scripts**: test:e2e, test:e2e:ui, test:e2e:headed
+- **Artifacts**: .gitignore updated for playwright-report/, test-results/, e2e/.auth/
+- **Local-only**: Playwright NOT in CI/CD (Azure Pipelines) — development tool only
+- **Directory structure**: e2e/specs/, e2e/pages/, e2e/fixtures/ created
+
+
+## [Task 7] Form & Validation Dependencies
+- **Installed**: react-hook-form@7.71.2, @hookform/resolvers@5.2.2, zod@4.3.6, sonner@2.0.7, lucide-react@0.575.0
+- **@hookform/resolvers**: v5.2.2 (well above required v3.9+ for React 19 compat)
+- **lucide-react**: already present from shadcn init (Task 3), verified in tree
+- **zod**: v4.3.6 (latest, replaces validator in Wave 3)
+- **sonner**: v2.0.7 (shadcn-compatible toast, replaces react-hot-toast in Wave 3)
+- **Build**: passes with zero errors, chunk size warning only (expected)

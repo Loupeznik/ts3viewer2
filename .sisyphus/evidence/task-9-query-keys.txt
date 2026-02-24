@@ -1,0 +1,3 @@
+✓ queryKeys.ts and api.ts created successfully
+✓ npm run build succeeded with zero errors
+✓ Committed: feat(web): add query key factory and wrapCancelable utility

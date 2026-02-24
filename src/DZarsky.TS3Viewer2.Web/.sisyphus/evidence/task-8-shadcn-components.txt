@@ -1,0 +1,45 @@
+badge.tsx
+button.tsx
+card.tsx
+checkbox.tsx
+dialog.tsx
+dropdown-menu.tsx
+form.tsx
+input.tsx
+label.tsx
+scroll-area.tsx
+select.tsx
+separator.tsx
+skeleton.tsx
+sonner.tsx
+table.tsx
+tooltip.tsx
+
+=== BUILD OUTPUT ===
+
+> ts3viewer2-web@1.0.0 build
+> tsc && vite build
+
+vite v6.4.1 building for production...
+transforming...
+✓ 2408 modules transformed.
+rendering chunks...
+computing gzip size...
+build/registerSW.js                0.13 kB
+build/manifest.webmanifest         0.17 kB
+build/index.html                   0.97 kB │ gzip:   0.51 kB
+build/assets/index-AUvYzJsq.css   49.87 kB │ gzip:   9.41 kB
+build/assets/index-I9Ms78Mp.js   761.91 kB │ gzip: 228.24 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 3.71s
+
+PWA v0.21.2
+mode      generateSW
+precache  9 entries (1030.46 KiB)
+files generated
+  build/sw.js
+  build/workbox-8c29f6e4.js
