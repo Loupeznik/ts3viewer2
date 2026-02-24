@@ -26,3 +26,14 @@
 - Task 3 depends on Task 1 (path aliases needed first)
 - Task 5 depends on Task 1 (path aliases needed for @/ imports)
 - Task 7 depends on Task 4 (clean deps first to avoid conflicts)
+
+## [Task 5] TanStack Query
+- queryClient.ts: QueryCache with 401 handler (revokeToken + redirect to /admin)
+- index.tsx: wrapped with QueryClientProvider + ReactQueryDevtools
+- ReactQueryDevtools added with initialIsOpen={false}
+- Build passes with zero errors
+- Packages: @tanstack/react-query, @tanstack/react-query-devtools
+
+## [Task 4] Dep cleanup
+- Removed: @testing-library/*, @types/jest, axios, web-vitals
+- Build: OK

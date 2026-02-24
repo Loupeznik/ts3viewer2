@@ -1,0 +1,29 @@
+Removed: @testing-library/*, @types/jest, axios, web-vitals
+
+> ts3viewer2-web@1.0.0 build
+> tsc && vite build
+
+vite v6.4.1 building for production...
+transforming...
+✓ 706 modules transformed.
+rendering chunks...
+computing gzip size...
+build/registerSW.js                0.13 kB
+build/manifest.webmanifest         0.17 kB
+build/index.html                   0.97 kB │ gzip:   0.50 kB
+build/assets/index-gaEQrB4Z.css   26.80 kB │ gzip:   5.65 kB
+build/assets/index-Cuo7e0UA.js   721.88 kB │ gzip: 217.36 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 2.10s
+
+PWA v0.21.2
+mode      generateSW
+precache  9 entries (968.84 KiB)
+files generated
+  build/sw.js
+  build/workbox-8c29f6e4.js
+Build completed successfully

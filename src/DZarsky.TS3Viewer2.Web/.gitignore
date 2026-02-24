@@ -24,3 +24,8 @@ yarn-error.log*
 
 # vite-pwa
 /dev-dist
+
+# Playwright
+e2e/.auth/
+playwright-report/
+test-results/
