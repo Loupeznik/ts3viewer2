@@ -8,8 +8,8 @@
     "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.0.0",
     "@types/jest": "^29.0.0",
-    "@types/react": "^19.0.0",
     "@types/node": "^24.0.0",
+    "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "axios": "^1.13.5",
     "env-cmd": "^10.1.0",
@@ -29,7 +29,11 @@
     "build:development": "env-cmd -f .env.development npm run build",
     "build:prod": "env-cmd -f .env.production npm run build",
     "build:test": "env-cmd -f .env.test npm run build",
-    "types:openapi": "openapi -i http://localhost:5274/swagger/v1/swagger.json -o src/api"
+    "types:openapi": "openapi -i http://localhost:5274/swagger/v1/swagger.json -o src/api",
+    "lint": "biome check src/",
+    "lint:fix": "biome check --fix src/",
+    "format": "biome format --write src/",
+    "format:check": "biome format src/"
   },
   "browserslist": {
     "production": [
@@ -44,6 +48,7 @@
     ]
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.4.4",
     "@tailwindcss/vite": "^4.0.0",
     "@types/validator": "^13.7.3",
     "@vitejs/plugin-react": "^4.5.0",
