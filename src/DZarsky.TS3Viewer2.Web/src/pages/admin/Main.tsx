@@ -1,9 +1,5 @@
-import { ServerPage } from "./Server"
+import { ServerPage } from "./Server";
 
 export const AdminMainPage = () => {
-    return(
-        <>
-            <ServerPage showActions={false} />
-        </>
-    )
-}
+  return <ServerPage showActions={false} />;
+};

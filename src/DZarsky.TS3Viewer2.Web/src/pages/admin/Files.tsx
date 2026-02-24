@@ -1,90 +1,132 @@
-import { useEffect, useState } from "react";
-import { FiEdit, FiTrash } from "react-icons/fi";
-import { FileDto, FileService, SongDto } from "../../api";
-import { TextFieldPopup } from "../../components/TextFieldPopup";
-import { getAppToken } from "../../helpers/TokenProvider";
-import { EntityMessageProps } from "../../models/EntityMessageProps";
+import { Loader2, Pencil, Trash2 } from "lucide-react";
+import { useState } from "react";
+import type { FileDto } from "@/api";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { useDeleteFile, useFiles, useRenameFile } from "@/hooks/useFiles";
 
 export const FilesPage = () => {
-    getAppToken()
-    const [files, setFiles] = useState<FileDto[]>([])
-    const [fileRenameProps, setFileRenameProps] = useState<EntityMessageProps<FileDto>>({ entity: {}, isPopupVisible: false })
+  const { data: files, isLoading } = useFiles();
+  const deleteFile = useDeleteFile();
+  const renameFile = useRenameFile();
+  const [renameTarget, setRenameTarget] = useState<FileDto | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<FileDto | null>(null);
+  const [newName, setNewName] = useState("");
 
-    useEffect(() => {
-        getSongList()
-    }, [])
+  const handleRenameClose = () => {
+    setRenameTarget(null);
+    setNewName("");
+  };
 
-    const deleteFile = async (file: FileDto) => {
-        if (!file.fullName) {
-            return
-        }
+  const handleRename = () => {
+    if (!renameTarget?.fullName || !newName) return;
+    renameFile.mutate({ fullFileName: renameTarget.fullName, newFileName: newName }, { onSuccess: handleRenameClose });
+  };
 
-        const confirm = window.confirm(`Are you sure you want to delete ${file.fullName}?`)
+  const handleDelete = () => {
+    if (!deleteTarget?.fullName) return;
+    deleteFile.mutate(deleteTarget.fullName, {
+      onSuccess: () => setDeleteTarget(null),
+    });
+  };
 
-        if (confirm) {
-            await FileService.deleteApiV1Files(file.fullName).then(() => {
-                getSongList()
-            })
-        }
-    }
+  return (
+    <div className="md:w-3/4 w-full m-auto">
+      <h2 className="text-2xl font-bold m-4">Files administration</h2>
+      <div className="bg-gray-600 p-4 my-4 w-full md:w-1/2 mx-auto gap-4 justify-center rounded-lg">
+        {isLoading ? (
+          <div className="space-y-2">
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-10 w-full" />
+          </div>
+        ) : (
+          <div data-testid="files-table" className="relative overflow-x-auto shadow-md sm:rounded-lg">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Song name</TableHead>
+                  <TableHead>Action</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {files?.map((file) => (
+                  <TableRow key={file.fullName}>
+                    <TableCell className="font-semibold uppercase">{file.fullName}</TableCell>
+                    <TableCell className="flex gap-1">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        title="Rename file"
+                        onClick={() => {
+                          setRenameTarget(file);
+                          setNewName(file.name ?? "");
+                        }}
+                      >
+                        <Pencil className="h-5 w-5" />
+                      </Button>
+                      <Button variant="ghost" size="icon" title="Delete file" onClick={() => setDeleteTarget(file)}>
+                        <Trash2 className="h-5 w-5" />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        )}
+      </div>
 
-    const getSongList = async () => {
-        const songs = await FileService.getApiV1Files()
+      <Dialog open={!!renameTarget} onOpenChange={(open) => !open && handleRenameClose()}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Set new file name for {renameTarget?.fullName}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-2">
+            <Label htmlFor="new-name">New name</Label>
+            <p className="text-sm text-gray-400">Set new file name (with suffix)</p>
+            <Input
+              id="new-name"
+              value={newName}
+              onChange={(e) => setNewName(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleRename()}
+            />
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={handleRenameClose}>
+              Cancel
+            </Button>
+            <Button onClick={handleRename} disabled={renameFile.isPending}>
+              {renameFile.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Rename
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
-        setFiles(songs)
-    }
-
-    const renameFile = async (newName: string) => {
-        if (!fileRenameProps.entity.fullName || !newName) {
-            return
-        }
-
-        await FileService.putApiV1FilesRename(fileRenameProps.entity.fullName, newName).then(() => {
-            getSongList()
-        })
-    }
-
-    const renderSongs = files?.map(function (file, index) {
-        return (
-            <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600" key={index}>
-                <th scope="row" className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap uppercase font-semibold">
-                    {file.fullName}
-                </th>
-                <td>
-                    <FiEdit className="cursor-pointer hover:text-blue-400 text-2xl" onClick={() => setFileRenameProps({entity: file, isPopupVisible: true})} />
-                    <FiTrash className="cursor-pointer hover:text-red-400 text-2xl" onClick={() => deleteFile(file)} />
-                </td>
-            </tr>
-        )
-    })
-
-    return (
-        <div className="md:w-3/4 w-full m-auto">
-            <h2 className="text-2xl font-bold m-4">Files administration</h2>
-            <div className="bg-gray-600 p-4 my-4 w-full md:w-1/2 mx-auto gap-4 justify-center rounded-lg">
-                <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-                    <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400 text-center">
-                        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                            <tr>
-                                <th scope="col" className="px-6 py-3">
-                                    Song name
-                                </th>
-                                <th>
-                                    Action
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {renderSongs}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            {fileRenameProps.isPopupVisible &&
-                <TextFieldPopup title={`Set new file name for ${fileRenameProps.entity.fullName}`} onUpdate={renameFile} action="Rename" 
-                    isVisible={fileRenameProps.isPopupVisible} label="New name" description="Set new file name (with suffix)" 
-                    setVisible={(value: boolean) => setFileRenameProps({...fileRenameProps, isPopupVisible: value})} />
-            }
-        </div>
-    )
-}
+      <Dialog open={!!deleteTarget} onOpenChange={(open) => !open && setDeleteTarget(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete file</DialogTitle>
+          </DialogHeader>
+          <p>
+            Are you sure you want to delete <span className="font-semibold">{deleteTarget?.fullName}</span>?
+          </p>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDeleteTarget(null)}>
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={handleDelete} disabled={deleteFile.isPending}>
+              {deleteFile.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Delete
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+};

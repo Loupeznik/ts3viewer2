@@ -1,72 +1,93 @@
-import { useEffect, useState } from "react"
-import { FiMessageSquare } from "react-icons/fi"
-import { ChannelDto, ChannelService } from "../../api"
-import { Loader } from "../../components/Loader"
-import { TextFieldPopup } from "../../components/TextFieldPopup"
-import { getAppToken } from "../../helpers/TokenProvider"
-import { EntityMessageProps } from "../../models/EntityMessageProps"
+import { Loader2, MessageSquare } from "lucide-react";
+import { useState } from "react";
+import type { ChannelDto } from "@/api";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useChannels, useSendChannelMessage } from "@/hooks/useChannels";
 
 export const ChannelsPage = () => {
-    getAppToken()
-    const [channels, setChannels] = useState<ChannelDto[]>([])
-    const [messageProps, setMessageProps] = useState<EntityMessageProps<ChannelDto>>({ entity: {}, isPopupVisible: false })
+  const { data: channels, isLoading } = useChannels();
+  const sendMessage = useSendChannelMessage();
+  const [selectedChannel, setSelectedChannel] = useState<ChannelDto | null>(null);
+  const [message, setMessage] = useState("");
 
-    const getChannels = async () => {
-        await ChannelService.getApiV1ServerChannels().then((response) => setChannels(response))
-    }
+  const handleClose = () => {
+    setSelectedChannel(null);
+    setMessage("");
+  };
 
-    const sendMessage = async (message: string) => {
-        if (messageProps.entity.id && message) {
-            await ChannelService.postApiV1ServerChannelsMessage(messageProps.entity.id, {
-                message: message
-            }).then(() => {
-                setMessageProps({...messageProps, isPopupVisible: false})
-            })
-        }
-    }
+  const handleSend = () => {
+    if (!selectedChannel || selectedChannel.id === undefined || !message) return;
+    sendMessage.mutate({ id: selectedChannel.id, message }, { onSuccess: handleClose });
+  };
 
-    useEffect(() => {
-        getChannels()
-    }, [])
-
-    const renderChannels = () => {
-        return (
-            <ul>
-                {channels.map((channel) => {
-                    return (
-                        <li key={channel.id} className="bg-gray-900 p-1 mt-1 rounded font-semibold text-lg">
-                            <div className="flex justify-between p-2 align-middle">
-                                <div>
-                                    {channel.name}
-                                </div>
-                                <div className="text-xl">
-                                    <FiMessageSquare className="mr-2 hover:text-blue-400 cursor-pointer" title="Send a message to the channel" 
-                                        onClick={() => setMessageProps({entity: channel, isPopupVisible: true})} />
-                                </div>
-                            </div>
-                        </li>
-                    )
-                })}
-            </ul>
-        )
-    }
-
-    return (
-        <div className="md:w-1/2 w-full m-auto">
-            <h2 className="text-2xl font-bold m-4">Channel administration</h2>
-            {
-                channels.length > 0 ?
-                    renderChannels() :
-                    <div className="m-4">
-                        <Loader />
+  return (
+    <div className="md:w-1/2 w-full m-auto">
+      <h2 className="text-2xl font-bold m-4">Channel administration</h2>
+      <Card>
+        <CardHeader>
+          <CardTitle>Channels</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {isLoading ? (
+            <div className="space-y-2">
+              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-10 w-full" />
+            </div>
+          ) : (
+            <ul data-testid="channels-list">
+              {channels?.map((channel) => (
+                <li key={channel.id} className="bg-gray-900 p-1 mt-1 rounded font-semibold text-lg">
+                  <div className="flex justify-between p-2 align-middle">
+                    <div>{channel.name}</div>
+                    <div>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        title="Send a message to the channel"
+                        onClick={() => setSelectedChannel(channel)}
+                      >
+                        <MessageSquare className="h-5 w-5" />
+                      </Button>
                     </div>
-            }
-            {
-                messageProps.isPopupVisible &&
-                <TextFieldPopup title="Send message to channel" onUpdate={sendMessage} action="Send"
-                    isVisible={messageProps.isPopupVisible} label="Message"
-                    setVisible={(value: boolean) => setMessageProps({ ...messageProps, isPopupVisible: value })} />
-            }
-        </div>
-    )
-}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </CardContent>
+      </Card>
+
+      <Dialog open={!!selectedChannel} onOpenChange={(open) => !open && handleClose()}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Send message to channel</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-2">
+            <Label htmlFor="channel-message">Message</Label>
+            <Input
+              id="channel-message"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSend()}
+            />
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={handleClose}>
+              Cancel
+            </Button>
+            <Button onClick={handleSend} disabled={sendMessage.isPending}>
+              {sendMessage.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Send
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+};
