@@ -1,43 +1,77 @@
 import React, { useState } from 'react';
-import { Input } from '../components/forms/Input';
-import { Label } from '../components/forms/Label';
-import { SubmitButton } from '../components/forms/SubmitButton';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { Copy, Headphones } from 'lucide-react';
+import { toast } from 'sonner';
 
 export const ConnectPage = () => {
-    const [username, setUsername] = useState({})
+  const [username, setUsername] = useState('');
+  const ts3Host = import.meta.env.VITE_TS3_HOST;
 
-    const onChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setUsername(event.target.value)
-    }
+  const onChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setUsername(event.target.value);
+  };
 
-    const handleSubmit = (event: React.SyntheticEvent) => {
-        event.preventDefault()
+  const handleSubmit = (event: React.SyntheticEvent) => {
+    event.preventDefault();
+    window.location.assign(`ts3server://${ts3Host}?nickname=${username}`);
+  };
 
-        window.location.assign("ts3server://" + import.meta.env.VITE_TS3_HOST + "?nickname=" + username)
-    }
+  const handleCopyHost = () => {
+    navigator.clipboard.writeText(ts3Host);
+    toast.success('Server address copied to clipboard');
+  };
 
-    return (
-        <div>
-            <div
-                className="p-4 w-full text-center bg-white border shadow-md sm:p-8 dark:bg-gray-800 dark:border-gray-700">
-                <h1 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white">Connect to the server</h1>
-                <div className="justify-center items-center space-y-4 sm:flex sm:space-y-0 sm:space-x-4">
-                    <div
-                        className="w-full mt-3 md:w-1/4 bg-gray-800 text-white rounded-lg inline-flex items-center justify-center px-4 py-2.5 dark:bg-gray-700">
-                        <div className="flex flex-col gap-4">
-                            <form onSubmit={handleSubmit}>
-                                <div className="mb-4">
-                                    <Label forElement="server" value="Server" />
-                                    <Input type="text" id="server" value={import.meta.env.VITE_TS3_HOST} isDisabled={true} />
-                                    <Label forElement="name" value="Username" />
-                                    <Input type="text" id="name" onChange={onChangeInput} />
-                                </div>
-                                <SubmitButton value="Connect" />
-                            </form>
-                        </div>
-                    </div>
-                </div>
+  return (
+    <div className="flex items-center justify-center min-h-screen p-4">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Headphones className="w-5 h-5" />
+            Connect to the server
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="server">Server</Label>
+              <div className="flex gap-2">
+                <Input
+                  type="text"
+                  id="server"
+                  value={ts3Host}
+                  disabled
+                  className="flex-1"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  onClick={handleCopyHost}
+                  title="Copy server address"
+                >
+                  <Copy className="w-4 h-4" />
+                </Button>
+              </div>
             </div>
-        </div>
-    )
-}
+            <div className="space-y-2">
+              <Label htmlFor="name">Username</Label>
+              <Input
+                type="text"
+                id="name"
+                placeholder="Enter your username"
+                value={username}
+                onChange={onChangeInput}
+              />
+            </div>
+            <Button type="submit" className="w-full">
+              Connect
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
