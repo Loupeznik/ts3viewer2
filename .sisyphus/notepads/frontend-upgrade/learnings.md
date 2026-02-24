@@ -55,3 +55,32 @@
 - **zod**: v4.3.6 (latest, replaces validator in Wave 3)
 - **sonner**: v2.0.7 (shadcn-compatible toast, replaces react-hot-toast in Wave 3)
 - **Build**: passes with zero errors, chunk size warning only (expected)
+
+## Task 10 — TanStack Query Hooks
+- Service method signatures differ significantly from the task template description
+- ClientService: all methods use separate positional params (id, requestBody) not object destructuring
+- BanClientDto uses `duration`/`reason` fields, NOT `banTime`
+- UpdateClientServerGroupDto uses `serverGroupId` not `groupId`
+- ChannelService.postApiV1ServerChannelsMessage takes (id, requestBody) separately
+- UserService.putApiV1Users(userId, requestBody) and deleteApiV1Users(userId: number) — numeric ID, not string login
+- FileService.postApiV1Files takes `{ files: Array<Blob> }` not `{ file, fileName }`
+- FileService.deleteApiV1Files(fullFileName: string) — direct string param
+- AudioBotService.postApiV1AudiobotSongPlay takes SongDto with `link` field (not `url`)
+- AudioBotService.putApiV1AudiobotVolume takes VolumeDto `{ volume }` — matches expected
+- `@/api/models` has no index.ts — use `@/api` for model type imports
+## Task 11 - Migrate shared components to shadcn
+
+### Components migrated
+- `Loader.tsx`: SVG spinner → `Loader2` from lucide-react with `animate-spin`
+- `NavLink.tsx`: Custom Link → shadcn `Button variant="ghost"` with `asChild` + React Router `Link`
+- `Navbar.tsx`: Inline SVG menu/close → lucide `Menu`/`X` icons; dark bg-gray-900 styling
+- `AdminSideNav.tsx`: All react-icons/fi → lucide equivalents; shadcn `Button variant="ghost"` for nav items; shadcn `Separator` between sections
+- `Login.tsx`: react-hot-toast → sonner; custom form → react-hook-form + zod + shadcn Card/Form/Input/Button; UserForm modal → shadcn Dialog with inline registration form
+
+### Key decisions
+- Navbar.tsx had NO react-icons imports (used inline SVGs) — only the mobile menu SVGs needed replacing
+- Login.tsx registration modal: replaced UserForm dependency with inline shadcn Dialog form (cleaner, no nested modal conflict)
+- AdminSideNav uses `asChild` on Button to render as `<Link>` while keeping shadcn styling
+- Dark theme: used `bg-gray-900`/`bg-gray-800`/`bg-gray-700` for dark-first consistency
+
+### Build result: ✓ zero errors (4.00s)

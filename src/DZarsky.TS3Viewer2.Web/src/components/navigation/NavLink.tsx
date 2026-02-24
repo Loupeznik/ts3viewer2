@@ -1,21 +1,23 @@
-import React from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router'
+import { Button } from '@/components/ui/button'
 
 type LinkProps = {
-    url: string,
-    name: string,
+    url: string
+    name: string
     isActive: boolean
 }
 
 export const NavLink = (props: LinkProps) => {
     return (
         <li>
-            <Link to={props.url}
-                className={`block py-2 pr-4 pl-3 border-b md:border-0 border-gray-100 md:hover:bg-transparent md:p-0
-                        hover:bg-gray-700 hover:text-white md:hover:bg-transparent border-gray-700 
-                        font-semibold ${props.isActive ? 'font-bolder text-white border-white border-b-2' : 'text-gray-400 '}`}>
-                {props.name}
-            </Link>
+            <Button
+                variant="ghost"
+                size="sm"
+                asChild
+                className={props.isActive ? 'text-white bg-accent' : 'text-gray-400 hover:text-white'}
+            >
+                <Link to={props.url}>{props.name}</Link>
+            </Button>
         </li>
     )
 }

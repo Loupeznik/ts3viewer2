@@ -1,90 +1,114 @@
-import { FiFile, FiLogOut, FiPhoneCall, FiServer, FiUser, FiUserCheck, FiUsers } from 'react-icons/fi';
-import { Link, useLocation } from 'react-router';
-import { checkPermissions, CurrentUserProps } from '../../helpers/UserHelper';
+import { File, LogOut, Phone, Server, User, UserCheck, Users } from 'lucide-react'
+import { Link, useLocation } from 'react-router'
+import { checkPermissions, CurrentUserProps } from '../../helpers/UserHelper'
+import { Button } from '@/components/ui/button'
+import { Separator } from '@/components/ui/separator'
 
 export const AdminSideNav = ({ username, permissions, onLogout }: {
-    username: CurrentUserProps['username'],
+    username: CurrentUserProps['username']
     permissions: CurrentUserProps['permissions']
     onLogout: () => void
 }) => {
     const defaultServerPermissions = ['ServerAdmin', 'SuperAdmin']
     const pathname = useLocation()
 
-    const highlightRoute = (path: string): string => {
-        return pathname.pathname == '/admin'.concat(path) ? 'bg-gray-700' : ''
+    const isActive = (path: string): boolean => {
+        return pathname.pathname === '/admin'.concat(path)
     }
 
     return (
-        <div className="flex flex-col p-3 dark:bg-gray-900 dark:text-gray-100 rounded max-w-screen">
+        <div className="flex flex-col p-3 bg-gray-900 text-gray-100 rounded max-w-screen">
             <div>
                 <div className="flex-1">
                     <ul className="pt-2 pb-4 space-y-1 text-sm">
-                        {
-                            checkPermissions(permissions, defaultServerPermissions.concat(['AudioBotAdmin'])) &&
-                            <li className={`rounded-lg hover:bg-gray-700 ${highlightRoute('/files')}`}>
-                                <Link to="/admin/files" className="flex items-center p-2 space-x-3 rounded-md">
-                                    <FiFile className="w-5 h-5" />
-                                    <span className="font-semibold">Files</span>
-                                </Link>
+                        {checkPermissions(permissions, defaultServerPermissions.concat(['AudioBotAdmin'])) && (
+                            <li>
+                                <Button
+                                    variant="ghost"
+                                    asChild
+                                    className={`w-full justify-start gap-3 ${isActive('/files') ? 'bg-gray-700 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white'}`}
+                                >
+                                    <Link to="/admin/files">
+                                        <File className="w-5 h-5" />
+                                        <span className="font-semibold">Files</span>
+                                    </Link>
+                                </Button>
                             </li>
-                        }
-                        {
-                            checkPermissions(permissions, defaultServerPermissions.concat(['ClientAdmin'])) &&
-                            <li className={`rounded-lg hover:bg-gray-700 ${highlightRoute('/clients')}`}>
-                                <Link to="/admin/clients" className="flex items-center p-2 space-x-3 rounded-md">
-                                    <FiUsers className="w-5 h-5" />
-                                    <span className="font-semibold">Clients</span>
-                                </Link>
+                        )}
+                        {checkPermissions(permissions, defaultServerPermissions.concat(['ClientAdmin'])) && (
+                            <li>
+                                <Button
+                                    variant="ghost"
+                                    asChild
+                                    className={`w-full justify-start gap-3 ${isActive('/clients') ? 'bg-gray-700 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white'}`}
+                                >
+                                    <Link to="/admin/clients">
+                                        <Users className="w-5 h-5" />
+                                        <span className="font-semibold">Clients</span>
+                                    </Link>
+                                </Button>
                             </li>
-                        }
-                        {
-                            checkPermissions(permissions, defaultServerPermissions.concat(['ChannelAdmin'])) &&
-                            <li className={`rounded-lg hover:bg-gray-700 ${highlightRoute('/channels')}`}>
-                                <Link to="/admin/channels" className="flex items-center p-2 space-x-3 rounded-md">
-                                    <FiPhoneCall className="w-5 h-5" />
-                                    <span className="font-semibold">Channels</span>
-                                </Link>
+                        )}
+                        {checkPermissions(permissions, defaultServerPermissions.concat(['ChannelAdmin'])) && (
+                            <li>
+                                <Button
+                                    variant="ghost"
+                                    asChild
+                                    className={`w-full justify-start gap-3 ${isActive('/channels') ? 'bg-gray-700 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white'}`}
+                                >
+                                    <Link to="/admin/channels">
+                                        <Phone className="w-5 h-5" />
+                                        <span className="font-semibold">Channels</span>
+                                    </Link>
+                                </Button>
                             </li>
-                        }
-                        {
-                            checkPermissions(permissions, defaultServerPermissions) &&
-                            <li className={`rounded-lg hover:bg-gray-700 ${highlightRoute('/server')}`}>
-                                <Link to="/admin/server" className="flex items-center p-2 space-x-3 rounded-md">
-                                    <FiServer className="w-5 h-5" />
-                                    <span className="font-semibold">Server</span>
-                                </Link>
+                        )}
+                        {checkPermissions(permissions, defaultServerPermissions) && (
+                            <li>
+                                <Button
+                                    variant="ghost"
+                                    asChild
+                                    className={`w-full justify-start gap-3 ${isActive('/server') ? 'bg-gray-700 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white'}`}
+                                >
+                                    <Link to="/admin/server">
+                                        <Server className="w-5 h-5" />
+                                        <span className="font-semibold">Server</span>
+                                    </Link>
+                                </Button>
                             </li>
-                        }
-                        {
-                            checkPermissions(permissions, ['SuperAdmin', 'ApiUserAdmin']) &&
-                            <li className={`rounded-lg hover:bg-gray-700 ${highlightRoute('/users')}`}>
-                                <Link to="/admin/users" className="flex items-center p-2 space-x-3 rounded-md">
-                                    <FiUserCheck className="w-5 h-5" />
-                                    <span className="font-semibold">API users</span>
-                                </Link>
+                        )}
+                        {checkPermissions(permissions, ['SuperAdmin', 'ApiUserAdmin']) && (
+                            <li>
+                                <Button
+                                    variant="ghost"
+                                    asChild
+                                    className={`w-full justify-start gap-3 ${isActive('/users') ? 'bg-gray-700 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white'}`}
+                                >
+                                    <Link to="/admin/users">
+                                        <UserCheck className="w-5 h-5" />
+                                        <span className="font-semibold">API users</span>
+                                    </Link>
+                                </Button>
                             </li>
-                        }
+                        )}
                     </ul>
                 </div>
             </div>
-            <div className="flex items-center py-2 mt-12 justify-between rounded-lg shadow-md dark:bg-gray-700">
-                <div className="flex md:flex-row flex-col md:items-center space-x-2 md:space-x-4 md:w-auto">
-                    <FiUser className="w-8 h-8" />
-                    <div>
-                        <h2 className="text-lg font-semibold text-ellipsis text-xs md:text-base">{username}</h2>
-                    </div>
+            <Separator className="my-2 bg-gray-700" />
+            <div className="flex items-center py-2 mt-4 justify-between rounded-lg bg-gray-800 px-3">
+                <div className="flex md:flex-row flex-col md:items-center gap-2 md:gap-3">
+                    <User className="w-6 h-6 text-gray-300" />
+                    <h2 className="text-sm md:text-base font-semibold text-ellipsis">{username}</h2>
                 </div>
-                <div className="flex flex-col">
-                    {
-                        /*<div className="hover:text-gray-400 cursor-pointer mx-2 my-1">
-                            <FiEdit className="w-8 h-8" /> <p>Change password</p>
-                        </div>
-                        */
-                    }
-                    <div className="hover:text-red-400 cursor-pointer mx-2 my-1" onClick={onLogout}>
-                        <FiLogOut className="w-8 h-8" /> <p className="text-xs md:text-base">Logout</p>
-                    </div>
-                </div>
+                <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-gray-300 hover:text-red-400 hover:bg-transparent flex flex-col items-center gap-1"
+                    onClick={onLogout}
+                >
+                    <LogOut className="w-5 h-5" />
+                    <span className="text-xs">Logout</span>
+                </Button>
             </div>
         </div>
     )

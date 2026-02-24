@@ -1,75 +1,168 @@
-import React from "react"
-import toast, { Toaster } from "react-hot-toast"
+import { useState } from "react"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { z } from "zod"
+import { toast } from "sonner"
 import { ApiError, ProblemDetails, UserDto, UserService } from "../api"
 import { getAppToken } from "../helpers/TokenProvider"
-import { Input } from "./forms/Input"
-import { FormType, UserForm } from "./forms/UserForm"
 import { Loader } from "./Loader"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+
+const loginSchema = z.object({
+    login: z.string().min(1, "Username is required"),
+    secret: z.string().min(1, "Password is required"),
+})
+
+const registerSchema = z.object({
+    login: z.string().min(1, "Username (TeamSpeakID) is required"),
+    secret: z.string().min(1, "Password is required"),
+})
+
+type LoginFormValues = z.infer<typeof loginSchema>
+type RegisterFormValues = z.infer<typeof registerSchema>
 
 type LoginProps = {
-    onLogin: ({ login, secret }: UserDto) => void,
+    onLogin: ({ login, secret }: UserDto) => void
 }
 
 export const Login = ({ onLogin }: LoginProps) => {
     getAppToken()
-    const [username, setUsername] = React.useState<string>('')
-    const [password, setPassword] = React.useState<string>('')
-    const [isRegisterPopupVisible, setIsRegisterPopupVisible] = React.useState<boolean>(false)
-    const [isLoading, setIsLoading] = React.useState<boolean>(false)
+    const [isRegisterOpen, setIsRegisterOpen] = useState<boolean>(false)
+    const [isLoading, setIsLoading] = useState<boolean>(false)
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        onLogin({ login: username, secret: password });
+    const loginForm = useForm<LoginFormValues>({
+        resolver: zodResolver(loginSchema),
+        defaultValues: { login: "", secret: "" },
+    })
+
+    const registerForm = useForm<RegisterFormValues>({
+        resolver: zodResolver(registerSchema),
+        defaultValues: { login: "", secret: "" },
+    })
+
+    const handleLogin = (values: LoginFormValues) => {
+        onLogin({ login: values.login, secret: values.secret })
     }
 
-    const handleRegistration = async (user: UserDto) => {
-        if (!user.login || !user.secret) {
-            toast.error('Username and password are required')
-            return
-        }
-
+    const handleRegistration = async (values: RegisterFormValues) => {
         setIsLoading(true)
-
-        await UserService.postApiV1Users(user).then(onFulfilled => {
-            setIsLoading(false)
-            onLogin(user)
-        }).catch(onRejected => {
-            const error = onRejected as ApiError
-            const body = JSON.parse(error.body) as ProblemDetails
-            toast.error(`Failed to register: ${body.detail}`)
-        })
+        await UserService.postApiV1Users(values)
+            .then(() => {
+                setIsLoading(false)
+                setIsRegisterOpen(false)
+                onLogin(values)
+            })
+            .catch((onRejected) => {
+                setIsLoading(false)
+                const error = onRejected as ApiError
+                const body = JSON.parse(error.body) as ProblemDetails
+                toast.error(`Failed to register: ${body.detail}`)
+            })
     }
 
     return (
-        <div className="flex justify-center">
-            <Toaster />
-            <form onSubmit={handleSubmit} className="w-full max-w-xs mt-48">
-                <div className="mb-4">
-                    <label htmlFor="username" className="block mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">Username</label>
-                    <Input id="username" type="text" onChange={(event) => setUsername(event.target.value)} />
-                </div>
-                <div className="mb-6">
-                    <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">Password</label>
-                    <Input id="password" type="password" onChange={(event) => setPassword(event.target.value)} />
-                </div>
-                <div className="flex items-center justify-between">
-                    <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 
-            focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700">Login</button>
-                    <button
-                        className="text-white bg-blue-700 hover:bg-blue-800 
-                        focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700"
-                        onClick={() => setIsRegisterPopupVisible(!isRegisterPopupVisible)}>Register</button>
-                </div>
-            </form>
-            {isRegisterPopupVisible && <UserForm user={{}} onSubmit={(user) => handleRegistration(user as UserDto)}
-                isVisible={isRegisterPopupVisible} setVisible={setIsRegisterPopupVisible} isFromAdmin={false}
-                type={FormType.Register} />
-            }
-            {isLoading &&
-                <div className="fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="flex justify-center items-center min-h-screen">
+            <Card className="w-full max-w-sm">
+                <CardHeader>
+                    <CardTitle className="text-xl">Sign in</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <Form {...loginForm}>
+                        <form onSubmit={loginForm.handleSubmit(handleLogin)} className="space-y-4">
+                            <FormField
+                                control={loginForm.control}
+                                name="login"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Username</FormLabel>
+                                        <FormControl>
+                                            <Input type="text" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={loginForm.control}
+                                name="secret"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Password</FormLabel>
+                                        <FormControl>
+                                            <Input type="password" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <div className="flex items-center gap-2 pt-2">
+                                <Button type="submit" className="flex-1">Login</Button>
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    className="flex-1"
+                                    onClick={() => setIsRegisterOpen(true)}
+                                >
+                                    Register
+                                </Button>
+                            </div>
+                        </form>
+                    </Form>
+                </CardContent>
+            </Card>
+
+            <Dialog open={isRegisterOpen} onOpenChange={setIsRegisterOpen}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Create account</DialogTitle>
+                    </DialogHeader>
+                    <Form {...registerForm}>
+                        <form onSubmit={registerForm.handleSubmit(handleRegistration)} className="space-y-4">
+                            <FormField
+                                control={registerForm.control}
+                                name="login"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Login (your TeamSpeakID)</FormLabel>
+                                        <FormControl>
+                                            <Input type="text" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={registerForm.control}
+                                name="secret"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Password</FormLabel>
+                                        <FormControl>
+                                            <Input type="password" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <div className="flex justify-end pt-2">
+                                <Button type="submit" disabled={isLoading}>
+                                    Register
+                                </Button>
+                            </div>
+                        </form>
+                    </Form>
+                </DialogContent>
+            </Dialog>
+
+            {isLoading && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
                     <Loader />
                 </div>
-            }
+            )}
         </div>
     )
 }
