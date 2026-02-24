@@ -1439,7 +1439,7 @@ Max Concurrent: 8 (Wave 3)
 ### Wave 4 — Testing + Polish (depends on Wave 3)
 
 
-- [ ] 21. Playwright E2E — Auth + Navigation Tests
+- [x] 21. Playwright E2E — Auth + Navigation Tests
 
   **What to do**:
   - Create `e2e/pages/login.page.ts` Page Object Model with locators for login form
@@ -1491,7 +1491,7 @@ Max Concurrent: 8 (Wave 3)
   - Files: `e2e/specs/auth.setup.ts`, `e2e/specs/auth.spec.ts`, `e2e/specs/navigation.spec.ts`, `e2e/pages/login.page.ts`
   - Pre-commit: `npx playwright test --reporter=list`
 
-- [ ] 22. Playwright E2E — Status + AudioBot Pages
+- [x] 22. Playwright E2E — Status + AudioBot Pages
 
   **What to do**:
   - Create `e2e/pages/status.page.ts` POM with locators for server info, channel tree, client list
@@ -1540,7 +1540,7 @@ Max Concurrent: 8 (Wave 3)
   - Files: `e2e/specs/status.spec.ts`, `e2e/specs/audiobot.spec.ts`, `e2e/pages/status.page.ts`, `e2e/pages/audiobot.page.ts`
   - Pre-commit: `npx playwright test --reporter=list`
 
-- [ ] 23. Playwright E2E — Admin CRUD Operations
+- [x] 23. Playwright E2E — Admin CRUD Operations
 
   **What to do**:
   - Create `e2e/pages/admin/users.page.ts` POM
@@ -1596,7 +1596,7 @@ Max Concurrent: 8 (Wave 3)
   - Files: `e2e/specs/admin/*`, `e2e/pages/admin/*`
   - Pre-commit: `npx playwright test --reporter=list`
 
-- [ ] 24. Biome Lint CI Step + Fix All Lint Issues
+- [x] 24. Biome Lint CI Step + Fix All Lint Issues
 
   **What to do**:
   - Run `npx biome check --fix src/` to auto-fix all formatting/lint issues across the codebase

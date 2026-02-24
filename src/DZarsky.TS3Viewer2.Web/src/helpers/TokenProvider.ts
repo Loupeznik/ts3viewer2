@@ -5,7 +5,7 @@ const _localAppTokenExpirationStorageKey: string = "app_token_expiration";
 
 const getAppToken = async () => {
   const localToken = localStorage.getItem(_localAppTokenStorageKey);
-  let token;
+  let token: string | undefined;
 
   if (localToken === null || isTokenExpired()) {
     const credentials: UserDto = {

@@ -204,3 +204,46 @@
 ### Build result: ✓ zero errors (3.50s)
 ### Verification: ✓ zero grep results for flowbite, react-icons, react-hot-toast, validator in src/
 ### Commit: `chore(web): remove Flowbite, react-icons, react-hot-toast, validator`
+
+## Task 21 — Biome Linting & CI Integration
+
+### Changes
+- Ran `npx biome check --write src/` to auto-fix 76 files (formatting, imports, etc.)
+- Updated `biome.json` to use `experimentalScannerIgnores` for src/api/** (auto-generated code)
+- Added Biome lint step to `azure-pipelines.yml` after npm install, before builds
+- Lint script: `npm run lint` (runs `biome check src/`)
+- Build passes with zero errors after lint fixes
+
+### Biome Configuration
+- Biome v2.4.4 with recommended rules enabled
+- Excludes src/api/** from scanning (has /* eslint-disable */ directives)
+- Double quotes, semicolons, 2-space indent, 120 char line width
+- Auto-generated API files have warnings (noExplicitAny, noStaticOnlyClass, noThenProperty) but these are acceptable
+
+### CI Integration
+- Azure Pipelines now runs `npm run lint` as a separate task
+- Lint step runs AFTER npm install, BEFORE build steps
+- Ensures code quality checks before compilation
+- Commit: `ci: add Biome lint check to Azure Pipelines`
+
+## Task — Admin E2E Tests (Playwright)
+
+### Auth bypass pattern
+- localStorage key for auth token: `api_app_token` (defined in both `TokenProvider.ts` and `UserHelper.ts`)
+- `isTokenExpired()` returns `false` when `app_token_expiration` is NOT set in localStorage — so only set `api_app_token`
+- Use `btoa()` inside `page.addInitScript()` (browser context) to generate base64 JWT payload
+- Fake JWT structure: `${header}.${payload}.fake-sig` — frontend only decodes `split('.')[1]`, never verifies signature
+- JWT payload needs: `sub` (username), `permissions` (array), `role` (must NOT be "App")
+- Admin.tsx calls `checkUser()` synchronously during render — no effects needed, `addInitScript` sets token before React runs
+
+### Route mocking
+- API base URL in dev: `http://localhost:20800`; use `"**/api/v1/endpoint**"` glob pattern in `page.route()`
+- Admin.tsx always calls `getServerGroups()` on render — mock `**/api/v1/server/groups**` in all admin tests
+- `page.route()` must be registered BEFORE `page.goto()`
+- `route.fulfill({ json: [...] })` auto-sets Content-Type and serializes the data
+
+### Common gotcha
+- `getByText("admin")` was ambiguous (7 matches: nav links, headings, table cells) — use `getByRole("cell", { name: "admin", exact: true })` for table cell assertions
+- Clients table (`data-testid="clients-table"`) is conditionally rendered — only shown when `fullClients.length > 0`; mock with `type: "FullClient"` for `ClientType.FULL_CLIENT`
+
+### Test results: 9/9 passed (4.6s)
