@@ -1,8 +1,7 @@
 export const serverKeys = {
   all: () => ["server"] as const,
   info: () => [...serverKeys.all(), "info"] as const,
-  clients: (includeQuery?: boolean) =>
-    [...serverKeys.all(), "clients", { includeQuery }] as const,
+  clients: (includeQuery?: boolean) => [...serverKeys.all(), "clients", { includeQuery }] as const,
   channels: () => [...serverKeys.all(), "channels"] as const,
   groups: () => [...serverKeys.all(), "groups"] as const,
 };

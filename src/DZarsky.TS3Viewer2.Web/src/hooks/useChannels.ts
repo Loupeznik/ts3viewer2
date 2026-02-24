@@ -7,8 +7,7 @@ import { serverKeys } from "@/lib/queryKeys";
 export function useChannels() {
   return useQuery({
     queryKey: serverKeys.channels(),
-    queryFn: ({ signal }) =>
-      wrapCancelable(() => ChannelService.getApiV1ServerChannels(), signal),
+    queryFn: ({ signal }) => wrapCancelable(() => ChannelService.getApiV1ServerChannels(), signal),
     staleTime: 300000,
   });
 }

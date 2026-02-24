@@ -1,19 +1,18 @@
-import React from 'react';
-import { Toaster } from '@/components/ui/sonner';
-import { Navbar } from '@/components/navigation/Navbar';
-import { Routes, Route } from "react-router";
+import { Route, Routes } from "react-router";
+import { Navbar } from "@/components/navigation/Navbar";
+import { Toaster } from "@/components/ui/sonner";
+import { AdminPage } from "./pages/Admin";
+import { AudioBotPage } from "./pages/AudioBot";
+import { ChannelsPage } from "./pages/admin/Channels";
+import { ClientsPage } from "./pages/admin/Clients";
+import { FilesPage } from "./pages/admin/Files";
+import { AdminMainPage } from "./pages/admin/Main";
+import { ServerPage } from "./pages/admin/Server";
+import { UsersPage } from "./pages/admin/Users";
+import { ConnectPage } from "./pages/Connect";
+import { MainPage } from "./pages/Main";
 import { StatusPage } from "./pages/Status";
-import { MainPage } from "./pages/Main"
-import { ConnectPage } from './pages/Connect';
-import { UploadPage } from './pages/Upload';
-import { AudioBotPage } from './pages/AudioBot';
-import { AdminPage } from './pages/Admin';
-import { ChannelsPage } from './pages/admin/Channels';
-import { ClientsPage } from './pages/admin/Clients';
-import { FilesPage } from './pages/admin/Files';
-import { ServerPage } from './pages/admin/Server';
-import { UsersPage } from './pages/admin/Users';
-import { AdminMainPage } from './pages/admin/Main';
+import { UploadPage } from "./pages/Upload";
 
 function App() {
   return (
@@ -25,7 +24,7 @@ function App() {
         <Route path="/connect" element={<ConnectPage />} />
         <Route path="/upload" element={<UploadPage />} />
         <Route path="/bot" element={<AudioBotPage />} />
-        <Route path="/admin" element={<AdminPage />} >
+        <Route path="/admin" element={<AdminPage />}>
           <Route path="/admin/channels" element={<ChannelsPage />} />
           <Route path="/admin/clients" element={<ClientsPage />} />
           <Route path="/admin/files" element={<FilesPage />} />

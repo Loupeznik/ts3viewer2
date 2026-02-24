@@ -1386,7 +1386,7 @@ Max Concurrent: 8 (Wave 3)
   - Files: `src/pages/admin/Channels.tsx`, `src/pages/admin/Files.tsx`, `src/pages/admin/Server.tsx`, `src/pages/admin/Main.tsx`
   - Pre-commit: `npm run build`
 
-- [ ] 20. Remove Flowbite + react-icons + react-hot-toast Completely
+- [x] 20. Remove Flowbite + react-icons + react-hot-toast Completely
 
   **What to do**:
   - Run `npm uninstall flowbite react-icons react-hot-toast`

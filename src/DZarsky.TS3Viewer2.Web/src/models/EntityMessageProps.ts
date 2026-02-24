@@ -1,4 +1,4 @@
 export type EntityMessageProps<TEntity> = {
-    entity: TEntity
-    isPopupVisible: boolean
-}
+  entity: TEntity;
+  isPopupVisible: boolean;
+};

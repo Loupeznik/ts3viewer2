@@ -7,8 +7,7 @@ import { audioBotKeys } from "@/lib/queryKeys";
 export function useCurrentSong() {
   return useQuery({
     queryKey: audioBotKeys.song(),
-    queryFn: ({ signal }) =>
-      wrapCancelable(() => AudioBotService.getApiV1AudiobotSong(), signal),
+    queryFn: ({ signal }) => wrapCancelable(() => AudioBotService.getApiV1AudiobotSong(), signal),
     refetchInterval: 10000,
     staleTime: 9000,
   });
@@ -17,8 +16,7 @@ export function useCurrentSong() {
 export function useVolume() {
   return useQuery({
     queryKey: audioBotKeys.volume(),
-    queryFn: ({ signal }) =>
-      wrapCancelable(() => AudioBotService.getApiV1AudiobotVolume(), signal),
+    queryFn: ({ signal }) => wrapCancelable(() => AudioBotService.getApiV1AudiobotVolume(), signal),
     refetchInterval: 10000,
     staleTime: 9000,
   });

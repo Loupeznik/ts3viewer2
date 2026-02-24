@@ -1,9 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import type { UserDto, UserInfoDto } from "@/api";
 import { UserService } from "@/api/services/UserService";
 import { wrapCancelable } from "@/lib/api";
 import { userKeys } from "@/lib/queryKeys";
-import type { UserDto, UserInfoDto } from "@/api";
 
 export function useUsers() {
   return useQuery({
@@ -28,8 +28,7 @@ export function useCreateUser() {
 export function useUpdateUser() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ userId, data }: { userId: number; data: UserInfoDto }) =>
-      UserService.putApiV1Users(userId, data),
+    mutationFn: ({ userId, data }: { userId: number; data: UserInfoDto }) => UserService.putApiV1Users(userId, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: userKeys.list() });
       toast.success("User updated");

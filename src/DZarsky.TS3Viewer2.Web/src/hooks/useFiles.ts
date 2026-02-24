@@ -39,13 +39,8 @@ export function useDeleteFile() {
 export function useRenameFile() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({
-      fullFileName,
-      newFileName,
-    }: {
-      fullFileName: string;
-      newFileName: string;
-    }) => FileService.putApiV1FilesRename(fullFileName, newFileName),
+    mutationFn: ({ fullFileName, newFileName }: { fullFileName: string; newFileName: string }) =>
+      FileService.putApiV1FilesRename(fullFileName, newFileName),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: fileKeys.list() });
       toast.success("File renamed");

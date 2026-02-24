@@ -1,15 +1,15 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import { BrowserRouter } from 'react-router';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
 import * as Sentry from "@sentry/react";
-import { QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { queryClient } from '@/lib/queryClient';
+import { QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { BrowserRouter } from "react-router";
+import { queryClient } from "@/lib/queryClient";
+import App from "./App";
 
 function stringToBoolean(str: string): boolean {
-  return str === 'true';
+  return str === "true";
 }
 
 if (stringToBoolean(import.meta.env.VITE_SENTRY_ENABLED) === true) {
@@ -23,9 +23,7 @@ if (stringToBoolean(import.meta.env.VITE_SENTRY_ENABLED) === true) {
   });
 }
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
+const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
@@ -34,5 +32,5 @@ root.render(
       </BrowserRouter>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
 );

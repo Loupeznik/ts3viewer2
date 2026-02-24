@@ -84,6 +84,13 @@ steps:
     command: 'install'
     workingDir: '$(webSourcesDirectory)'
 
+- task: Npm@1
+  displayName: 'Lint (Biome)'
+  inputs:
+    command: 'custom'
+    workingDir: '$(webSourcesDirectory)'
+    customCommand: 'run lint'
+
 - task: DownloadSecureFile@1
   displayName: 'Download .env file - Test'
   name: env_test

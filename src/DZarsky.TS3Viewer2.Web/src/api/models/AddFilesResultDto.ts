@@ -3,6 +3,6 @@
 /* eslint-disable */
 
 export type AddFilesResultDto = {
-    successful?: Array<string> | null;
-    failed?: Array<string> | null;
+  successful?: Array<string> | null;
+  failed?: Array<string> | null;
 };

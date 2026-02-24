@@ -7,8 +7,7 @@ import { serverKeys } from "@/lib/queryKeys";
 export function useClients(getDetail?: boolean) {
   return useQuery({
     queryKey: serverKeys.clients(getDetail),
-    queryFn: ({ signal }) =>
-      wrapCancelable(() => ClientService.getApiV1ServerClients(getDetail), signal),
+    queryFn: ({ signal }) => wrapCancelable(() => ClientService.getApiV1ServerClients(getDetail), signal),
     refetchInterval: 5000,
     staleTime: 4500,
   });
@@ -29,15 +28,8 @@ export function useKickClient() {
 export function useBanClient() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({
-      id,
-      duration,
-      reason,
-    }: {
-      id: number;
-      duration?: number;
-      reason?: string;
-    }) => ClientService.postApiV1ServerClientsBan(id, { duration, reason }),
+    mutationFn: ({ id, duration, reason }: { id: number; duration?: number; reason?: string }) =>
+      ClientService.postApiV1ServerClientsBan(id, { duration, reason }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: serverKeys.clients() });
       toast.success("Client banned");
@@ -58,13 +50,8 @@ export function usePokeClient() {
 export function useAddClientPermission() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({
-      databaseId,
-      serverGroupId,
-    }: {
-      databaseId: number;
-      serverGroupId: number;
-    }) => ClientService.postApiV1ServerClientsPermissions(databaseId, { serverGroupId }),
+    mutationFn: ({ databaseId, serverGroupId }: { databaseId: number; serverGroupId: number }) =>
+      ClientService.postApiV1ServerClientsPermissions(databaseId, { serverGroupId }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: serverKeys.clients() });
       toast.success("Permission added");
@@ -76,13 +63,8 @@ export function useAddClientPermission() {
 export function useRemoveClientPermission() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({
-      databaseId,
-      serverGroupId,
-    }: {
-      databaseId: number;
-      serverGroupId: number;
-    }) => ClientService.deleteApiV1ServerClientsPermissions(databaseId, { serverGroupId }),
+    mutationFn: ({ databaseId, serverGroupId }: { databaseId: number; serverGroupId: number }) =>
+      ClientService.deleteApiV1ServerClientsPermissions(databaseId, { serverGroupId }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: serverKeys.clients() });
       toast.success("Permission removed");

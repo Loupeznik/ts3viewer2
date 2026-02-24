@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
-import { Copy, Headphones } from 'lucide-react';
-import { toast } from 'sonner';
+import { Copy, Headphones } from "lucide-react";
+import type React from "react";
+import { useState } from "react";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export const ConnectPage = () => {
-  const [username, setUsername] = useState('');
+  const [username, setUsername] = useState("");
   const ts3Host = import.meta.env.VITE_TS3_HOST;
 
   const onChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -21,7 +22,7 @@ export const ConnectPage = () => {
 
   const handleCopyHost = () => {
     navigator.clipboard.writeText(ts3Host);
-    toast.success('Server address copied to clipboard');
+    toast.success("Server address copied to clipboard");
   };
 
   return (
@@ -38,13 +39,7 @@ export const ConnectPage = () => {
             <div className="space-y-2">
               <Label htmlFor="server">Server</Label>
               <div className="flex gap-2">
-                <Input
-                  type="text"
-                  id="server"
-                  value={ts3Host}
-                  disabled
-                  className="flex-1"
-                />
+                <Input type="text" id="server" value={ts3Host} disabled className="flex-1" />
                 <Button
                   type="button"
                   variant="outline"

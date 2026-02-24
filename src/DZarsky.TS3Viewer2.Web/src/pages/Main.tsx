@@ -1,13 +1,11 @@
+import { Users } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useServerInfo } from "@/hooks/useServer";
-import { Users } from "lucide-react";
 
 export const MainPage = () => {
   const { data: server } = useServerInfo();
 
-  const clientsOnline = server
-    ? (server.clientsOnline as number) - (server.queriesOnline as number)
-    : 0;
+  const clientsOnline = server ? (server.clientsOnline as number) - (server.queriesOnline as number) : 0;
   const maxClients = server?.maxClients ?? 0;
 
   return (

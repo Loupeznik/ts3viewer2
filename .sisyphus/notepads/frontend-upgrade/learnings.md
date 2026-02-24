@@ -177,3 +177,30 @@
 - `noUselessFragments` info on Main.tsx fragment — applied `--unsafe` fix to remove it
 
 ### Build result: ✓ zero errors (3.67s)
+
+## Task 20 — Remove legacy dependencies (Flowbite, react-icons, react-hot-toast, validator)
+
+### Changes
+- Removed `import 'flowbite'` from `src/index.tsx`
+- Removed `svg { display: inline !important; vertical-align: middle; }` from `src/index.css`
+- Deleted dead component files:
+  - `src/components/ClientList.tsx`
+  - `src/components/InfoPopup.tsx`
+  - `src/components/ServerGroup.tsx`
+  - `src/components/TextFieldPopup.tsx`
+  - `src/components/forms/Input.tsx`
+  - `src/components/forms/Label.tsx`
+  - `src/components/forms/SubmitButton.tsx`
+- Removed empty `src/components/forms/` directory
+- Uninstalled packages: `flowbite`, `react-icons`, `react-hot-toast`, `validator`
+- Migrated `Status.tsx` ClientList usage: inlined client rendering with lucide icons (Moon, VolumeOff, MicOff, User)
+
+### Key decisions
+- ClientList was only used by Status.tsx in a simple way (just filtering and rendering clients)
+- Inlined the client list rendering directly into Status.tsx to avoid creating a new component
+- Used lucide-react icons (Moon, VolumeOff, MicOff, User) instead of react-icons/fi equivalents
+- Lucide icons do NOT accept `title` prop — removed from icon JSX, kept on `<li>` wrapper
+
+### Build result: ✓ zero errors (3.50s)
+### Verification: ✓ zero grep results for flowbite, react-icons, react-hot-toast, validator in src/
+### Commit: `chore(web): remove Flowbite, react-icons, react-hot-toast, validator`

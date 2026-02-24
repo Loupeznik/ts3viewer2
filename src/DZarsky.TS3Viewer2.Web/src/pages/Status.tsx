@@ -1,9 +1,9 @@
-import { CornerDownRight, Server, User, Moon, VolumeOff, MicOff } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
-import { useChannels } from '@/hooks/useChannels';
-import { useClients } from '@/hooks/useClients';
-import { useServerInfo } from '@/hooks/useServer';
+import { CornerDownRight, MicOff, Moon, Server, User, VolumeOff } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useChannels } from "@/hooks/useChannels";
+import { useClients } from "@/hooks/useClients";
+import { useServerInfo } from "@/hooks/useServer";
 
 export const StatusPage = () => {
   const { data: server, isLoading: serverLoading, isError: serverError } = useServerInfo();
@@ -43,10 +43,7 @@ export const StatusPage = () => {
       <div className="flex justify-center">
         <Card className="w-full max-w-2xl text-left">
           <CardHeader>
-            <CardTitle
-              className="flex items-center gap-2 text-lg"
-              data-testid="server-name"
-            >
+            <CardTitle className="flex items-center gap-2 text-lg" data-testid="server-name">
               <Server className="h-5 w-5" />
               {server?.name}
             </CardTitle>
@@ -64,23 +61,11 @@ export const StatusPage = () => {
                       {clients
                         .filter((c) => c.channelId === channel.id)
                         .map((client) => (
-                          <li
-                            key={client.id}
-                            className="ml-4"
-                            title={client.detail?.description ?? ""}
-                          >
-                            {client.detail?.away && (
-                              <Moon className="mr-1 inline h-4 w-4" />
-                            )}
-                            {client.detail?.outputMuted && (
-                              <VolumeOff className="mr-1 inline h-4 w-4" />
-                            )}
-                            {client.detail?.inputMuted && (
-                              <MicOff className="mr-1 inline h-4 w-4" />
-                            )}
-                            {!client.detail?.away &&
-                              !client.detail?.outputMuted &&
-                              !client.detail?.inputMuted && (
+                          <li key={client.id} className="ml-4" title={client.detail?.description ?? ""}>
+                            {client.detail?.away && <Moon className="mr-1 inline h-4 w-4" />}
+                            {client.detail?.outputMuted && <VolumeOff className="mr-1 inline h-4 w-4" />}
+                            {client.detail?.inputMuted && <MicOff className="mr-1 inline h-4 w-4" />}
+                            {!client.detail?.away && !client.detail?.outputMuted && !client.detail?.inputMuted && (
                               <User className="mr-1 inline h-4 w-4" />
                             )}
                             {client.nickName}
