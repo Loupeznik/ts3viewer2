@@ -650,7 +650,7 @@ Max Concurrent: 8 (Wave 3)
 ### Wave 2 — Core Infrastructure (depends on Wave 1)
 
 
-- [ ] 8. Add shadcn Base UI Components
+- [x] 8. Add shadcn Base UI Components
 
   **What to do**:
   - Run `npx shadcn@latest add` for each component needed across the app:
@@ -718,7 +718,7 @@ Max Concurrent: 8 (Wave 3)
   - Files: `src/components/ui/*`, `src/App.tsx`, `package.json`
   - Pre-commit: `npm run build`
 
-- [ ] 9. TanStack Query Key Factory + wrapCancelable Utility
+- [x] 9. TanStack Query Key Factory + wrapCancelable Utility
 
   **What to do**:
   - Create `src/lib/queryKeys.ts` with query key factory functions for each API service:
@@ -792,7 +792,7 @@ Max Concurrent: 8 (Wave 3)
   - Files: `src/lib/queryKeys.ts`, `src/lib/api.ts`
   - Pre-commit: `npm run build`
 
-- [ ] 10. TanStack Query Custom Hooks for All API Services
+- [x] 10. TanStack Query Custom Hooks for All API Services
 
   **What to do**:
   - Create `src/hooks/` directory with custom hooks wrapping each API service:
@@ -884,7 +884,7 @@ Max Concurrent: 8 (Wave 3)
   - Files: `src/hooks/*`
   - Pre-commit: `npm run build`
 
-- [ ] 11. Migrate Shared Components (Navbar, AdminSideNav, NavLink, Loader, Login)
+- [x] 11. Migrate Shared Components (Navbar, AdminSideNav, NavLink, Loader, Login)
 
   **What to do**:
   - **Navbar** (`src/components/navigation/Navbar.tsx`):
@@ -976,7 +976,7 @@ Max Concurrent: 8 (Wave 3)
 ### Wave 3 — Page Migrations (MAX PARALLEL, depends on Wave 2)
 
 
-- [ ] 12. Migrate Main + Connect Pages (static, no data)
+- [x] 12. Migrate Main + Connect Pages (static, no data)
 
   **What to do**:
   - **Main page** (`src/pages/Main.tsx`): Restyle with shadcn Card, typography, lucide-react icons. This is the landing/home page.
@@ -1019,7 +1019,7 @@ Max Concurrent: 8 (Wave 3)
   - Files: `src/pages/Main.tsx`, `src/pages/Connect.tsx`
   - Pre-commit: `npm run build`
 
-- [ ] 13. Migrate Status Page (polling, channels+clients tree)
+- [x] 13. Migrate Status Page (polling, channels+clients tree)
 
   **What to do**:
   - Replace all useState + useEffect + setInterval data fetching with TQ hooks:
@@ -1087,7 +1087,7 @@ Max Concurrent: 8 (Wave 3)
   - Files: `src/pages/Status.tsx`
   - Pre-commit: `npm run build`
 
-- [ ] 14. Migrate AudioBot Page (polling, controls, file list)
+- [x] 14. Migrate AudioBot Page (polling, controls, file list)
 
   **What to do**:
   - Replace data fetching with TQ hooks: `useCurrentSong()`, `useVolume()`, `useFiles()`, `usePlaySong()`, `useStopSong()`, `usePauseSong()`, `useSetVolume()`
@@ -1141,7 +1141,7 @@ Max Concurrent: 8 (Wave 3)
   - Files: `src/pages/AudioBot.tsx`
   - Pre-commit: `npm run build`
 
-- [ ] 15. Migrate Upload Page (file upload form)
+- [x] 15. Migrate Upload Page (file upload form)
 
   **What to do**:
   - Restyle with shadcn Card + Form (react-hook-form) + Input (file type) + Button
@@ -1182,7 +1182,7 @@ Max Concurrent: 8 (Wave 3)
   - Files: `src/pages/Upload.tsx`
   - Pre-commit: `npm run build`
 
-- [ ] 16. Migrate Admin Layout + Login Form (auth flow)
+- [x] 16. Migrate Admin Layout + Login Form (auth flow)
 
   **What to do**:
   - **Admin.tsx** (`src/pages/Admin.tsx`):
@@ -1231,7 +1231,7 @@ Max Concurrent: 8 (Wave 3)
   - Files: `src/pages/Admin.tsx`
   - Pre-commit: `npm run build`
 
-- [ ] 17. Migrate Users Admin Page (CRUD table + modal form)
+- [x] 17. Migrate Users Admin Page (CRUD table + modal form)
 
   **What to do**:
   - Replace UserTable with shadcn Table component
@@ -1281,7 +1281,7 @@ Max Concurrent: 8 (Wave 3)
   - Files: `src/pages/admin/Users.tsx`, `src/components/UserTable.tsx`, `src/components/forms/UserForm.tsx`, `src/components/forms/PermissionSelect.tsx`
   - Pre-commit: `npm run build`
 
-- [ ] 18. Migrate Clients Admin Page (list + actions + modals)
+- [x] 18. Migrate Clients Admin Page (list + actions + modals)
 
   **What to do**:
   - Replace ClientList with shadcn Table + DropdownMenu for actions
@@ -1336,7 +1336,7 @@ Max Concurrent: 8 (Wave 3)
   - Files: `src/pages/admin/Clients.tsx`, `src/components/ClientList.tsx`, `src/components/SelectPopup.tsx`, `src/components/TextFieldPopup.tsx`, `src/components/InfoPopup.tsx`, `src/components/ServerGroup.tsx`
   - Pre-commit: `npm run build`
 
-- [ ] 19. Migrate Channels + Files + Server Admin Pages
+- [x] 19. Migrate Channels + Files + Server Admin Pages
 
   **What to do**:
   - **Channels page** (`src/pages/admin/Channels.tsx`): Use `useChannels()` TQ hook, shadcn Table for channel list, shadcn Dialog for send message modal

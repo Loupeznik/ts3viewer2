@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import 'flowbite';
 import { BrowserRouter } from 'react-router';
 import * as Sentry from "@sentry/react";
 import { QueryClientProvider } from '@tanstack/react-query';

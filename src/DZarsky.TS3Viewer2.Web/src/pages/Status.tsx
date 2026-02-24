@@ -1,5 +1,4 @@
-import { CornerDownRight, Server } from 'lucide-react';
-import { ClientList } from '@/components/ClientList';
+import { CornerDownRight, Server, User, Moon, VolumeOff, MicOff } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useChannels } from '@/hooks/useChannels';
@@ -62,9 +61,32 @@ export const StatusPage = () => {
                       {channel.name}
                     </li>
                     <ul className="ml-2">
-                      <ClientList
-                        clients={clients.filter((c) => c.channelId === channel.id)}
-                      />
+                      {clients
+                        .filter((c) => c.channelId === channel.id)
+                        .map((client) => (
+                          <li
+                            key={client.id}
+                            className="ml-4"
+                            title={client.detail?.description ?? ""}
+                          >
+                            {client.detail?.away && (
+                              <Moon className="mr-1 inline h-4 w-4" />
+                            )}
+                            {client.detail?.outputMuted && (
+                              <VolumeOff className="mr-1 inline h-4 w-4" />
+                            )}
+                            {client.detail?.inputMuted && (
+                              <MicOff className="mr-1 inline h-4 w-4" />
+                            )}
+                            {!client.detail?.away &&
+                              !client.detail?.outputMuted &&
+                              !client.detail?.inputMuted && (
+                              <User className="mr-1 inline h-4 w-4" />
+                            )}
+                            {client.nickName}
+                          </li>
+                        ))
+                        .filter(Boolean)}
                     </ul>
                   </ul>
                 </li>

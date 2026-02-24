@@ -16,10 +16,6 @@ code {
     monospace;
 }
 
-svg  {
-  display: inline !important;
-  vertical-align: middle;
-}
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);

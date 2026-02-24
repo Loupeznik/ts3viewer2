@@ -84,3 +84,96 @@
 - Dark theme: used `bg-gray-900`/`bg-gray-800`/`bg-gray-700` for dark-first consistency
 
 ### Build result: ✓ zero errors (4.00s)
+
+## Task 12 - Migrate Main and Connect pages to shadcn
+
+### Main.tsx
+- **Before**: useState + useEffect for server info, inline Tailwind classes, no icons
+- **After**: 
+  - Kept useState/useEffect (static page, no TQ needed per task spec)
+  - Replaced custom div styling with shadcn `Card` + `CardHeader` + `CardContent`
+  - Added `Users` icon from lucide-react for visual enhancement
+  - Centered layout with `flex items-center justify-center min-h-screen`
+  - Cleaner typography using Card components
+
+### Connect.tsx
+- **Before**: Custom form with Input/Label/SubmitButton components, no icons, no copy functionality
+- **After**:
+  - Replaced custom Input/Label/SubmitButton with shadcn equivalents
+  - Added `Headphones` icon in header for visual context
+  - Added `Copy` icon button to copy server address to clipboard
+  - Integrated sonner `toast()` for copy feedback
+  - Fixed state type: `useState<string>('')` instead of `useState({})`
+  - Improved form layout with `space-y-4` and proper spacing
+  - Added placeholder text to username input
+
+### Key changes
+- Zero react-icons imports (used lucide-react instead)
+- Both pages now use shadcn Card-based layout
+- Improved UX with copy-to-clipboard and toast notifications
+- Build: ✓ zero errors (4.28s)
+- Commit: `refactor(web): migrate Main and Connect pages to shadcn`
+
+## Task 14 - Migrate AudioBot page to shadcn + TanStack Query
+
+### Changes
+- Removed all useState/useEffect/setInterval for data fetching
+- TQ hooks: useCurrentSong(), useVolume(), useFiles(), usePlaySong(), useStopSong(), usePauseSong(), useSetVolume()
+- zod validation: `z.string().url("Invalid URL")` replaces validator.isURL
+- react-hook-form + zodResolver for YouTube URL form
+- shadcn: Card, Table, Button, Input, Form, Tooltip, TooltipProvider
+- lucide-react: Play, Pause, Square, Plus, Minus, Youtube (all available in v0.575.0)
+- data-testid: audiobot-controls (controls div), song-list (table wrapper)
+- key={file.fullName} replaces index key (avoids biome noArrayIndexKey lint error)
+
+### Gotchas
+- biome auto-collapses multi-line imports and simple JSX expressions to single lines — run `npx biome check --write` after manual edits to fix formatting
+- After edit tool runs, re-read file and run biome check before assuming clean
+- The `noArrayIndexKey` biome rule fires on `.map((file, index) => ...)` even when `key` uses `file.fullName` — must remove the `index` param entirely from the map callback
+- Build: ✓ zero errors (3.79s)
+
+
+## Task 16 — Admin layout migration
+- Admin.tsx: replaced bg-gray-800/bg-gray-700/text-white with bg-background/Card/text-foreground
+- Used shadcn Card + CardContent for the content area instead of raw div
+- Added data-testid="admin-layout" to outer container
+- Removed unused React/useEffect imports; split type-only imports with `import type`
+- No react-icons usage was present in original; authentication logic unchanged
+- Build: zero errors (chunk size warning only, pre-existing)
+## Task 17 — Migrate Clients admin page to shadcn + TanStack Query
+
+### Changes
+- Replaced useState/useEffect/setInterval for data fetching with useClients(true) (5s refetchInterval built-in)
+- Replaced localStorage server groups cache with useServerGroups() (5min staleTime)
+- Removed react-hot-toast (Toaster) — mutations use sonner internally
+- Replaced all react-icons/fi with lucide-react equivalents
+- ClientList, SelectPopup, TextFieldPopup, ServerGroup logic inlined directly into Clients.tsx
+- SelectPopup.tsx deleted (was only used by Clients.tsx)
+- ClientList.tsx, TextFieldPopup.tsx, ServerGroup.tsx kept — still used by Status.tsx, Server.tsx, Channels.tsx
+- shadcn: Table (with data-testid="clients-table"), DropdownMenu for kick/ban/poke actions, three Dialogs (poke, add-group, confirm-remove)
+- window.confirm() replaced with shadcn Dialog confirmation for group removal
+- data-testid="clients-table" on table wrapper div
+
+### Gotchas
+- Lucide icons do NOT accept `title` prop — TypeScript TS2322 error; remove title from icon JSX
+- ClientList.tsx and TextFieldPopup.tsx cannot be deleted yet — still imported by non-migrated pages (Status.tsx, Server.tsx, Channels.tsx); ONLY delete when those pages are also migrated
+- The noArrayIndexKey biome rule: using key={client.id} and key={groupId} (numeric IDs) is fine; the rule only fires when using the array index variable
+- Build: ✓ zero errors (3.92s)
+
+## Task 17 — Migrate Channels, Files, Server admin pages to shadcn + TanStack Query
+
+### Changes per file
+- **Channels.tsx**: `useChannels()` + `useSendChannelMessage()`, shadcn Card/Dialog/Input, `MessageSquare` lucide icon, `data-testid="channels-list"` on `<ul>`
+- **Files.tsx**: `useFiles()` + `useDeleteFile()` + `useRenameFile()`, shadcn Table/Dialog, `Pencil`/`Trash2` lucide icons, `data-testid="files-table"` on table wrapper div, delete uses a confirmation Dialog (no `window.confirm`)
+- **Server.tsx**: `useServerInfo()` (polls at 60s via TQ) + `useSendGlobalMessage()`, shadcn Card/Dialog, `Circle`/`MessageSquare` lucide icons, `data-testid="server-info"` on Card
+- **Main.tsx**: formatting + fragment cleanup only (logic unchanged)
+
+### Key decisions
+- `useSendGlobalMessage()` mutationFn takes `(message: string)` directly — NOT `({ message })`
+- Delete confirmation uses shadcn Dialog (task MUST NOT: no `window.confirm`)
+- Uptime timer in Server.tsx: two `useEffect` blocks preserved exactly; first syncs from `data?.uptime`, second ticks every second
+- `parseInt` calls require radix 10 (`parseInt(x, 10)`) — biome `useParseIntRadix` rule
+- `"0" + n` string padding triggers `useTemplate` — replaced with template literals: `` `0${n}` ``
+- `noUselessFragments` info on Main.tsx fragment — applied `--unsafe` fix to remove it
+
+### Build result: ✓ zero errors (3.67s)
