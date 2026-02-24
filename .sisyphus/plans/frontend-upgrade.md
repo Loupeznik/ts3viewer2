@@ -332,7 +332,7 @@ Max Concurrent: 8 (Wave 3)
   - Files: `biome.json`, `package.json`
   - Pre-commit: `npx biome check src/ --skip-parse-diagnostics` (informational only)
 
-- [ ] 3. shadcn/ui Init + Dark-Only Theme Configuration
+- [x] 3. shadcn/ui Init + Dark-Only Theme Configuration
 
   **What to do**:
   - Run `npx shadcn@latest init` in `src/DZarsky.TS3Viewer2.Web/`
