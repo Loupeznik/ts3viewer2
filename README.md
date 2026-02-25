@@ -34,7 +34,7 @@ This starts three services:
 - **API** — port 20800 (mapped to container port 8080)
 - **Web frontend** — port 20801 (mapped to container port 80)
 
-The `docker-compose.yml` includes all necessary environment variables for the API, including JWT configuration and TeamSpeak server query credentials. On first run, the API will automatically run EF Core migrations (controlled by `RUN_MIGRATIONS=true`) which creates a default `react-app` user with a random secret.
+The `docker-compose.yml` uses environment variable substitution for secrets. Copy the `.env.example` file to `.env` and fill in the values before running. On first run, the API will automatically run EF Core migrations (controlled by `RUN_MIGRATIONS=true`) which creates a default `react-app` user with a random secret.
 
 To retrieve the react-app secret after first run:
 

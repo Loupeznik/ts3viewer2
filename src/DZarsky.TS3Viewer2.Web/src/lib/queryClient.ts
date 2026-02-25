@@ -7,7 +7,10 @@ export const queryClient = new QueryClient({
     onError: (error) => {
       if (error instanceof ApiError && error.status === 401) {
         revokeToken();
-        window.location.href = "/admin";
+
+        if (window.location.pathname.startsWith("/admin")) {
+          window.location.href = "/admin";
+        }
       }
     },
   }),

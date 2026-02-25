@@ -23,7 +23,7 @@ const getAppToken = async () => {
 
 const isTokenExpired = (): boolean => {
   const localTokenExpiration = localStorage.getItem(_localAppTokenExpirationStorageKey);
-  return localTokenExpiration === null ? false : Date.now() > Date.parse(localTokenExpiration);
+  return localTokenExpiration === null ? true : Date.now() > Date.parse(localTokenExpiration);
 };
 
 const setTokenExpiration = (expiresIn: number) => {
@@ -46,4 +46,4 @@ const initializeTokenResolver = () => {
 
 initializeTokenResolver();
 
-export { getAppToken, isTokenExpired, setTokenExpiration, revokeToken };
+export { _localAppTokenStorageKey, getAppToken, isTokenExpired, setTokenExpiration, revokeToken };

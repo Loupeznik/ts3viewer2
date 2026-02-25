@@ -108,8 +108,6 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddCors();
-
 var app = builder.Build();
 
 if (string.Equals(Environment.GetEnvironmentVariable("RUN_MIGRATIONS"), "true", StringComparison.OrdinalIgnoreCase))
@@ -118,16 +116,7 @@ if (string.Equals(Environment.GetEnvironmentVariable("RUN_MIGRATIONS"), "true", 
     var db = scope.ServiceProvider.GetRequiredService<DataContext>();
     db.Database.Migrate();
 
-    var reactAppUser = db.Users.AsNoTracking().FirstOrDefault(u => u.Login == "react-app");
-    if (reactAppUser != null)
-    {
-        Log.Logger.Warning("react-app secret: {Secret}", reactAppUser.Secret);
-    }
 }
-
-app.UseCors(x => x.AllowAnyHeader()
-    .AllowAnyOrigin()
-    .AllowAnyMethod());
 
 if (app.Environment.IsDevelopment())
 {
@@ -139,9 +128,10 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 #endif
 
-app.UseAuthorization();
-
 app.UseCors(allowedOriginsPolicy);
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseMiddleware<GlobalErrorHandler>();
 

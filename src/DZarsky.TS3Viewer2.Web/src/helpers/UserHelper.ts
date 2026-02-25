@@ -1,13 +1,11 @@
 import { type UserDto, UserService } from "../api";
-import { isTokenExpired, setTokenExpiration } from "./TokenProvider";
+import { _localAppTokenStorageKey, isTokenExpired, setTokenExpiration } from "./TokenProvider";
 
 type CurrentUserProps = {
   username: string;
   permissions: string | string[];
   isValid: boolean;
 };
-
-const _localAppTokenStorageKey: string = "api_app_token";
 
 const getCurrentUser = (): CurrentUserProps => {
   const jwt = localStorage.getItem(_localAppTokenStorageKey);
@@ -21,22 +19,32 @@ const getCurrentUser = (): CurrentUserProps => {
     return result;
   }
 
-  const decoded = atob(jwt.split(".")[1]);
-  const payloadObject = JSON.parse(decoded);
+  try {
+    const parts = jwt.split(".");
+    if (parts.length !== 3) {
+      return result;
+    }
 
-  const [username, permissions, role]: [string, string | string[], string] = [
-    payloadObject.sub,
-    payloadObject.permissions,
-    payloadObject.role,
-  ];
+    const base64 = parts[1].replace(/-/g, "+").replace(/_/g, "/");
+    const decoded = atob(base64);
+    const payloadObject = JSON.parse(decoded);
 
-  if (role === "App" || isTokenExpired()) {
+    const [username, permissions, role]: [string, string | string[], string] = [
+      payloadObject.sub,
+      payloadObject.permissions,
+      payloadObject.role,
+    ];
+
+    if (role === "App" || isTokenExpired()) {
+      return result;
+    }
+
+    result.permissions = permissions;
+    result.username = username;
+    result.isValid = true;
+  } catch {
     return result;
   }
-
-  result.permissions = permissions;
-  result.username = username;
-  result.isValid = true;
 
   return result;
 };
