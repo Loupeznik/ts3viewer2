@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Outlet } from "react-router";
 import { Card, CardContent } from "@/components/ui/card";
 import type { UserDto } from "../api";
 import { Login } from "../components/Login";
 import { AdminSideNav } from "../components/navigation/AdminSideNav";
 import { getServerGroups } from "../helpers/ServerHelpers";
-import { getAppToken, revokeToken } from "../helpers/TokenProvider";
+import { revokeToken } from "../helpers/TokenProvider";
 import type { CurrentUserProps } from "../helpers/UserHelper";
 import { getCurrentUser, signIn } from "../helpers/UserHelper";
 
@@ -13,7 +13,7 @@ export const AdminPage = () => {
   const [authenticated, setAuthenticated] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<CurrentUserProps>({} as CurrentUserProps);
 
-  const checkUser = () => {
+  const checkUser = useCallback(() => {
     const user = getCurrentUser();
 
     if (!user.isValid) {
@@ -22,7 +22,17 @@ export const AdminPage = () => {
 
     setCurrentUser(user);
     setAuthenticated(true);
-  };
+  }, []);
+
+  useEffect(() => {
+    checkUser();
+  }, [checkUser]);
+
+  useEffect(() => {
+    if (authenticated) {
+      getServerGroups();
+    }
+  }, [authenticated]);
 
   const onLogin = async ({ login, secret }: UserDto) => {
     if (!login || !secret) {
@@ -37,21 +47,14 @@ export const AdminPage = () => {
     checkUser();
   };
 
-  if (!authenticated) {
-    checkUser();
-
-    return <Login onLogin={onLogin} />;
-  }
-
-  if (authenticated) {
-    getAppToken();
-    getServerGroups();
-  }
-
   const onLogout = () => {
     revokeToken();
     setAuthenticated(false);
   };
+
+  if (!authenticated) {
+    return <Login onLogin={onLogin} />;
+  }
 
   return (
     <div data-testid="admin-layout" className="p-4 w-full sm:p-8 bg-background">

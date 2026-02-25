@@ -13,16 +13,16 @@ export const Navbar = () => {
   };
 
   return (
-    <nav className="bg-gray-900 border-b border-gray-800 px-4 py-3">
+    <nav className="bg-background border-b border-border px-4 py-3">
       <div className="container flex flex-wrap justify-between items-center mx-auto">
         <a href="/" className="flex items-center gap-2">
           <img src={logo} className="mr-3 h-6 sm:h-9" alt="Logo" />
-          <span className="self-center text-xl font-semibold whitespace-nowrap text-white">TeamSpeak3 Viewer</span>
+          <span className="self-center text-xl font-semibold whitespace-nowrap text-foreground">TeamSpeak3 Viewer</span>
         </a>
         <button
           onClick={handleShowNavbar}
           type="button"
-          className="inline-flex items-center p-2 ml-3 text-gray-400 rounded-lg md:hidden hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600"
+          className="inline-flex items-center p-2 ml-3 text-muted-foreground rounded-lg md:hidden hover:bg-accent focus:outline-none focus:ring-2 focus:ring-ring"
           aria-controls="mobile-menu"
           aria-expanded={showNavbar}
         >

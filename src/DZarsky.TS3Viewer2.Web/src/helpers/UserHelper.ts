@@ -1,4 +1,4 @@
-import { OpenAPI, type UserDto, UserService } from "../api";
+import { type UserDto, UserService } from "../api";
 import { isTokenExpired, setTokenExpiration } from "./TokenProvider";
 
 type CurrentUserProps = {
@@ -47,9 +47,6 @@ const signIn = async ({ login, secret }: UserDto): Promise<boolean> => {
   if (tokenResult.token != null) {
     localStorage.setItem(_localAppTokenStorageKey, tokenResult.token);
     setTokenExpiration(tokenResult.expiresIn!);
-
-    OpenAPI.TOKEN = tokenResult.token;
-
     return true;
   }
 

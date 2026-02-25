@@ -5,7 +5,6 @@ const _localAppTokenExpirationStorageKey: string = "app_token_expiration";
 
 const getAppToken = async () => {
   const localToken = localStorage.getItem(_localAppTokenStorageKey);
-  let token: string | undefined;
 
   if (localToken === null || isTokenExpired()) {
     const credentials: UserDto = {
@@ -18,14 +17,8 @@ const getAppToken = async () => {
     if (tokenResult.token != null) {
       localStorage.setItem(_localAppTokenStorageKey, tokenResult.token);
       setTokenExpiration(tokenResult.expiresIn!);
-
-      token = tokenResult.token;
     }
-  } else {
-    token = localToken;
   }
-
-  OpenAPI.TOKEN = token;
 };
 
 const isTokenExpired = (): boolean => {
@@ -44,5 +37,13 @@ const revokeToken = () => {
   localStorage.removeItem(_localAppTokenStorageKey);
   localStorage.removeItem(_localAppTokenExpirationStorageKey);
 };
+
+const initializeTokenResolver = () => {
+  OpenAPI.TOKEN = async () => {
+    return localStorage.getItem(_localAppTokenStorageKey) ?? "";
+  };
+};
+
+initializeTokenResolver();
 
 export { getAppToken, isTokenExpired, setTokenExpiration, revokeToken };
