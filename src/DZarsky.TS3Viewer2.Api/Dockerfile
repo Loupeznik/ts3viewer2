@@ -19,6 +19,7 @@ FROM build AS publish
 RUN dotnet publish "DZarsky.TS3Viewer2.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
+RUN apk add --no-cache libmagic && ln -s /usr/lib/libmagic.so.1 /usr/lib/libmagic-1.so
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "DZarsky.TS3Viewer2.Api.dll"]
